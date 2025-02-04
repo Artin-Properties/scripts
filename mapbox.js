@@ -98,8 +98,6 @@ async function initializeMap() {
             if (e.features.length > 0) {
               const properties = e.features[0].properties;
 
-              console.log('properties', e);
-
               try {
                 const property = await fetch(`https://api.artinproperties.ca/api:iwYORZ6t:${version}/map/property?id=${properties.id}`);
                 const propertyData = await property.json();
@@ -207,7 +205,10 @@ async function initializeMap() {
                   modal.style.opacity = 1;
                 }, 10);
   
-                const coordinates = e.features[0].geometry.coordinates;
+                const coordinates = [
+                  propertyData.coordinates.data.lng,
+                  propertyData.coordinates.data.lat,
+              ];
                 const pinCoordinates = map.project(coordinates);
                 modal.style.left = `${pinCoordinates.x - modal.offsetWidth / 2}px`;
                 modal.style.top = `${pinCoordinates.y + 20}px`;
