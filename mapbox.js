@@ -251,6 +251,10 @@ async function initializeMap() {
           map.on("mouseleave", "unclustered-point", () => {
             map.getCanvas().style.cursor = "";
           });
+
+          map.on("mouseclick", "cluster-count", (e) => {
+            console.log(e);
+          });
         }
       );
     });
