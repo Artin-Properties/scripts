@@ -98,6 +98,8 @@ async function initializeMap() {
             if (e.features.length > 0) {
               const properties = e.features[0].properties;
 
+              console.log('properties', e);
+
               try {
                 const property = await fetch(`https://api.artinproperties.ca/api:iwYORZ6t:${version}/map/property?id=${properties.id}`);
                 const propertyData = await property.json();
