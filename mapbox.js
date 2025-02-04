@@ -95,119 +95,123 @@ async function initializeMap() {
 
           // Function to handle displaying the modal
           const showModal = async (e) => {
-            try {
-              const property = await fetch(`https://api.artinproperties.ca/api:iwYORZ6t:${version}/map/property?id=${properties.id}`);
-              const propertyData = await property.json();
+            if (e.features.length > 0) {
+              const properties = e.features[0].properties;
 
-              // Set modal content
-              document.querySelector('[wized="map_PropertyTitle"]').textContent =
-                propertyData.title || "No Title";
-              const imageElement = document.querySelector(
-                '[wized="map_PropertyImageSrc"]'
-              );
-              imageElement.src = propertyData.image || ""; // Set image src
-
-              // Format and set start and end dates using Moment.js
-              const formattedStartDate = moment(propertyData.avail_start_date).format(
-                "MMM Do"
-              );
-              const formattedEndDate = moment(propertyData.avail_end_date).format(
-                "MMM Do"
-              );
-              document.querySelector(
-                '[wized="map_PropertyAvailableFrom"]'
-              ).textContent =
-                `${formattedStartDate} - ${formattedEndDate}` || "N/A";
-
-              // Set other property details
-              document.querySelector(
-                '[wized="map_PropertyGuestCount"]'
-              ).textContent = propertyData.personCapacity || "N/A";
-              document.querySelector('[wized="map_PropertyBedCount"]').textContent =
-                propertyData.bedroomsNumber || "N/A";
-              document.querySelector(
-                '[wized="map_PropertyBathCount"]'
-              ).textContent = propertyData.bathroomsNumber || "N/A";
-              document.querySelector('[wized="map_PropertyLocation"]').textContent =
-                propertyData.city || "No City";
-
-              // Determine and display price based on rental type
-              const priceElement = document.querySelector(
-                '[wized="map_PropertyPrice"]'
-              );
-              const rentalType = propertyData.rental_type;
-
-              if (rentalType === "MTR" || rentalType === "LTR") {
-                // Multiply nightly cost by 30 for monthly rate
-                const monthlyPrice = propertyData.price * 30;
-                priceElement.textContent = `$${monthlyPrice.toLocaleString()}/month`;
-              } else {
-                // Default to nightly rate
-                priceElement.textContent = `$${propertyData.price.toLocaleString()}/night`;
+              try {
+                const property = await fetch(`https://api.artinproperties.ca/api:iwYORZ6t:${version}/map/property?id=${properties.id}`);
+                const propertyData = await property.json();
+  
+                // Set modal content
+                document.querySelector('[wized="map_PropertyTitle"]').textContent =
+                  propertyData.title || "No Title";
+                const imageElement = document.querySelector(
+                  '[wized="map_PropertyImageSrc"]'
+                );
+                imageElement.src = propertyData.image || ""; // Set image src
+  
+                // Format and set start and end dates using Moment.js
+                const formattedStartDate = moment(propertyData.avail_start_date).format(
+                  "MMM Do"
+                );
+                const formattedEndDate = moment(propertyData.avail_end_date).format(
+                  "MMM Do"
+                );
+                document.querySelector(
+                  '[wized="map_PropertyAvailableFrom"]'
+                ).textContent =
+                  `${formattedStartDate} - ${formattedEndDate}` || "N/A";
+  
+                // Set other property details
+                document.querySelector(
+                  '[wized="map_PropertyGuestCount"]'
+                ).textContent = propertyData.personCapacity || "N/A";
+                document.querySelector('[wized="map_PropertyBedCount"]').textContent =
+                  propertyData.bedroomsNumber || "N/A";
+                document.querySelector(
+                  '[wized="map_PropertyBathCount"]'
+                ).textContent = propertyData.bathroomsNumber || "N/A";
+                document.querySelector('[wized="map_PropertyLocation"]').textContent =
+                  propertyData.city || "No City";
+  
+                // Determine and display price based on rental type
+                const priceElement = document.querySelector(
+                  '[wized="map_PropertyPrice"]'
+                );
+                const rentalType = propertyData.rental_type;
+  
+                if (rentalType === "MTR" || rentalType === "LTR") {
+                  // Multiply nightly cost by 30 for monthly rate
+                  const monthlyPrice = propertyData.price * 30;
+                  priceElement.textContent = `$${monthlyPrice.toLocaleString()}/month`;
+                } else {
+                  // Default to nightly rate
+                  priceElement.textContent = `$${propertyData.price.toLocaleString()}/night`;
+                }
+  
+                document.querySelector(
+                  '[wized="map-modal-link"]'
+                ).href = `/property?property=${propertyData.id}`;
+  
+                // Logic to set display propertyData for tags
+                const shortTag = document.querySelector(
+                  '[wized="home_PropertyTagShort"]'
+                );
+                const monthTag = document.querySelector(
+                  '[wized="home_PropertyTagMonth"]'
+                );
+                const longTag = document.querySelector(
+                  '[wized="home_PropertyTagLong"]'
+                );
+                const artinTag = document.querySelector(
+                  '[wized="home_PropertyTagArtin"]'
+                );
+                const artinTagText = document.querySelector(
+                  '[wized="home_PropertyTagArtinText"]'
+                );
+                const newTag = document.querySelector(
+                  '[wized="home_PropertyTagNew"]'
+                );
+  
+                shortTag.style.display = "none";
+                monthTag.style.display = "none";
+                longTag.style.display = "none";
+                artinTag.style.display = "none";
+                newTag.style.display = "none";
+  
+                if (rentalType === "STR") {
+                  shortTag.style.display = "flex";
+                } else if (rentalType === "MTR") {
+                  monthTag.style.display = "flex";
+                } else if (rentalType === "LTR") {
+                  longTag.style.display = "flex";
+                }
+  
+                if (
+                  propertyData.artin_status &&
+                  propertyData.artin_status.trim() !== ""
+                ) {
+                  artinTag.style.display = "flex";
+                  artinTagText.textContent = propertyData.artin_status;
+                }
+  
+                if (propertyData.new === true) {
+                  newTag.style.display = "flex";
+                }
+  
+                const modal = document.getElementById("property-modal");
+                modal.style.display = "block";
+                setTimeout(() => {
+                  modal.style.opacity = 1;
+                }, 10);
+  
+                const coordinates = e.features[0].geometry.coordinates;
+                const pinCoordinates = map.project(coordinates);
+                modal.style.left = `${pinCoordinates.x - modal.offsetWidth / 2}px`;
+                modal.style.top = `${pinCoordinates.y + 20}px`;
+              } catch (error) {
+                console.error("Error fetching property data:", error);
               }
-
-              document.querySelector(
-                '[wized="map-modal-link"]'
-              ).href = `/property?property=${propertyData.id}`;
-
-              // Logic to set display propertyData for tags
-              const shortTag = document.querySelector(
-                '[wized="home_PropertyTagShort"]'
-              );
-              const monthTag = document.querySelector(
-                '[wized="home_PropertyTagMonth"]'
-              );
-              const longTag = document.querySelector(
-                '[wized="home_PropertyTagLong"]'
-              );
-              const artinTag = document.querySelector(
-                '[wized="home_PropertyTagArtin"]'
-              );
-              const artinTagText = document.querySelector(
-                '[wized="home_PropertyTagArtinText"]'
-              );
-              const newTag = document.querySelector(
-                '[wized="home_PropertyTagNew"]'
-              );
-
-              shortTag.style.display = "none";
-              monthTag.style.display = "none";
-              longTag.style.display = "none";
-              artinTag.style.display = "none";
-              newTag.style.display = "none";
-
-              if (rentalType === "STR") {
-                shortTag.style.display = "flex";
-              } else if (rentalType === "MTR") {
-                monthTag.style.display = "flex";
-              } else if (rentalType === "LTR") {
-                longTag.style.display = "flex";
-              }
-
-              if (
-                propertyData.artin_status &&
-                propertyData.artin_status.trim() !== ""
-              ) {
-                artinTag.style.display = "flex";
-                artinTagText.textContent = propertyData.artin_status;
-              }
-
-              if (propertyData.new === true) {
-                newTag.style.display = "flex";
-              }
-
-              const modal = document.getElementById("property-modal");
-              modal.style.display = "block";
-              setTimeout(() => {
-                modal.style.opacity = 1;
-              }, 10);
-
-              const coordinates = e.features[0].geometry.coordinates;
-              const pinCoordinates = map.project(coordinates);
-              modal.style.left = `${pinCoordinates.x - modal.offsetWidth / 2}px`;
-              modal.style.top = `${pinCoordinates.y + 20}px`;
-            } catch (error) {
-              console.error("Error fetching property data:", error);
             }
           };
 
@@ -239,6 +243,22 @@ async function initializeMap() {
 
             map.on("click", "cluster-count", (e) => {
               console.log('cluster-count', e);
+              if (!e.features.length) return;
+
+              const cluster = e.features[0];
+              const clusterId = cluster.properties.cluster_id;
+              const source = map.getSource('locations'); // Replace 'locations' with your source id
+
+              // Get the zoom level at which the cluster expands
+              source.getClusterExpansionZoom(clusterId, function (err, expansionZoom) {
+                if (err) return;
+                
+                // Optionally, adjust the zoom level (for example, adding a bit more zoom)
+                map.easeTo({
+                  center: cluster.geometry.coordinates,
+                  zoom: expansionZoom
+                });
+              });
             });
           }
 
