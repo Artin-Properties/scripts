@@ -35,7 +35,7 @@ async function initializeMap() {
           // Add a GeoJSON source with clustering enabled
           map.addSource("locations", {
             type: "geojson",
-            data: `https://api.artinproperties.ca/api:NnUrPyf2:${version}/map/properties`, // Replace with your GeoJSON data URL
+            data: `https://api.artinproperties.ca/api:iwYORZ6t:${version}/map/properties`, // Replace with your GeoJSON data URL
             cluster: true,
             clusterMaxZoom: 14,
             clusterRadius: 37.5,
@@ -99,19 +99,22 @@ async function initializeMap() {
               console.log(e);
               const properties = e.features[0].properties;
 
+              const property = await fetch(`https://api.artinproperties.ca/api:iwYORZ6t:${version}/property?id=${properties.id}`);
+              const propertyData = property.json();
+
               // Set modal content
               document.querySelector('[wized="map_PropertyTitle"]').textContent =
-                properties.title || "No Title";
+                propertyData.title || "No Title";
               const imageElement = document.querySelector(
                 '[wized="map_PropertyImageSrc"]'
               );
-              imageElement.src = properties.image || ""; // Set image src
+              imageElement.src = propertyData.image || ""; // Set image src
 
               // Format and set start and end dates using Moment.js
-              const formattedStartDate = moment(properties.avail_start_date).format(
+              const formattedStartDate = moment(propertyData.avail_start_date).format(
                 "MMM Do"
               );
-              const formattedEndDate = moment(properties.avail_end_date).format(
+              const formattedEndDate = moment(propertyData.avail_end_date).format(
                 "MMM Do"
               );
               document.querySelector(
@@ -122,35 +125,35 @@ async function initializeMap() {
               // Set other property details
               document.querySelector(
                 '[wized="map_PropertyGuestCount"]'
-              ).textContent = properties.personCapacity || "N/A";
+              ).textContent = propertyData.personCapacity || "N/A";
               document.querySelector('[wized="map_PropertyBedCount"]').textContent =
-                properties.bedroomsNumber || "N/A";
+                propertyData.bedroomsNumber || "N/A";
               document.querySelector(
                 '[wized="map_PropertyBathCount"]'
-              ).textContent = properties.bathroomsNumber || "N/A";
+              ).textContent = propertyData.bathroomsNumber || "N/A";
               document.querySelector('[wized="map_PropertyLocation"]').textContent =
-                properties.city || "No City";
+                propertyData.city || "No City";
 
               // Determine and display price based on rental type
               const priceElement = document.querySelector(
                 '[wized="map_PropertyPrice"]'
               );
-              const rentalType = properties.rental_type;
+              const rentalType = propertyData.rental_type;
 
               if (rentalType === "MTR" || rentalType === "LTR") {
                 // Multiply nightly cost by 30 for monthly rate
-                const monthlyPrice = properties.price * 30;
+                const monthlyPrice = propertyData.price * 30;
                 priceElement.textContent = `$${monthlyPrice.toLocaleString()}/month`;
               } else {
                 // Default to nightly rate
-                priceElement.textContent = `$${properties.price.toLocaleString()}/night`;
+                priceElement.textContent = `$${propertyData.price.toLocaleString()}/night`;
               }
 
               document.querySelector(
                 '[wized="map-modal-link"]'
-              ).href = `/property?property=${properties.id}`;
+              ).href = `/property?property=${propertyData.id}`;
 
-              // Logic to set display properties for tags
+              // Logic to set display propertyData for tags
               const shortTag = document.querySelector(
                 '[wized="home_PropertyTagShort"]'
               );
@@ -185,14 +188,14 @@ async function initializeMap() {
               }
 
               if (
-                properties.artin_status &&
-                properties.artin_status.trim() !== ""
+                propertyData.artin_status &&
+                propertyData.artin_status.trim() !== ""
               ) {
                 artinTag.style.display = "flex";
-                artinTagText.textContent = properties.artin_status;
+                artinTagText.textContent = propertyData.artin_status;
               }
 
-              if (properties.new === true) {
+              if (propertyData.new === true) {
                 newTag.style.display = "flex";
               }
 
