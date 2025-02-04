@@ -104,11 +104,11 @@ async function initializeMap() {
   
                 // Set modal content
                 document.querySelector('[wized="map_PropertyTitle"]').textContent =
-                  propertyData.title || "No Title";
+                  propertyData.name || "No Title";
                 const imageElement = document.querySelector(
                   '[wized="map_PropertyImageSrc"]'
                 );
-                imageElement.src = propertyData.image || ""; // Set image src
+                imageElement.src = propertyData.meta_image?.url || ""; // Set image src
   
                 // Format and set start and end dates using Moment.js
                 const formattedStartDate = moment(propertyData.avail_start_date).format(
@@ -152,6 +152,10 @@ async function initializeMap() {
                 document.querySelector(
                   '[wized="map-modal-link"]'
                 ).href = `/property?property=${propertyData.id}`;
+
+                document.querySelector(
+                  '[wized="map-modal-link"]'
+                ).target = "_blank";
   
                 // Logic to set display propertyData for tags
                 const shortTag = document.querySelector(
@@ -208,7 +212,8 @@ async function initializeMap() {
                 const coordinates = [
                   propertyData.coordinates.data.lng,
                   propertyData.coordinates.data.lat,
-              ];
+                ];
+
                 const pinCoordinates = map.project(coordinates);
                 modal.style.left = `${pinCoordinates.x - modal.offsetWidth / 2}px`;
                 modal.style.top = `${pinCoordinates.y + 20}px`;
