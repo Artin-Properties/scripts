@@ -1,7 +1,8 @@
 // Fetch the Mapbox token from your backend
 async function initializeMap() {
   try {
-    const response = await fetch('https://api.artinproperties.ca/api:iwYORZ6t:v1.4/map/token');
+    const version = window.location.href.includes('artin-properties.webflow.io') ? 'v1.4' : 'v1.3';
+    const response = await fetch(`https://api.artinproperties.ca/api:iwYORZ6t:${version}/map/token`);
     if (!response.ok) {
       throw new Error('Failed to fetch Mapbox token');
     }
@@ -13,7 +14,7 @@ async function initializeMap() {
 
     const map = new mapboxgl.Map({
       container: "map", // ID of the div to render the map in
-      style: "mapbox://styles/blackpeakbp/cm2jfprjq007f01py5z2g8h1w/draft", // Map style
+      // style: "mapbox://styles/blackpeakbp/cm2jfprjq007f01py5z2g8h1w/draft", // Map style
       center: [-123.068645, 49.239609], // Starting position [lng, lat]
       zoom: 9, // Starting zoom
     });
@@ -34,7 +35,7 @@ async function initializeMap() {
           // Add a GeoJSON source with clustering enabled
           map.addSource("locations", {
             type: "geojson",
-            data: "https://api.artinproperties.ca/api:iwYORZ6t:v1.4/map/properties", // Replace with your GeoJSON data URL
+            data: `https://api.artinproperties.ca/api:NnUrPyf2:${version}/map/properties`, // Replace with your GeoJSON data URL
             cluster: true,
             clusterMaxZoom: 14,
             clusterRadius: 37.5,
@@ -93,8 +94,9 @@ async function initializeMap() {
           });
 
           // Function to handle displaying the modal
-          const showModal = (e) => {
+          const showModal = async (e) => {
             if (e.features.length > 0) {
+              console.log(e);
               const properties = e.features[0].properties;
 
               // Set modal content
