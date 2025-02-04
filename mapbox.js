@@ -247,10 +247,9 @@ async function initializeMap() {
             });
           } else {
             map.on("click", "unclustered-point", showModal);
-            // map.on("mouseleave", "unclustered-point", closeModal);
+            map.on("movestart", closeModal);
 
             map.on("click", "cluster-count", (e) => {
-              console.log('cluster-count', e);
               if (!e.features.length) return;
 
               const cluster = e.features[0];
@@ -280,6 +279,13 @@ async function initializeMap() {
             map.getCanvas().style.cursor = "pointer";
           });
           map.on("mouseleave", "unclustered-point", () => {
+            map.getCanvas().style.cursor = "";
+          });
+
+          map.on("mouseenter", "cluster-count", () => {
+            map.getCanvas().style.cursor = "pointer";
+          });
+          map.on("mouseleave", "cluster-count", () => {
             map.getCanvas().style.cursor = "";
           });
         }
