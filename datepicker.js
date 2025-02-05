@@ -46,6 +46,12 @@ window.Wized.push(async (Wized) => {
         inline: true,
         zIndex: 10,
         plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
+        RangePlugin: {
+          tooltip: true,
+          tooltipNumber(num) {
+            return num - 1;
+          }
+        },
         LockPlugin: {
           minDate: new Date(),
           filter(date, picked) {
