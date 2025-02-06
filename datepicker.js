@@ -59,6 +59,7 @@ window.Wized.push(async (Wized) => {
           },
         },
         startDate: new Date(result.data.datestreak.startDate),
+        defaultDay: new Date(result.data.datestreak.startDate),
         LockPlugin: {
           minDate: tomorrow,
           filter(date, picked) {
