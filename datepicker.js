@@ -19,8 +19,6 @@ window.Wized.push(async (Wized) => {
       const tomorrow = new Date(today); 
       tomorrow.setDate(today.getDate() + 1);
 
-      console.log(result.data);
-
       // Loop through date_object to set prices and filter by availability
       result.data.date_object.forEach((dateObj) => {
         const dateStr = dateObj.date;
@@ -60,7 +58,7 @@ window.Wized.push(async (Wized) => {
             other: 'nights',
           },
         },
-        startDate: new Date(result.data.dateStreak.startDate),
+        startDate: new Date(result.data.datestreak.startDate),
         LockPlugin: {
           minDate: tomorrow,
           filter(date, picked) {
