@@ -58,7 +58,7 @@ window.Wized.push(async (Wized) => {
             other: 'nights',
           },
         },
-        startDate: new Date(result.data.datestreak.startDate).format("YYYY-MM-DD"),
+        startDate: new Date(result.data.dateStreak.startDate),
         LockPlugin: {
           minDate: tomorrow,
           filter(date, picked) {
