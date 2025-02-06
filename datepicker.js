@@ -42,8 +42,8 @@ window.Wized.push(async (Wized) => {
       picker = new easepick.create({
         element: "#datepicker",
         css: [
-          "https://scripttag.nyc3.digitaloceanspaces.com/6e6958ce-3345-49b2-b0de-25483a9cca8a", // Replace with your CSS URL
-          "https://api.statechange.ai/api:scripttagme/dev/Easepick_13dff193-b494-44ce-a31c-40d8b99e6a4a",
+          "https://artin-properties.github.io/scripts/datepicker-theme.css", // Replace with your CSS URL
+          "https://artin-properties.github.io/scripts/datepicker.css",
         ],
         inline: true,
         zIndex: 10,
