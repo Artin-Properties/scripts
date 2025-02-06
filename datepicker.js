@@ -39,6 +39,8 @@ window.Wized.push(async (Wized) => {
         }
       });
 
+      console.log(prices);
+
       picker = new easepick.create({
         element: "#datepicker",
         css: [
@@ -58,7 +60,7 @@ window.Wized.push(async (Wized) => {
             other: 'nights',
           },
         },
-        startDate: date.format("YYYY-MM-DD"),
+        // startDate: date.format("YYYY-MM-DD"),
         LockPlugin: {
           minDate: tomorrow,
           filter(date, picked) {
