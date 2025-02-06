@@ -58,8 +58,6 @@ window.Wized.push(async (Wized) => {
             other: 'nights',
           },
         },
-        startDate: new Date(result.data.datestreak.startDate),
-        defaultDate: new Date(result.data.datestreak.startDate),
         LockPlugin: {
           minDate: tomorrow,
           filter(date, picked) {
@@ -159,6 +157,8 @@ window.Wized.push(async (Wized) => {
               }
             }
           });
+
+          picker.gotoDate(new Date(result.data.datestreak.startDate));
 
           picker.on("view", (evt) => {
             const { view, date, target } = evt.detail;
