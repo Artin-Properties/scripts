@@ -66,6 +66,7 @@
     border: 1px solid var(--border-color--line-darker);
     font-family: SF UI Text, sans-serif;
     font-size: 0.7rem;
+    z-index: 901;
 }
 
 .choices[data-type*=select-multiple] .choices__button, .choices[data-type*=text] .choices__button {
