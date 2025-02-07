@@ -2,7 +2,7 @@
     width: 100%;
 }
 
-.choices > svg {
+.multiple-choice > svg {
     position: absolute;
     right: 1rem;
     top: 3.5rem;
