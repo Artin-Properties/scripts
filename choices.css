@@ -1,0 +1,36 @@
+.choices {
+    width: 100%;
+}
+
+.choices > svg {
+    position: absolute;
+    right: 1rem;
+    top: 3.5rem;
+    color: var(--base-color-neutral--neutral-light);
+}
+
+.choices__inner {
+    border: 1px solid var(--border-color--line-darker);
+    background-color: var(--base-color-neutral--neutral-darker);
+    border-radius: 2px;
+    width: 100%;
+    height: auto;
+    min-height: 2.75rem;
+    margin-bottom: 0;
+    padding: .75rem .625rem .75rem 1.25rem;
+    font-size: 1rem;
+    line-height: 1.3;
+}
+
+.choices__input {
+    background-color: var(--base-color-neutral--neutral-darker);
+    font-family: SF UI Text, sans-serif;
+    font-size: 1rem;
+}
+
+.choices__list--dropdown {
+    background-color: var(--base-color-neutral--neutral-darker);
+    border: 1px solid var(--border-color--line-darker);
+}
+
+
