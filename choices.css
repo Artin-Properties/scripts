@@ -4,8 +4,8 @@
 
 .multiple-choice > svg {
     position: absolute;
-    right: 1rem;
-    top: 3.5rem;
+    right: 0.7rem;
+    top: 3.1rem;
     color: var(--base-color-neutral--neutral-light);
 }
 
@@ -30,8 +30,8 @@
     margin-bottom: 0;
 }
 
-.choices__list {
-    
+.choices__input::placeholder {
+    color: var(--base-color-neutral--neutral-light);
 }
 
 .choices__list--dropdown,.choices__list[aria-expanded] {
