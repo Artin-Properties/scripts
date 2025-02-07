@@ -71,3 +71,7 @@
 .choices[data-type*=select-multiple] .choices__button, .choices[data-type*=text] .choices__button {
     border-left: 1px solid var(--border-color--line-darker);
 }
+
+.is-open .choices__list--dropdown, .is-open .choices__list[aria-expanded] {
+    border: 1px solid var(--border-color--line-darker);
+}
