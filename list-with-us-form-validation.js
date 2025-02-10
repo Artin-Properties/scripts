@@ -1,4 +1,4 @@
-document.getElementById("myForm").addEventListener("submit", async function(event) {
+document.getElementById("wf-form-List-with-us-form").addEventListener("submit", async function(event) {
   event.preventDefault(); // Prevent form from submitting initially
 
   let isValid = true;
