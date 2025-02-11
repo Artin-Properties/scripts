@@ -194,8 +194,9 @@ function formatDate(date) {
           button.style.display = "none";
         } else {
           button.style.display = "flex";
+          button.classList.add("is-blue")
           button.classList.remove("is-dark");
-          button.style.pointerEvents = "";
+          // button.style.pointerEvents = "";
         }
       }
   
