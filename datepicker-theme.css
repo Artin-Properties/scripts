@@ -203,6 +203,10 @@
   justify-content: space-between;
   padding: 10px;
 }
+.calander > .header .month-name .month-name--select {
+  background-color: transparent;
+  color: var(--base-color-brand--white);
+}
 .calendar > .header .month-name {
   flex: 1;
   font-size: 15px;
