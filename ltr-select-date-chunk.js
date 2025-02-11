@@ -193,7 +193,7 @@ function formatDate(date) {
           // button.style.pointerEvents = "none";
           button.style.display = "none";
         } else {
-          button.style.display = "unset";
+          button.style.display = "flex";
           button.classList.remove("is-dark");
           button.style.pointerEvents = "";
         }
