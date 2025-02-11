@@ -140,6 +140,7 @@ function formatDate(date) {
       if (availableRange.startDate && availableRange.endDate) {
         attachDateToPicker(availableRange.startDate, availableRange.endDate);
         // Sync to Wized variables
+        console.log("availableRange", availableRange);
         Wized.data.v.arrival_date = availableRange.startDate;
         Wized.data.v.departure_date = availableRange.endDate;
       } else {
