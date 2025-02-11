@@ -190,13 +190,13 @@ function formatDate(date) {
         if (!availableRange.startDate || !availableRange.endDate) {
           button.classList.add("is-dark");
           button.classList.remove("is-blue"); // Ensure 'is-blue' is removed if disabled
-          // button.style.pointerEvents = "none";
+          button.style.pointerEvents = "none";
           button.style.display = "none";
         } else {
           button.style.display = "flex";
           button.classList.add("is-blue")
           button.classList.remove("is-dark");
-          // button.style.pointerEvents = "";
+          button.style.pointerEvents = "";
         }
       }
   
