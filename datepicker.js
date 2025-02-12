@@ -27,7 +27,7 @@ window.Wized.push(async (Wized) => {
         const date = new Date(year, month, day);
 
         if (
-          date > today &&
+          date >= today &&
           (dateObj.available ||
             dateObj.check_in_available ||
             dateObj.check_out_available)

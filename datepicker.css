@@ -117,6 +117,14 @@ input {
   color: #ffffff;
 }
 
+/* .container.range-plugin .calendar > .days-grid > .day.start {
+  clip-path: polygon(0 0, 80% 0, 100% 50%, 80% 100%, 0 100%);
+}
+
+.container.range-plugin .calendar > .days-grid > .day.end {
+  clip-path: polygon(0 0, 80% 0, 100% 50%, 80% 100%, 0 100%);
+} */
+
 /* Disable triangle created by ::after pseudo-element on both start and end */
 .day.unit.start::after,
 .day.unit.end::after {
