@@ -14,7 +14,6 @@ window.Wized.push(async (Wized) => {
 
     if (result && result.data && result.data.date_object) {
       const prices = {}; // Map date to price based on date_object array
-
       const today = new Date();
       today.setHours(0, 0, 0, 0); // Set to start of the day for accurate comparison
 
@@ -38,8 +37,6 @@ window.Wized.push(async (Wized) => {
         }
       });
 
-      console.log(prices);
-
       picker = new easepick.create({
         element: "#datepicker",
         css: [
@@ -60,7 +57,7 @@ window.Wized.push(async (Wized) => {
           },
         },
         LockPlugin: {
-          minDate: minDate,
+          minDate: new Date(),
           filter(date, picked) {
             const formattedDate = date.format("YYYY-MM-DD");
             const dateObj = result.data.date_object.find(
