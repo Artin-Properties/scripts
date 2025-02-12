@@ -142,11 +142,11 @@ window.Wized.push(async (Wized) => {
 
               if (Wized.data.r.Get_Property.data.rental_type === "MTR") {
                 if (startDate && endDate) {
-                  const totalDays = Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+                  const totalDays = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
                   console.log(`Total Days Selected: ${totalDays}`);
                 }
   
-                if (totalDays < Wized.data.r.Get_Property.data.minNights || totalDays > Wized.data.r.Get_Property.data.maxNights) {
+                if ((Wized.data.r.Get_Property.data.minNights && totalDays < Wized.data.r.Get_Property.data.minNights) || (Wized.data.r.Get_Property.data.maxNights && totalDays > Wized.data.r.Get_Property.data.maxNights)  ) {
                   isInvalidRange = true;
                 }
               }
