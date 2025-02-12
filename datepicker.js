@@ -145,7 +145,7 @@ window.Wized.push(async (Wized) => {
                   const totalNights = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
                   console.log(`Total Days Selected: ${totalNights}`);
 
-                  if ((Wized.data.r.Get_Property.data.minNights && totalDays < Wized.data.r.Get_Property.data.minNights) || (Wized.data.r.Get_Property.data.maxNights && totalDays > Wized.data.r.Get_Property.data.maxNights)  ) {
+                  if ((Wized.data.r.Get_Property.data.minNights && totalNights < Wized.data.r.Get_Property.data.minNights) || (Wized.data.r.Get_Property.data.maxNights && totalNights > Wized.data.r.Get_Property.data.maxNights)  ) {
                     isInvalidRange = true;
                   }
                 }              
