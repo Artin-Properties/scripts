@@ -140,6 +140,15 @@ window.Wized.push(async (Wized) => {
                 isInvalidRange = true;
               }
 
+              if (startDate && endDate) {
+                const totalDays = Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+                console.log(`Total Days Selected: ${totalDays}`);
+              }
+
+              if (totalDays < Wized.data.r.Get_Property.data.minNights || totalDays > Wized.data.r.Get_Property.data.maxNights) {
+                isInvalidRange = true;
+              }
+
               // Log whether the selected range is invalid
               console.log("Is Invalid Range:", isInvalidRange);
 
