@@ -14,18 +14,9 @@ window.Wized.push(async (Wized) => {
 
     if (result && result.data && result.data.date_object) {
       const prices = {}; // Map date to price based on date_object array
-      const now = new Date();
-      const currentHour = now.getHours();
-      const currentMinutes = now.getMinutes();
 
-      // Check if it's past 8:45 PM (20:45)
-      if (currentHour > 20 || (currentHour === 20 && currentMinutes >= 45)) {
-          now.setDate(now.getDate() + 1); // Move to tomorrow
-      }
-      const minDate = now;
-
-      // const today = new Date();
-      // today.setHours(0, 0, 0, 0); // Set to start of the day for accurate comparison
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Set to start of the day for accurate comparison
 
       // Loop through date_object to set prices and filter by availability
       result.data.date_object.forEach((dateObj) => {
@@ -37,7 +28,7 @@ window.Wized.push(async (Wized) => {
         const date = new Date(year, month, day);
 
         if (
-          date >= minDate &&
+          date >= today &&
           (dateObj.available ||
             dateObj.check_in_available ||
             dateObj.check_out_available)
