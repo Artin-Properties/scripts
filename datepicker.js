@@ -16,8 +16,6 @@ window.Wized.push(async (Wized) => {
       const prices = {}; // Map date to price based on date_object array
       const today = new Date();
       today.setHours(0, 0, 0, 0); // Set to start of the day for accurate comparison
-      const tomorrow = new Date(today); 
-      tomorrow.setDate(today.getDate() + 1);
 
       // Loop through date_object to set prices and filter by availability
       result.data.date_object.forEach((dateObj) => {
@@ -59,7 +57,7 @@ window.Wized.push(async (Wized) => {
           },
         },
         LockPlugin: {
-          minDate: tomorrow,
+          minDate: new Date(),
           filter(date, picked) {
             const formattedDate = date.format("YYYY-MM-DD");
             const dateObj = result.data.date_object.find(
@@ -111,7 +109,7 @@ window.Wized.push(async (Wized) => {
                 selectedDates.push(formattedDate);
                 currentDate.setDate(currentDate.getDate() + 1);
               }
-              console.log(selectedDates);
+
               const [...leadingdates] = selectedDates;
               const checkoutdate = leadingdates.pop();
 
