@@ -38,6 +38,8 @@ window.Wized.push(async (Wized) => {
         }
       });
 
+      console.log(prices);
+
       picker = new easepick.create({
         element: "#datepicker",
         css: [
