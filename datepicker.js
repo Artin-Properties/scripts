@@ -156,6 +156,7 @@ window.Wized.push(async (Wized) => {
                     newElement.classList.add("input_error", "is-red");
                     newElement.style.marginTop = "1rem";
                     newElement.style.marginBottom = "0.5rem";
+                    newElement.style.justifyContent = "center";
 
                     // Check conditions for minNights and maxNights
                     if (minNights && totalNights < minNights) {
