@@ -26,15 +26,30 @@ window.Wized.push(async (Wized) => {
         const day = parseInt(parts[2], 10);
         const date = new Date(year, month, day);
 
-        if (
-          date >= today &&
-          (dateObj.available ||
-            dateObj.check_in_available ||
-            dateObj.check_out_available)
-        ) {
+        // if (
+        //   date >= today &&
+        //   (dateObj.available ||
+        //     dateObj.check_in_available ||
+        //     dateObj.check_out_available)
+        // ) {
+        //   const formattedDate = formatDate(date);
+        //   prices[formattedDate] = dateObj.price;
+        // }
+
+        if (date >= today) {
           const formattedDate = formatDate(date);
-          prices[formattedDate] = dateObj.price;
-        }
+      
+          // If today is the last day of a booking, allow check-in
+          const isLastDayOfBooking = dateObj.check_out_available && !dateObj.available;
+      
+          // If a date is the first day of a booking, it should only allow checkout (not selectable for check-in)
+          const isFirstDayOfBooking = dateObj.check_in_available && !dateObj.available;
+      
+          // Add price only if it's available, or if today is a valid check-in/check-out scenario
+          if (dateObj.available || isLastDayOfBooking || (dateObj.check_out_available && !isFirstDayOfBooking)) {
+              prices[formattedDate] = dateObj.price;
+          }
+      }
       });
 
       picker = new easepick.create({
@@ -69,11 +84,27 @@ window.Wized.push(async (Wized) => {
             const isAvailable = dateObj.available;
             const isAvailableForCheckIn = dateObj.check_in_available;
             const isAvailableForCheckOut = dateObj.check_out_available;
+
+            // If today is the last day of a booking, allow check-in
+            const isLastDayOfBooking = isAvailableForCheckOut && !isAvailable;
+
+            // If a date is the first day of a booking, it should only allow checkout (not selectable for check-in)
+            const isFirstDayOfBooking = isAvailableForCheckIn && !isAvailable;
+
             return !(
-              isAvailable ||
-              isAvailableForCheckIn ||
-              isAvailableForCheckOut
+                isAvailable || 
+                isLastDayOfBooking || 
+                (isAvailableForCheckOut && !isFirstDayOfBooking)
             );
+            
+            // const isAvailable = dateObj.available;
+            // const isAvailableForCheckIn = dateObj.check_in_available;
+            // const isAvailableForCheckOut = dateObj.check_out_available;
+            // return !(
+            //   isAvailable ||
+            //   isAvailableForCheckIn ||
+            //   isAvailableForCheckOut
+            // );
           },
         },
 
