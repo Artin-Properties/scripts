@@ -153,7 +153,7 @@ window.Wized.push(async (Wized) => {
 
                     // Create the new div with the "gird" class
                     const newElement = document.createElement("div");
-                    newElement.classList.add("input_error is-red");
+                    newElement.classList.add("input_error", "is-red");
 
                     // Check conditions for minNights and maxNights
                     if (minNights && totalNights < minNights) {
