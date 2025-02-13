@@ -154,12 +154,14 @@ window.Wized.push(async (Wized) => {
                     // Create the new div with the "gird" class
                     const newElement = document.createElement("div");
                     newElement.classList.add("input_error", "is-red");
+                    newElement.style.marginTop = "1rem";
+                    newElement.style.marginBottom = "0.5rem";
 
                     // Check conditions for minNights and maxNights
                     if (minNights && totalNights < minNights) {
-                        newElement.textContent = `Select at least ${minNights} nights`;
+                        newElement.textContent = `The minimum stay is ${minNights} nights`;
                     } else if (maxNights && totalNights > maxNights) {
-                        newElement.textContent = `Maximum stay is ${maxNights} nights`;
+                        newElement.textContent = `The maximum stay is ${maxNights} nights`;
                     } else {
                         newElement.textContent = ""; // If within range, leave empty or remove the element
                     }
