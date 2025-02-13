@@ -143,10 +143,31 @@ window.Wized.push(async (Wized) => {
               if (Wized.data.r.Get_Property.data.rental_type === "MTR") {
                 if (startDate && endDate) {
                   const totalNights = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+                  const minNights = Wized.data.r.Get_Property.data.minNights;
+                  const maxNights = Wized.data.r.Get_Property.data.maxNights;
                   console.log(`Total Days Selected: ${totalNights}`);
 
-                  if ((Wized.data.r.Get_Property.data.minNights && totalNights < Wized.data.r.Get_Property.data.minNights) || (Wized.data.r.Get_Property.data.maxNights && totalNights > Wized.data.r.Get_Property.data.maxNights)  ) {
+                  if ((minNights && totalNights < minNights) || (maxNights && totalNights > maxNights)  ) {
                     isInvalidRange = true;
+                    const targetElement = document.querySelector(".price_form-field-wrap-2");
+
+                    // Create the new div with the "gird" class
+                    const newElement = document.createElement("div");
+                    newElement.classList.add("input_error is-red");
+
+                    // Check conditions for minNights and maxNights
+                    if (minNights && totalNights < minNights) {
+                        newElement.textContent = `Select at least ${minNights} nights`;
+                    } else if (maxNights && totalNights > maxNights) {
+                        newElement.textContent = `Maximum stay is ${maxNights} nights`;
+                    } else {
+                        newElement.textContent = ""; // If within range, leave empty or remove the element
+                    }
+
+                    // Insert after the target element if there's a message to display
+                    if (newElement.textContent !== "") {
+                        targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
+                    }
                   }
                 }              
               }
