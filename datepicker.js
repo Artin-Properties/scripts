@@ -6,6 +6,12 @@ function formatDate(date) {
   return `${year}-${month}-${day}`;
 }
 
+// Helper function to check if current time is past 8 PM
+function isPastBookingTime() {
+  const now = new Date();
+  return now.getHours() >= 20; // 20 is 8 PM in 24-hour format
+}
+
 // Initialize Easepick date picker after the Wized request completes
 window.Wized = window.Wized || [];
 window.Wized.push(async (Wized) => {
@@ -26,16 +32,6 @@ window.Wized.push(async (Wized) => {
         const day = parseInt(parts[2], 10);
         const date = new Date(year, month, day);
 
-        // if (
-        //   date >= today &&
-        //   (dateObj.available ||
-        //     dateObj.check_in_available ||
-        //     dateObj.check_out_available)
-        // ) {
-        //   const formattedDate = formatDate(date);
-        //   prices[formattedDate] = dateObj.price;
-        // }
-
         if (date >= today) {
           const formattedDate = formatDate(date);
       
@@ -49,7 +45,7 @@ window.Wized.push(async (Wized) => {
           if (dateObj.available || isLastDayOfBooking || (dateObj.check_out_available && !isFirstDayOfBooking)) {
               prices[formattedDate] = dateObj.price;
           }
-      }
+        }
       });
 
       picker = new easepick.create({
@@ -81,6 +77,16 @@ window.Wized.push(async (Wized) => {
             if (!dateObj) {
               return false;
             }
+
+            // Check if the date is today and if it's past 8 PM
+            const today = new Date();
+            const dateToCheck = new Date(date.getTime());
+            const isToday = dateToCheck.toDateString() === today.toDateString();
+            
+            if (isToday && isPastBookingTime()) {
+              return true; // Lock the date if it's today and past 8 PM
+            }
+
             const isAvailable = dateObj.available;
             const isAvailableForCheckIn = dateObj.check_in_available;
             const isAvailableForCheckOut = dateObj.check_out_available;
@@ -96,15 +102,6 @@ window.Wized.push(async (Wized) => {
                 isLastDayOfBooking || 
                 (isAvailableForCheckOut && !isFirstDayOfBooking)
             );
-            
-            // const isAvailable = dateObj.available;
-            // const isAvailableForCheckIn = dateObj.check_in_available;
-            // const isAvailableForCheckOut = dateObj.check_out_available;
-            // return !(
-            //   isAvailable ||
-            //   isAvailableForCheckIn ||
-            //   isAvailableForCheckOut
-            // );
           },
         },
 
