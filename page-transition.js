@@ -1,6 +1,6 @@
 $(document).ready(function() {
   // Check if the current URL is staging
-  const isStaging = window.location.href.includes("https://artin-properties.webflow.io/");
+  const isStaging = window.location.pathname.startsWith("/v2/page/proxy");
   
   if (isStaging) {
     const transitionTrigger = document.querySelector(".transition-trigger");
