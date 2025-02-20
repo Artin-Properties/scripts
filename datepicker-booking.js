@@ -212,7 +212,7 @@ window.Wized.push(async (Wized) => {
               } else {
                 Wized.data.v.booking_property_data.arrival_date = arrivalDateStr;
                 Wized.data.v.booking_property_data.departure_date = departureDateStr;
-                Wized.data.v.booking_property_data.lenght = totalNights;
+                Wized.data.v.booking_property_data.length = totalNights;
                 lastEndDate = endDate;
               }
             }
