@@ -91,7 +91,7 @@ input {
 
 /* Target available day cells (without the .not-available class) */
 .calendar > .days-grid > .day.unit:not(.not-available) {
-  background-color: #1e1e1e !important;
+  background-color: #303030 !important;
   color: #ffffff !important;
   font-weight: 700 !important;
   font-size: 16px !important;
@@ -270,7 +270,7 @@ input {
   .calendar
   > .days-grid
   > .day.locked:not(.start):not(.end) {
-  background-image: none !important; /* Remove background image */
+  background-color: #191919 !important; /* Remove background image */
   opacity: 0.2 !important; /* Maintain the reduced opacity */
   pointer-events: none !important; /* Prevent interaction */
   font-style: normal !important; /* Remove italic styling */
