@@ -103,6 +103,7 @@ input {
   font-size: 0.875rem;
   font-style: normal;
   line-height: 25px;
+  cursor: pointer;
 }
 
 /* Hover effect for a day */
