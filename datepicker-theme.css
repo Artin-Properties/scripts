@@ -341,10 +341,7 @@
   visibility: hidden;
 }
 .container.lock-plugin .calendar > .days-grid > .day.not-available {
-  background-color: var(--color-bg-unavailable);
-  color: var(--color-fg-locked);
-  font-style: italic;
-  pointer-events: none;
+  background-image: repeating-linear-gradient(135deg, transparent, var(--color-bg-locked) 2px, transparent 2px, transparent 4px);
 }
 .container.lock-plugin .calendar > .days-grid > .day.locked {
   background-color: transparent;
