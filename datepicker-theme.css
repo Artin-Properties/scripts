@@ -342,6 +342,11 @@
 }
 .container.lock-plugin .calendar > .days-grid > .day.not-available {
   background-image: repeating-linear-gradient(135deg, transparent, var(--color-bg-locked) 2px, transparent 2px, transparent 4px);
+  opacity: 0.2 !important;
+  font-style: normal !important;
+  color: white !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
 }
 .container.lock-plugin .calendar > .days-grid > .day.locked {
   background-color: transparent;
