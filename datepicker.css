@@ -42,6 +42,7 @@ input {
   flex-direction: row !important;
   justify-content: space-between !important;
   box-sizing: border-box !important;
+  gap: 20px;
 }
 
 /* .day unit styling */
