@@ -56,6 +56,7 @@ window.Wized.push(async (Wized) => {
         ],
         inline: true,
         zIndex: 10,
+        calendars: 2,
         plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
         RangePlugin: {
           tooltip: true,
