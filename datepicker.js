@@ -115,8 +115,13 @@ window.Wized.push(async (Wized) => {
 
           picker.on("select", () => {
             const startDate = picker.getStartDate();
-            const endDate = picker.getEndDate();
-            console.log(startDate, endDate);
+  const endDate = picker.getEndDate();
+
+  if (startDate) {
+    picker.LockPlugin.lockDates(date => date < startDate);
+  } else {
+    picker.LockPlugin.unlockDates();
+  }
 
             if (startDate && endDate) {
               const arrivalDateStr = startDate.format("YYYY-MM-DD");
