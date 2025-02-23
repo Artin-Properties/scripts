@@ -140,7 +140,7 @@ window.Wized.push(async (Wized) => {
 
 
           let lastEndDate = null;
-
+setup(picker) {
           picker.on("select", () => {
             
             const startDate = picker.getStartDate();
