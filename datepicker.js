@@ -104,9 +104,9 @@ window.Wized.push(async (Wized) => {
             );
           },
         },
-
+ setup(picker) {
      picker.on("preselect", (evt) => {
-    const startDate = new Date(evt.detail.start); // Convert start date to Date object
+    const startDate = new Date(evt.detail.start); // Ensure startDate is a Date object
     const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
 
     if (startDate) {
@@ -115,23 +115,17 @@ window.Wized.push(async (Wized) => {
 
     let firstLockedDate = null;
 
-    if (result?.data?.date_object?.length) {  // Ensure result.data.date_object exists
-        for (const obj of result.data.date_object) {
-            const objDate = new Date(obj.date); // Convert date string to Date object
-
-            if (objDate >= startDate) { // Only check dates after startDate
-                console.log(`Date: ${obj.date}, available: ${obj.available}`);
-
-                if (!obj.available) { 
-                    firstLockedDate = objDate;
-                    console.log("First locked date found:", firstLockedDate);
-                    break; // Stop at the first locked date
-                }
+    if (result?.data?.date_object) {  // Ensure result and data exist
+        for (const dateObj of result.data.date_object) {
+            if (!dateObj.available) { 
+                firstLockedDate = new Date(dateObj.date);
+                console.log("First locked date:", firstLockedDate);
+                break; 
             }
         }
     }
 
-    if (firstLockedDate) {
+    if (firstLockedDate && firstLockedDate > startDate) {
         lockPlugin.options.maxDate = firstLockedDate;
     } else {
         lockPlugin.options.maxDate = null; // No restriction if no locked date is found
@@ -139,8 +133,8 @@ window.Wized.push(async (Wized) => {
 });
 
 
+
           let lastEndDate = null;
-setup(picker) {
           picker.on("select", () => {
             
             const startDate = picker.getStartDate();
