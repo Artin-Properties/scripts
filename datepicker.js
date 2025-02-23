@@ -125,8 +125,6 @@ window.Wized.push(async (Wized) => {
             const startDate = picker.getStartDate();
   const endDate = picker.getEndDate();
 
-const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
-
   const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
 
 if (!endDate) {
