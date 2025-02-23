@@ -114,23 +114,22 @@ window.Wized.push(async (Wized) => {
     if (startDate) {
         lockPlugin.options.minDate = startDate;
     }
+let firstLockedDate = null;
 
-    let firstLockedDate = null;
-
-    // Find the first locked date from the result data
-    for (const dateObj of result.data.date_object) {
-        if (!dateObj.available) { // If the date is locked
-            firstLockedDate = new Date(dateObj.date);
-            break; // Stop at the first locked date
-        }
+for (const dateObj of result.data.date_object) {
+    if (!dateObj.available) { 
+      
+        firstLockedDate = new Date(dateObj.date);
+      console.log(firstLockedDate);
+        break; 
     }
+}
 
-    // Set maxDate to the first locked date if found
-    if (firstLockedDate && firstLockedDate > startDate) {
-        lockPlugin.options.maxDate = firstLockedDate;
-    } else {
-        lockPlugin.options.maxDate = null; // No restriction if no locked date is found
-    }
+if (firstLockedDate && firstLockedDate > startDate) {
+    lockPlugin.options.maxDate = firstLockedDate;
+} else {
+    lockPlugin.options.maxDate = null; // No restriction if no locked date is found
+}
 });
 
           let lastEndDate = null;
