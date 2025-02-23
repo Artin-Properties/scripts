@@ -110,6 +110,7 @@ window.Wized.push(async (Wized) => {
           let lastEndDate = null;
 
           picker.on("select", () => {
+            
             const startDate = picker.getStartDate();
   const endDate = picker.getEndDate();
 
@@ -123,8 +124,6 @@ window.Wized.push(async (Wized) => {
     // Reset minDate to today's date when no dates are selected
     picker.LockPlugin.minDate = new Date();
   }
-            const startDate = picker.getStartDate();
-            const endDate = picker.getEndDate();
             console.log(startDate, endDate);
 
             if (startDate && endDate) {
