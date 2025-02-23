@@ -148,6 +148,10 @@ input {
   color: #ffffff !important;
 }
 
+.calendar > .days-grid > .day.in-range .day-price {
+  color: #fff !important; /* Set text color to white when in-range class is present */
+}
+
 /* Ensure the in-range days are still styled when they're also available and unlocked */
 .calendar > .days-grid > .day.unit.in-range:not(.not-available):not(.locked) {
   background-color: #404040 !important;
