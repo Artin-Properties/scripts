@@ -106,34 +106,29 @@ window.Wized.push(async (Wized) => {
         },
 
         setup(picker) {
-     picker.on("preselect", (evt) => {
-    const startDate = evt.detail.start;
-    const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
+      picker.on("preselect", (evt) => {
+        const startDate = evt.detail.start;
+        const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
 
-    // Set minDate to startDate (or today if not selected)
-    lockPlugin.options.minDate = startDate || new Date();
+        // Set minDate to startDate (or today if not selected)
+        lockPlugin.options.minDate = startDate || new Date();
 
-    // Find the first locked date from the DOM
-    let lockedElements = document.querySelectorAll(".day.unit.locked"); 
-    let firstLockedDate = null;
-
-    for (let elem of lockedElements) {
-        let timestamp = parseInt(elem.getAttribute("data-time")); // Get timestamp
-        if (!isNaN(timestamp)) {
-            firstLockedDate = new Date(timestamp);
-            break; // Stop at the first locked date
+        // Find the first disabled/locked date
+        let firstLockedDate = null;
+        for (const dateObj of result.data.date_object) {
+            if (!dateObj.available) { // Check if date is locked
+                firstLockedDate = new Date(dateObj.date);
+                break; // Stop at the first locked date
+            }
         }
-    }
 
-    // Set maxDate to the first locked date if found
-    if (firstLockedDate) {
-        lockPlugin.options.maxDate = firstLockedDate;
-    }
+        // Set maxDate to the first locked date if found
+        if (firstLockedDate) {
+            lockPlugin.options.maxDate = firstLockedDate;
+        }
 
-    // Reload the plugin to apply changes
-    picker.PluginManager.reloadInstance("LockPlugin");
-});
-
+    
+    });
           let lastEndDate = null;
 
           picker.on("select", () => {
