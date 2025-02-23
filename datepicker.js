@@ -70,6 +70,10 @@ window.Wized.push(async (Wized) => {
         LockPlugin: {
           minDate: new Date(), // Disable all dates before today
           filter(date, picked) {
+            const startDate = picker.getStartDate();
+    if (startDate && date < startDate) {
+      return false; // Disable all previous dates
+    }
             const formattedDate = date.format("YYYY-MM-DD");
             const dateObj = result.data.date_object.find(
               (obj) => obj.date === formattedDate
