@@ -105,35 +105,37 @@ window.Wized.push(async (Wized) => {
           },
         },
  setup(picker) {
-     picker.on("preselect", (evt) => {
-    const startDate = evt.detail.start;
-    const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
+picker.on("preselect", (evt) => {
+  const startDate = evt.detail.start;
+  const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
 
-    if (startDate) {
-        lockPlugin.options.minDate = startDate;
+  if (startDate) {
+    lockPlugin.options.minDate = startDate;
+  }
+
+  let firstLockedDate = null;
+
+  // Find the first locked date AFTER the start date
+  for (const dateObj of result.data.date_object) {
+    const lockedDate = new Date(dateObj.date);
+    if (!dateObj.available && lockedDate > startDate) {
+      firstLockedDate = lockedDate;
+      break; // Stop at the first locked date
     }
+  }
 
-    let firstLockedDate = null;
+  console.log("First locked date:", firstLockedDate);
 
-    // Find the first locked date AFTER the start date
-    for (const dateObj of result.data.date_object) {
-        const lockedDate = new Date(dateObj.date);
-        if (!dateObj.available && lockedDate > startDate) {
-            firstLockedDate = lockedDate;
-            break; // Stop at the first locked date
-        }
-    }
+  // Set maxDate to the first locked date if found
+  if (firstLockedDate) {
+    lockPlugin.options.maxDate = firstLockedDate;
+  } else {
+    lockPlugin.options.maxDate = null; // No restriction if no locked date found
+  }
 
-    // Set maxDate to the first locked date if found
-    if (firstLockedDate) {
-        lockPlugin.options.maxDate = firstLockedDate;
-    } else {
-        lockPlugin.options.maxDate = null; // No restriction if no locked date found
-    }
-
-    // Reload LockPlugin to apply changes
+  // Reload LockPlugin to apply changes
+  picker.PluginManager.reloadInstance("LockPlugin");
 });
-
 
 
           let lastEndDate = null;
