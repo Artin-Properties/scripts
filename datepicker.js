@@ -34,16 +34,16 @@ window.Wized.push(async (Wized) => {
 
         if (date >= today) {
           const formattedDate = formatDate(date);
-      
+
           // If today is the last day of a booking, allow check-in
           const isLastDayOfBooking = dateObj.check_out_available && !dateObj.available;
-      
+
           // If a date is the first day of a booking, it should only allow checkout (not selectable for check-in)
           const isFirstDayOfBooking = dateObj.check_in_available && !dateObj.available;
-      
+
           // Add price only if it's available, or if today is a valid check-in/check-out scenario
           if (dateObj.available || isLastDayOfBooking || (dateObj.check_out_available && !isFirstDayOfBooking)) {
-              prices[formattedDate] = dateObj.price;
+            prices[formattedDate] = dateObj.price;
           }
         }
       });
@@ -68,7 +68,7 @@ window.Wized.push(async (Wized) => {
           },
         },
         LockPlugin: {
-          minDate: new Date(),
+          minDate: new Date(), // Disable all dates before today
           filter(date, picked) {
             const formattedDate = date.format("YYYY-MM-DD");
             const dateObj = result.data.date_object.find(
@@ -82,7 +82,7 @@ window.Wized.push(async (Wized) => {
             const today = new Date();
             const dateToCheck = new Date(date.getTime());
             const isToday = dateToCheck.toDateString() === today.toDateString();
-            
+
             if (isToday && isPastBookingTime()) {
               return true; // Lock the date if it's today and past 8 PM
             }
@@ -97,10 +97,15 @@ window.Wized.push(async (Wized) => {
             // If a date is the first day of a booking, it should only allow checkout (not selectable for check-in)
             const isFirstDayOfBooking = isAvailableForCheckIn && !isAvailable;
 
+            // Disable dates before today
+            if (dateToCheck < today) {
+              return true; // Lock the date if it's before today
+            }
+
             return !(
-                isAvailable || 
-                isLastDayOfBooking || 
-                (isAvailableForCheckOut && !isFirstDayOfBooking)
+              isAvailable ||
+              isLastDayOfBooking ||
+              (isAvailableForCheckOut && !isFirstDayOfBooking)
             );
           },
         },
@@ -175,7 +180,7 @@ window.Wized.push(async (Wized) => {
                   const maxNights = Wized.data.r.Get_Property.data.maxNights;
                   console.log(`Total Days Selected: ${totalNights}`);
 
-                  if ((minNights && totalNights < minNights) || (maxNights && totalNights > maxNights)  ) {
+                  if ((minNights && totalNights < minNights) || (maxNights && totalNights > maxNights)) {
                     isInvalidRange = true;
                     const targetElement = document.querySelector(".price_form-field-wrap-2");
 
@@ -188,19 +193,19 @@ window.Wized.push(async (Wized) => {
 
                     // Check conditions for minNights and maxNights
                     if (minNights && totalNights < minNights) {
-                        newElement.textContent = `The minimum stay is ${minNights} nights`;
+                      newElement.textContent = `The minimum stay is ${minNights} nights`;
                     } else if (maxNights && totalNights > maxNights) {
-                        newElement.textContent = `The maximum stay is ${maxNights} nights`;
+                      newElement.textContent = `The maximum stay is ${maxNights} nights`;
                     } else {
-                        newElement.textContent = ""; // If within range, leave empty or remove the element
+                      newElement.textContent = ""; // If within range, leave empty or remove the element
                     }
 
                     // Insert after the target element if there's a message to display
                     if (newElement.textContent !== "") {
-                        targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
+                      targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
                     }
                   }
-                }              
+                }
               }
 
               // Log whether the selected range is invalid
