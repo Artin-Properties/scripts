@@ -114,10 +114,10 @@ window.Wized.push(async (Wized) => {
             const startDate = picker.getStartDate();
   const endDate = picker.getEndDate();
 
- if (startDate) {
-        picker.setOptions({
-            minDate: startDate, // Disable all past dates, including available ones
-        });
+if (startDate) {
+        // Disable all previous dates after selection
+        picker.options.minDate = startDate;
+        picker.render(); // Re-render the picker to apply changes
     }
             console.log(startDate, endDate);
 
