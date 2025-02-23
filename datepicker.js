@@ -114,11 +114,9 @@ window.Wized.push(async (Wized) => {
             const startDate = picker.getStartDate();
   const endDate = picker.getEndDate();
 
-if (startDate) {
-        // Disable all previous dates after selection
-        picker.setOptions({
-            minDate: startDate
-        });
+ if (startDate) {
+        picker.PluginManager.getInstance("LockPlugin").options.minDate = startDate;
+        picker.render(); // Apply the new minDate
     }
             console.log(startDate, endDate);
 
