@@ -70,6 +70,7 @@ window.Wized.push(async (Wized) => {
         },
         LockPlugin: {
           minDate: new Date(),
+          inseperable:true,
           filter(date, picked) {
             const formattedDate = date.format("YYYY-MM-DD");
             const dateObj = result.data.date_object.find(
@@ -108,10 +109,50 @@ window.Wized.push(async (Wized) => {
 
         setup(picker) {
           let lastEndDate = null;
+                picker.on("preselect", (evt) => {
+    const startDate = evt.detail.start;
+    const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
 
+    // Ensure startDate is valid before setting minDate
+    if (startDate) {
+        lockPlugin.options.minDate = startDate;
+    }
+
+    let firstLockedDate = null;
+
+    // Find the first locked date from the result data
+    for (const dateObj of result.data.date_object) {
+        if (!dateObj.available) { // If the date is locked
+            firstLockedDate = new Date(dateObj.date);
+            break; // Stop at the first locked date
+        }
+    }
+
+    // Set maxDate to the first locked date if found
+    if (firstLockedDate && firstLockedDate > startDate) {
+        lockPlugin.options.maxDate = firstLockedDate;
+    } else {
+        lockPlugin.options.maxDate = null; // No restriction if no locked date is found
+    }
+});
+
+
+
+          let lastEndDate = null;
           picker.on("select", () => {
+            
             const startDate = picker.getStartDate();
-            const endDate = picker.getEndDate();
+  const endDate = picker.getEndDate();
+
+  const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
+
+if (startDate) {
+    lockPlugin.options.minDate = new Date(); // Ensure minDate is always today
+picker.PluginManager.reloadInstance("LockPlugin");
+} else {
+    lockPlugin.options.minDate = new Date(); // Keep minDate at today to avoid unwanted locking
+   picker.PluginManager.reloadInstance("LockPlugin");
+}
             console.log(startDate, endDate);
 
             if (startDate && endDate) {
