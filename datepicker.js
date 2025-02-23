@@ -69,7 +69,6 @@ window.Wized.push(async (Wized) => {
         },
         LockPlugin: {
           minDate: new Date(),
-           inseparable: true,
           filter(date, picked) {
             const formattedDate = date.format("YYYY-MM-DD");
             const dateObj = result.data.date_object.find(
@@ -107,6 +106,17 @@ window.Wized.push(async (Wized) => {
         },
 
         setup(picker) {
+            picker.on("preselect", (evt) => {
+        const startDate = evt.detail.start;
+        const endDate = evt.detail.end;
+        const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
+
+        if (startDate) {
+            lockPlugin.options.minDate = startDate; // Lock past dates when picking End Date
+        } else {
+            lockPlugin.options.minDate = new Date(); // Reset when both dates are picked
+        }
+    });
           
           let lastEndDate = null;
 
@@ -115,13 +125,13 @@ window.Wized.push(async (Wized) => {
             const startDate = picker.getStartDate();
   const endDate = picker.getEndDate();
 
- const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
+const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
 
-    if (startDate) {
-        lockPlugin.options.minDate = startDate;  // Lock past dates when picking End Date
-    } else {
-        lockPlugin.options.minDate = new Date(); // Reset when both dates are picked
-    }
+        if (!endDate) {
+            lockPlugin.options.minDate = startDate; // Lock past dates when picking End Date
+        } else {
+            lockPlugin.options.minDate = new Date(); // Reset when end date is selected
+        }
             console.log(startDate, endDate);
 
             if (startDate && endDate) {
