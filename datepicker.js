@@ -104,7 +104,7 @@ window.Wized.push(async (Wized) => {
             );
           },
         },
-
+setup(picker) {
      picker.on("preselect", (evt) => {
     const startDate = new Date(evt.detail.start); // Convert start date to Date object
     const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
@@ -140,7 +140,7 @@ window.Wized.push(async (Wized) => {
 
 
           let lastEndDate = null;
-setup(picker) {
+
           picker.on("select", () => {
             
             const startDate = picker.getStartDate();
