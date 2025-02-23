@@ -127,7 +127,7 @@ window.Wized.push(async (Wized) => {
 
   const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
 
-if (!endDate) {
+if (startDate) {
     lockPlugin.options.minDate = new Date(); // Ensure minDate is always today
 } else {
     lockPlugin.options.minDate = new Date(); // Keep minDate at today to avoid unwanted locking
