@@ -67,43 +67,49 @@ window.Wized.push(async (Wized) => {
             other: 'nights',
           },
         },
-        LockPlugin: {
-          minDate: new Date(),
-          filter(date, picked) {
-            const formattedDate = date.format("YYYY-MM-DD");
-            const dateObj = result.data.date_object.find(
-              (obj) => obj.date === formattedDate
-            );
-            if (!dateObj) {
-              return false;
-            }
+       LockPlugin: {
+  minDate: new Date(),
+  filter(date, picked) {
+    const formattedDate = date.format("YYYY-MM-DD");
+    const dateObj = result.data.date_object.find(
+      (obj) => obj.date === formattedDate
+    );
 
-            // Check if the date is today and if it's past 8 PM
-            const today = new Date();
-            const dateToCheck = new Date(date.getTime());
-            const isToday = dateToCheck.toDateString() === today.toDateString();
-            
-            if (isToday && isPastBookingTime()) {
-              return true; // Lock the date if it's today and past 8 PM
-            }
+    if (!dateObj) {
+      return false;
+    }
 
-            const isAvailable = dateObj.available;
-            const isAvailableForCheckIn = dateObj.check_in_available;
-            const isAvailableForCheckOut = dateObj.check_out_available;
+    // Check if the date is today and if it's past 8 PM
+    const today = new Date();
+    const dateToCheck = new Date(date.getTime());
+    const isToday = dateToCheck.toDateString() === today.toDateString();
 
-            // If today is the last day of a booking, allow check-in
-            const isLastDayOfBooking = isAvailableForCheckOut && !isAvailable;
+    if (isToday && isPastBookingTime()) {
+      return true; // Lock the date if it's today and past 8 PM
+    }
 
-            // If a date is the first day of a booking, it should only allow checkout (not selectable for check-in)
-            const isFirstDayOfBooking = isAvailableForCheckIn && !isAvailable;
+    const isAvailable = dateObj.available;
+    const isAvailableForCheckIn = dateObj.check_in_available;
+    const isAvailableForCheckOut = dateObj.check_out_available;
 
-            return !(
-                isAvailable || 
-                isLastDayOfBooking || 
-                (isAvailableForCheckOut && !isFirstDayOfBooking)
-            );
-          },
-        },
+    // If today is the last day of a booking, allow check-in
+    const isLastDayOfBooking = isAvailableForCheckOut && !isAvailable;
+
+    // If a date is the first day of a booking, it should only allow checkout (not selectable for check-in)
+    const isFirstDayOfBooking = isAvailableForCheckIn && !isAvailable;
+
+    // Disable all previous dates once a date range is picked
+    if (lastEndDate && date < lastEndDate) {
+      return false;
+    }
+
+    return !(
+      isAvailable 
+      isLastDayOfBooking 
+      (isAvailableForCheckOut && !isFirstDayOfBooking)
+    );
+  },
+},
 
         setup(picker) {
           let lastEndDate = null;
