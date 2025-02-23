@@ -144,7 +144,7 @@ input {
 
 /* Styling for in-range days between start and end */
 .calendar > .days-grid > .day.in-range {
-  background-color: #404040 !important;
+  background-color: #006FFF !important;
   color: #ffffff !important;
 }
 
