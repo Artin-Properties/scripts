@@ -104,8 +104,8 @@ window.Wized.push(async (Wized) => {
     }
 
     return !(
-      isAvailable 
-      isLastDayOfBooking 
+      isAvailable || 
+      isLastDayOfBooking ||
       (isAvailableForCheckOut && !isFirstDayOfBooking)
     );
   },
