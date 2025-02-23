@@ -113,9 +113,7 @@ window.Wized.push(async (Wized) => {
 
         if (startDate) {
             lockPlugin.options.minDate = startDate; // Lock past dates when picking End Date
-        } else {
-            lockPlugin.options.minDate = new Date(); // Reset when both dates are picked
-        }
+        } 
     });
           
           let lastEndDate = null;
