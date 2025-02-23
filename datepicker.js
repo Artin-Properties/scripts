@@ -127,11 +127,14 @@ window.Wized.push(async (Wized) => {
 
 const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
 
-        if (!endDate) {
-            lockPlugin.options.minDate = startDate; // Lock past dates when picking End Date
-        } else {
-            lockPlugin.options.minDate = new Date(); // Reset when end date is selected
-        }
+  const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
+
+if (!endDate) {
+    lockPlugin.options.minDate = new Date(); // Ensure minDate is always today
+} else {
+    lockPlugin.options.minDate = new Date(); // Keep minDate at today to avoid unwanted locking
+}
+
             console.log(startDate, endDate);
 
             if (startDate && endDate) {
