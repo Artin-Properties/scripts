@@ -114,9 +114,11 @@ window.Wized.push(async (Wized) => {
             const startDate = picker.getStartDate();
   const endDate = picker.getEndDate();
 
- if (startDate) {
+ if (startDate !== null) {
         picker.PluginManager.getInstance("LockPlugin").options.minDate = startDate;
-        picker.render(); // Apply the new minDate
+       
+    }else{
+     picker.PluginManager.getInstance("LockPlugin").options.minDate = new Date();
     }
             console.log(startDate, endDate);
 
