@@ -114,8 +114,27 @@ window.Wized.push(async (Wized) => {
           let lastEndDate = null;
 
           picker.on("select", () => {
-            const startDate = picker.getStartDate();
-            const endDate = picker.getEndDate();
+           const startDate = picker.getStartDate();
+  const endDate = picker.getEndDate();
+
+  if (startDate) {
+    // Temporarily disable all previous dates
+    picker.setOptions({
+      LockPlugin: {
+        minDate: startDate, 
+      },
+    });
+
+    // Restore the original logic after selection
+    setTimeout(() => {
+      picker.setOptions({
+        LockPlugin: {
+          minDate: null, // Reset to the original setting
+        },
+      });
+    }, 500); // Adjust delay if needed
+  }
+
             console.log(startDate, endDate);
 
             if (startDate && endDate) {
