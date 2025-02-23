@@ -114,16 +114,11 @@ window.Wized.push(async (Wized) => {
             const startDate = picker.getStartDate();
   const endDate = picker.getEndDate();
 
-  if (startDate && !endDate) {
-    // Set minDate to the selected start date when selecting a range
-    picker.LockPlugin.minDate = startDate;
-  } else if (startDate && endDate) {
-    // Reset minDate to today's date after selecting a range
-    picker.LockPlugin.minDate = new Date();
-  } else {
-    // Reset minDate to today's date when no dates are selected
-    picker.LockPlugin.minDate = new Date();
-  }
+  if (startDate) {
+        picker.setOptions({
+            minDate: startDate, // Disable all past dates, including available ones
+        });
+    }
             console.log(startDate, endDate);
 
             if (startDate && endDate) {
