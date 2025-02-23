@@ -67,13 +67,14 @@ window.Wized.push(async (Wized) => {
             other: 'nights',
           },
         },
-        LockPlugin: {
+       LockPlugin: {
           minDate: new Date(),
           filter(date, picked) {
             const formattedDate = date.format("YYYY-MM-DD");
             const dateObj = result.data.date_object.find(
               (obj) => obj.date === formattedDate
             );
+
             if (!dateObj) {
               return false;
             }
@@ -82,7 +83,7 @@ window.Wized.push(async (Wized) => {
             const today = new Date();
             const dateToCheck = new Date(date.getTime());
             const isToday = dateToCheck.toDateString() === today.toDateString();
-            
+
             if (isToday && isPastBookingTime()) {
               return true; // Lock the date if it's today and past 8 PM
             }
@@ -97,10 +98,15 @@ window.Wized.push(async (Wized) => {
             // If a date is the first day of a booking, it should only allow checkout (not selectable for check-in)
             const isFirstDayOfBooking = isAvailableForCheckIn && !isAvailable;
 
+            // Disable all previous dates once a date range is picked
+            if (lastEndDate && date < lastEndDate) {
+              return false;
+            }
+
             return !(
-                isAvailable || 
-                isLastDayOfBooking || 
-                (isAvailableForCheckOut && !isFirstDayOfBooking)
+              isAvailable 
+              isLastDayOfBooking 
+              (isAvailableForCheckOut && !isFirstDayOfBooking)
             );
           },
         },
