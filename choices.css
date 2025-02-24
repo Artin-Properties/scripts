@@ -1,77 +1,88 @@
 .choices {
-    width: 100%;
+  width: 100%;
 }
 
 .multiple-choice > svg {
-    position: absolute;
-    right: 0.7rem;
-    top: 3.1rem;
-    color: var(--base-color-neutral--neutral-light);
+  position: absolute;
+  right: 0.7rem;
+  top: 3.1rem;
+  color: var(--base-color-neutral--neutral-light);
 }
 
 .choices__inner {
-    border: 1px solid var(--border-color--line-darker);
-    background-color: var(--base-color-neutral--neutral-darker);
-    border-radius: 2px;
-    width: 100%;
-    height: auto;
-    min-height: 2.75rem;
-    margin-bottom: 0;
-    padding: .75rem .625rem .75rem 1.25rem;
-    font-size: 1rem;
-    line-height: 1.3;
+  border: 1px solid var(--border-color--line-darker);
+  background-color: var(--base-color-neutral--neutral-darker);
+  border-radius: 2px;
+  width: 100%;
+  height: auto;
+  min-height: 2.75rem;
+  margin-bottom: 0;
+  padding: 0.75rem 0.625rem 0.75rem 1.25rem;
+  font-size: 1rem;
+  line-height: 1.3;
 }
 
 .choices__input {
-    background-color: var(--base-color-neutral--neutral-darker);
-    font-family: SF UI Text, sans-serif;
-    font-size: 1rem;
-    padding: 0;
-    margin-bottom: 0;
+  background-color: var(--base-color-neutral--neutral-darker);
+  font-family:
+    SF UI Text,
+    sans-serif;
+  font-size: 1rem;
+  padding: 0;
+  margin-bottom: 0;
 }
 
 .choices__input::placeholder {
-    color: var(--base-color-neutral--neutral-light);
+  color: var(--base-color-neutral--neutral-light);
 }
 
-.choices__list--dropdown,.choices__list[aria-expanded] {
-    display: none;
-    z-index: 901;
-    position: absolute;
-    width: 100%;
-    background-color: var(--base-color-neutral--neutral-darker);
-    border: 1px solid var(--border-color--line-darker);
-    top: 100%;
-    margin-top: -1px;
-    border-bottom-left-radius: 2.5px;
-    border-bottom-right-radius: 2.5px;
-    overflow: hidden;
-    word-break: break-all;
-    font-family: SF UI Text, sans-serif;
-    font-size: 1rem;
+.choices__list--dropdown,
+.choices__list[aria-expanded] {
+  display: none;
+  z-index: 901;
+  position: absolute;
+  width: 100%;
+  background-color: var(--base-color-neutral--neutral-darker);
+  border: 1px solid var(--border-color--line-darker);
+  top: 100%;
+  margin-top: -1px;
+  border-bottom-left-radius: 2.5px;
+  border-bottom-right-radius: 2.5px;
+  overflow: hidden;
+  word-break: break-all;
+  font-family:
+    SF UI Text,
+    sans-serif;
+  font-size: 1rem;
 }
 
-.is-focused .choices__inner,.is-open .choices__inner {
-    border-color: var(--border-color--line-darker);
+.is-focused .choices__inner,
+.is-open .choices__inner {
+  border-color: var(--border-color--line-darker);
 }
 
-.choices__list--dropdown .choices__item--selectable.is-highlighted,.choices__list[aria-expanded] .choices__item--selectable.is-highlighted {
-    background-color: var(--base-color-neutral--neutral-dark);
+.choices__list--dropdown .choices__item--selectable.is-highlighted,
+.choices__list[aria-expanded] .choices__item--selectable.is-highlighted {
+  background-color: var(--base-color-neutral--neutral-dark);
 }
 
 .choices__list--multiple .choices__item {
-    margin-right: 3px;
-    margin-left: 3px;
-    background-color: var(--base-color-neutral--neutral-darker);
-    border: 1px solid var(--border-color--line-darker);
-    font-family: SF UI Text, sans-serif;
-    font-size: 0.7rem;
+  margin-right: 3px;
+  margin-left: 3px;
+  background-color: var(--base-color-neutral--neutral-darker);
+  border: 1px solid var(--border-color--line-darker);
+  font-family:
+    SF UI Text,
+    sans-serif;
+  font-size: 0.7rem;
 }
 
-.choices[data-type*=select-multiple] .choices__button, .choices[data-type*=text] .choices__button {
-    border-left: 1px solid var(--border-color--line-darker);
+.choices[data-type*="select-multiple"] .choices__button,
+.choices[data-type*="text"] .choices__button {
+  border-left: 1px solid var(--border-color--line-darker);
 }
 
-.is-open .choices__list--dropdown, .is-open .choices__list[aria-expanded] {
-    border: 1px solid var(--border-color--line-darker);
+.is-open .choices__list--dropdown,
+.is-open .choices__list[aria-expanded] {
+  border: 1px solid var(--border-color--line-darker);
 }

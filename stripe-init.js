@@ -5,9 +5,7 @@ let currentClientSecret;
 
 function initializeOrUpdateStripe(clientSecret) {
   if (!clientSecret) {
-    console.error(
-      "Client secret is undefined or null. Cannot initialize Stripe."
-    );
+    console.error("Client secret is undefined or null. Cannot initialize Stripe.");
     return;
   }
 
@@ -87,9 +85,7 @@ window.triggerSubmit = async function () {
 
   try {
     // Update the booking button text to indicate processing
-    const buttonTextElement = document.querySelector(
-      '[wized="booking_BookingButtonText"]'
-    );
+    const buttonTextElement = document.querySelector('[wized="booking_BookingButtonText"]');
     if (buttonTextElement) {
       buttonTextElement.textContent = "Processing Payment...";
     }
@@ -126,9 +122,7 @@ window.triggerSubmit = async function () {
     }
   } catch (error) {
     console.error("Error during payment submission:", error);
-    const buttonTextElement = document.querySelector(
-      '[wized="booking_BookingButtonText"]'
-    );
+    const buttonTextElement = document.querySelector('[wized="booking_BookingButtonText"]');
     if (buttonTextElement) {
       buttonTextElement.textContent = "Payment Failed. Try Again.";
     }

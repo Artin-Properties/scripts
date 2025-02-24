@@ -1,0 +1,16 @@
+# Dependencies
+node_modules
+package-lock.json
+
+# Build output
+dist
+build
+
+# Logs
+*.log
+
+# Environment variables
+.env*
+
+# Cache directories
+.cache 

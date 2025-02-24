@@ -1,14 +1,16 @@
 // Fetch the Mapbox token from your backend
 async function initializeMap() {
   try {
-    const version = window.location.href.includes('artin-properties.webflow.io') ? 'v1.4' : 'v1.3';
-    const response = await fetch(`https://api.artinproperties.ca/api:iwYORZ6t:${version}/map/token`);
+    const version = window.location.href.includes("artin-properties.webflow.io") ? "v1.4" : "v1.3";
+    const response = await fetch(
+      `https://api.artinproperties.ca/api:iwYORZ6t:${version}/map/token`
+    );
     if (!response.ok) {
-      throw new Error('Failed to fetch Mapbox token');
+      throw new Error("Failed to fetch Mapbox token");
     }
     const data = await response.json();
     if (!data.token) {
-      throw new Error('Invalid token response');
+      throw new Error("Invalid token response");
     }
     mapboxgl.accessToken = data.token;
 
@@ -49,17 +51,7 @@ async function initializeMap() {
             filter: ["has", "point_count"],
             paint: {
               "circle-color": "#FFFFFF",
-              "circle-radius": [
-                "step",
-                ["get", "point_count"],
-                15,
-                7.5,
-                22.5,
-                15,
-                30,
-                22.5,
-                37.5,
-              ],
+              "circle-radius": ["step", ["get", "point_count"], 15, 7.5, 22.5, 15, 30, 22.5, 37.5],
             },
           });
 
@@ -99,47 +91,37 @@ async function initializeMap() {
               const properties = e.features[0].properties;
 
               try {
-                const property = await fetch(`https://api.artinproperties.ca/api:iwYORZ6t:${version}/map/property?id=${properties.id}`);
+                const property = await fetch(
+                  `https://api.artinproperties.ca/api:iwYORZ6t:${version}/map/property?id=${properties.id}`
+                );
                 const propertyData = await property.json();
-  
+
                 // Set modal content
                 document.querySelector('[wized="map_PropertyTitle"]').textContent =
                   propertyData.name || "No Title";
-                const imageElement = document.querySelector(
-                  '[wized="map_PropertyImageSrc"]'
-                );
+                const imageElement = document.querySelector('[wized="map_PropertyImageSrc"]');
                 imageElement.src = propertyData.meta_image?.url || ""; // Set image src
-  
+
                 // Format and set start and end dates using Moment.js
-                const formattedStartDate = moment(propertyData.avail_start_date).format(
-                  "MMM Do"
-                );
-                const formattedEndDate = moment(propertyData.avail_end_date).format(
-                  "MMM Do"
-                );
-                document.querySelector(
-                  '[wized="map_PropertyAvailableFrom"]'
-                ).textContent =
+                const formattedStartDate = moment(propertyData.avail_start_date).format("MMM Do");
+                const formattedEndDate = moment(propertyData.avail_end_date).format("MMM Do");
+                document.querySelector('[wized="map_PropertyAvailableFrom"]').textContent =
                   `${formattedStartDate} - ${formattedEndDate}` || "N/A";
-  
+
                 // Set other property details
-                document.querySelector(
-                  '[wized="map_PropertyGuestCount"]'
-                ).textContent = propertyData.personCapacity || "N/A";
+                document.querySelector('[wized="map_PropertyGuestCount"]').textContent =
+                  propertyData.personCapacity || "N/A";
                 document.querySelector('[wized="map_PropertyBedCount"]').textContent =
                   propertyData.bedroomsNumber || "N/A";
-                document.querySelector(
-                  '[wized="map_PropertyBathCount"]'
-                ).textContent = propertyData.bathroomsNumber || "N/A";
+                document.querySelector('[wized="map_PropertyBathCount"]').textContent =
+                  propertyData.bathroomsNumber || "N/A";
                 document.querySelector('[wized="map_PropertyLocation"]').textContent =
                   propertyData.city || "No City";
-  
+
                 // Determine and display price based on rental type
-                const priceElement = document.querySelector(
-                  '[wized="map_PropertyPrice"]'
-                );
+                const priceElement = document.querySelector('[wized="map_PropertyPrice"]');
                 const rentalType = propertyData.rental_type;
-  
+
                 if (rentalType === "MTR" || rentalType === "LTR") {
                   // Multiply nightly cost by 30 for monthly rate
                   const monthlyPrice = propertyData.price * 30;
@@ -148,41 +130,26 @@ async function initializeMap() {
                   // Default to nightly rate
                   priceElement.textContent = `$${propertyData.price.toLocaleString()}/night`;
                 }
-  
-                document.querySelector(
-                  '[wized="map-modal-link"]'
-                ).href = `/property?property=${propertyData.id}`;
 
-                document.querySelector(
-                  '[wized="map-modal-link"]'
-                ).target = "_blank";
-  
+                document.querySelector('[wized="map-modal-link"]').href =
+                  `/property?property=${propertyData.id}`;
+
+                document.querySelector('[wized="map-modal-link"]').target = "_blank";
+
                 // Logic to set display propertyData for tags
-                const shortTag = document.querySelector(
-                  '[wized="home_PropertyTagShort"]'
-                );
-                const monthTag = document.querySelector(
-                  '[wized="home_PropertyTagMonth"]'
-                );
-                const longTag = document.querySelector(
-                  '[wized="home_PropertyTagLong"]'
-                );
-                const artinTag = document.querySelector(
-                  '[wized="home_PropertyTagArtin"]'
-                );
-                const artinTagText = document.querySelector(
-                  '[wized="home_PropertyTagArtinText"]'
-                );
-                const newTag = document.querySelector(
-                  '[wized="home_PropertyTagNew"]'
-                );
-  
+                const shortTag = document.querySelector('[wized="home_PropertyTagShort"]');
+                const monthTag = document.querySelector('[wized="home_PropertyTagMonth"]');
+                const longTag = document.querySelector('[wized="home_PropertyTagLong"]');
+                const artinTag = document.querySelector('[wized="home_PropertyTagArtin"]');
+                const artinTagText = document.querySelector('[wized="home_PropertyTagArtinText"]');
+                const newTag = document.querySelector('[wized="home_PropertyTagNew"]');
+
                 shortTag.style.display = "none";
                 monthTag.style.display = "none";
                 longTag.style.display = "none";
                 artinTag.style.display = "none";
                 newTag.style.display = "none";
-  
+
                 if (rentalType === "STR") {
                   shortTag.style.display = "flex";
                 } else if (rentalType === "MTR") {
@@ -190,25 +157,22 @@ async function initializeMap() {
                 } else if (rentalType === "LTR") {
                   longTag.style.display = "flex";
                 }
-  
-                if (
-                  propertyData.artin_status &&
-                  propertyData.artin_status.trim() !== ""
-                ) {
+
+                if (propertyData.artin_status && propertyData.artin_status.trim() !== "") {
                   artinTag.style.display = "flex";
                   artinTagText.textContent = propertyData.artin_status;
                 }
-  
+
                 if (propertyData.new === true) {
                   newTag.style.display = "flex";
                 }
-  
+
                 const modal = document.getElementById("property-modal");
                 modal.style.display = "block";
                 setTimeout(() => {
                   modal.style.opacity = 1;
                 }, 10);
-  
+
                 const coordinates = [
                   propertyData.coordinates.data.lng,
                   propertyData.coordinates.data.lat,
@@ -225,9 +189,7 @@ async function initializeMap() {
 
           const closeModal = () => {
             const modal = document.getElementById("property-modal");
-            const imageElement = document.querySelector(
-              '[wized="map_PropertyImageSrc"]'
-            );
+            const imageElement = document.querySelector('[wized="map_PropertyImageSrc"]');
             imageElement.src = "";
             modal.style.opacity = 0;
             setTimeout(() => {
@@ -254,16 +216,16 @@ async function initializeMap() {
 
               const cluster = e.features[0];
               const clusterId = cluster.properties.cluster_id;
-              const source = map.getSource('locations'); // Replace 'locations' with your source id
+              const source = map.getSource("locations"); // Replace 'locations' with your source id
 
               // Get the zoom level at which the cluster expands
               source.getClusterExpansionZoom(clusterId, function (err, expansionZoom) {
                 if (err) return;
-                
+
                 // Optionally, adjust the zoom level (for example, adding a bit more zoom)
                 map.easeTo({
                   center: cluster.geometry.coordinates,
-                  zoom: expansionZoom
+                  zoom: expansionZoom,
                 });
               });
             });

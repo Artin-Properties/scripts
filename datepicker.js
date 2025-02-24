@@ -34,16 +34,20 @@ window.Wized.push(async (Wized) => {
 
         if (date >= today) {
           const formattedDate = formatDate(date);
-      
+
           // If today is the last day of a booking, allow check-in
           const isLastDayOfBooking = dateObj.check_out_available && !dateObj.available;
-      
+
           // If a date is the first day of a booking, it should only allow checkout (not selectable for check-in)
           const isFirstDayOfBooking = dateObj.check_in_available && !dateObj.available;
-      
+
           // Add price only if it's available, or if today is a valid check-in/check-out scenario
-          if (dateObj.available || isLastDayOfBooking || (dateObj.check_out_available && !isFirstDayOfBooking)) {
-              prices[formattedDate] = dateObj.price;
+          if (
+            dateObj.available ||
+            isLastDayOfBooking ||
+            (dateObj.check_out_available && !isFirstDayOfBooking)
+          ) {
+            prices[formattedDate] = dateObj.price;
           }
         }
       });
@@ -63,8 +67,8 @@ window.Wized.push(async (Wized) => {
             return num - 1;
           },
           locale: {
-            one: 'night',
-            other: 'nights',
+            one: "night",
+            other: "nights",
           },
         },
         LockPlugin: {
@@ -72,9 +76,7 @@ window.Wized.push(async (Wized) => {
           inseparable: true,
           filter(date, picked) {
             const formattedDate = date.format("YYYY-MM-DD");
-            const dateObj = result.data.date_object.find(
-              (obj) => obj.date === formattedDate
-            );
+            const dateObj = result.data.date_object.find((obj) => obj.date === formattedDate);
             if (!dateObj) {
               return false;
             }
@@ -83,7 +85,7 @@ window.Wized.push(async (Wized) => {
             const today = new Date();
             const dateToCheck = new Date(date.getTime());
             const isToday = dateToCheck.toDateString() === today.toDateString();
-            
+
             if (isToday && isPastBookingTime()) {
               return true; // Lock the date if it's today and past 8 PM
             }
@@ -99,57 +101,55 @@ window.Wized.push(async (Wized) => {
             const isFirstDayOfBooking = isAvailableForCheckIn && !isAvailable;
 
             return !(
-                isAvailable || 
-                isLastDayOfBooking || 
-                (isAvailableForCheckOut && !isFirstDayOfBooking)
+              isAvailable ||
+              isLastDayOfBooking ||
+              (isAvailableForCheckOut && !isFirstDayOfBooking)
             );
           },
         },
- setup(picker) {
-         picker.on("preselect", (evt) => {
-    const startDate = evt.detail.start;
-    const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
+        setup(picker) {
+          picker.on("preselect", (evt) => {
+            const startDate = evt.detail.start;
+            const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
 
-    // Ensure startDate is valid before setting minDate
-    if (startDate) {
-        lockPlugin.options.minDate = startDate;
-    }
+            // Ensure startDate is valid before setting minDate
+            if (startDate) {
+              lockPlugin.options.minDate = startDate;
+            }
 
-    let firstLockedDate = null;
+            let firstLockedDate = null;
 
-    // Find the first locked date from the result data
-    for (const dateObj of result.data.date_object) {
-        if (!dateObj.available) { // If the date is locked
-            firstLockedDate = new Date(dateObj.date);
-            break; // Stop at the first locked date
-        }
-    }
+            // Find the first locked date from the result data
+            for (const dateObj of result.data.date_object) {
+              if (!dateObj.available) {
+                // If the date is locked
+                firstLockedDate = new Date(dateObj.date);
+                break; // Stop at the first locked date
+              }
+            }
 
-    // Set maxDate to the first locked date if found
-    if (firstLockedDate && firstLockedDate > startDate) {
-        lockPlugin.options.maxDate = firstLockedDate;
-    } else {
-        lockPlugin.options.maxDate = null; // No restriction if no locked date is found
-    }
-});
-
-
+            // Set maxDate to the first locked date if found
+            if (firstLockedDate && firstLockedDate > startDate) {
+              lockPlugin.options.maxDate = firstLockedDate;
+            } else {
+              lockPlugin.options.maxDate = null; // No restriction if no locked date is found
+            }
+          });
 
           let lastEndDate = null;
           picker.on("select", () => {
-            
             const startDate = picker.getStartDate();
-  const endDate = picker.getEndDate();
+            const endDate = picker.getEndDate();
 
-  const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
+            const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
 
-if (startDate) {
-    lockPlugin.options.minDate = new Date(); // Ensure minDate is always today
-picker.PluginManager.reloadInstance("LockPlugin");
-} else {
-    lockPlugin.options.minDate = new Date(); // Keep minDate at today to avoid unwanted locking
-   picker.PluginManager.reloadInstance("LockPlugin");
-}
+            if (startDate) {
+              lockPlugin.options.minDate = new Date(); // Ensure minDate is always today
+              picker.PluginManager.reloadInstance("LockPlugin");
+            } else {
+              lockPlugin.options.minDate = new Date(); // Keep minDate at today to avoid unwanted locking
+              picker.PluginManager.reloadInstance("LockPlugin");
+            }
 
             console.log(startDate, endDate);
 
@@ -182,9 +182,7 @@ picker.PluginManager.reloadInstance("LockPlugin");
               const checkoutdate = leadingdates.pop();
 
               for (let date of leadingdates) {
-                const dateObj = result.data.date_object.find(
-                  (obj) => obj.date === date
-                );
+                const dateObj = result.data.date_object.find((obj) => obj.date === date);
 
                 // Log the date and its availability status
                 if (dateObj) {
@@ -200,9 +198,7 @@ picker.PluginManager.reloadInstance("LockPlugin");
                   break;
                 }
               }
-              const dateObj = result.data.date_object.find(
-                (obj) => obj.date === checkoutdate
-              );
+              const dateObj = result.data.date_object.find((obj) => obj.date === checkoutdate);
 
               if (!dateObj.check_out_available && !dateObj.available) {
                 isInvalidRange = true;
@@ -210,12 +206,17 @@ picker.PluginManager.reloadInstance("LockPlugin");
 
               if (Wized.data.r.Get_Property.data.rental_type === "MTR") {
                 if (startDate && endDate) {
-                  const totalNights = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+                  const totalNights = Math.round(
+                    (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+                  );
                   const minNights = Wized.data.r.Get_Property.data.minNights;
                   const maxNights = Wized.data.r.Get_Property.data.maxNights;
                   console.log(`Total Days Selected: ${totalNights}`);
 
-                  if ((minNights && totalNights < minNights) || (maxNights && totalNights > maxNights)  ) {
+                  if (
+                    (minNights && totalNights < minNights) ||
+                    (maxNights && totalNights > maxNights)
+                  ) {
                     isInvalidRange = true;
                     const targetElement = document.querySelector(".price_form-field-wrap-2");
 
@@ -228,19 +229,19 @@ picker.PluginManager.reloadInstance("LockPlugin");
 
                     // Check conditions for minNights and maxNights
                     if (minNights && totalNights < minNights) {
-                        newElement.textContent = `The minimum stay is ${minNights} nights`;
+                      newElement.textContent = `The minimum stay is ${minNights} nights`;
                     } else if (maxNights && totalNights > maxNights) {
-                        newElement.textContent = `The maximum stay is ${maxNights} nights`;
+                      newElement.textContent = `The maximum stay is ${maxNights} nights`;
                     } else {
-                        newElement.textContent = ""; // If within range, leave empty or remove the element
+                      newElement.textContent = ""; // If within range, leave empty or remove the element
                     }
 
                     // Insert after the target element if there's a message to display
                     if (newElement.textContent !== "") {
-                        targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
+                      targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
                     }
                   }
-                }              
+                }
               }
 
               // Log whether the selected range is invalid
@@ -266,9 +267,7 @@ picker.PluginManager.reloadInstance("LockPlugin");
             const formattedDate = date ? date.format("YYYY-MM-DD") : null;
 
             if (view === "CalendarDay" && prices[formattedDate]) {
-              const span =
-                target.querySelector(".day-price") ||
-                document.createElement("span");
+              const span = target.querySelector(".day-price") || document.createElement("span");
               span.className = "day-price";
               span.innerHTML = `$${prices[formattedDate]}`;
               target.append(span);
@@ -278,11 +277,7 @@ picker.PluginManager.reloadInstance("LockPlugin");
                 if (priceElement) {
                   priceElement.style.display = "none";
                 }
-                target.style.setProperty(
-                  "background-color",
-                  "transparent",
-                  "important"
-                );
+                target.style.setProperty("background-color", "transparent", "important");
               }
             }
           });

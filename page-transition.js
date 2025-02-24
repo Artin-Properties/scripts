@@ -1,10 +1,10 @@
-$(document).ready(function() {
+$(document).ready(function () {
   // Check if the current URL is staging
   const isStaging = window.location.pathname.startsWith("/v2/page/proxy");
-  
+
   if (isStaging) {
     const transitionTrigger = document.querySelector(".transition-trigger");
-  
+
     // Trigger transition on page load for staging environment
     if (transitionTrigger) {
       transitionTrigger.click();
@@ -46,16 +46,16 @@ $(document).ready(function() {
       "/map": { autoTransition: true },
       // Add more pages or wildcard patterns as needed
     };
-  
+
     // Utility to get configuration based on the current URL
     function getPageConfig() {
       const path = window.location.pathname;
-  
+
       // Check for exact matches first
       if (pageConfig[path]) {
         return pageConfig[path];
       }
-  
+
       // Check for wildcard matches
       for (const pattern in pageConfig) {
         if (pattern.endsWith("/*")) {
@@ -65,17 +65,17 @@ $(document).ready(function() {
           }
         }
       }
-  
+
       return null; // Return null if no config is found
     }
-  
+
     // Function to handle Wized requests and transitions
     async function handlePageTransition(config) {
       const transitionTrigger = $(".transition-trigger");
       const introDurationMS = 500; // Adjusted for visibility
       const exitDurationMS = 1200;
       const excludedClass = "no-transition";
-  
+
       // Utility to wait for a Wized request
       async function waitForWizedRequest(requestName, maxRetries = 10, interval = 200) {
         for (let attempts = 0; attempts < maxRetries; attempts++) {
@@ -91,16 +91,16 @@ $(document).ready(function() {
         }
         throw new Error(`Max retries reached for request: ${requestName}`);
       }
-  
+
       // Event listener for transition trigger clicks
-      transitionTrigger.on("click", function() {
+      transitionTrigger.on("click", function () {
         $("body").addClass("transition-active");
         // Add any additional transition logic here
         setTimeout(() => {
           $("body").removeClass("transition-active");
         }, introDurationMS);
       });
-  
+
       // Automatically trigger transition for pages with autoTransition
       if (config.autoTransition) {
         if (transitionTrigger.length > 0) {
@@ -112,7 +112,7 @@ $(document).ready(function() {
         }
         return;
       }
-  
+
       // On Page Load
       if (transitionTrigger.length > 0 && config.requestName) {
         try {
@@ -126,33 +126,36 @@ $(document).ready(function() {
           // Error handling if necessary
         }
       }
-  
+
       // On Link Click
-      $("a").not(".finished").addClass("finished").on("click", function (e) {
-        const transitionURL = $(this).attr("href");
-        if (
-          $(this).prop("hostname") === window.location.hostname &&
-          !$(this).attr("href").includes("#") &&
-          !$(this).hasClass(excludedClass) &&
-          $(this).attr("target") !== "_blank" &&
-          transitionTrigger.length > 0
-        ) {
-          e.preventDefault();
-          $("body").addClass("no-scroll-transition");
-          transitionTrigger.click();
-          setTimeout(() => {
-            window.location = transitionURL;
-          }, exitDurationMS);
-        }
-      });
-  
+      $("a")
+        .not(".finished")
+        .addClass("finished")
+        .on("click", function (e) {
+          const transitionURL = $(this).attr("href");
+          if (
+            $(this).prop("hostname") === window.location.hostname &&
+            !$(this).attr("href").includes("#") &&
+            !$(this).hasClass(excludedClass) &&
+            $(this).attr("target") !== "_blank" &&
+            transitionTrigger.length > 0
+          ) {
+            e.preventDefault();
+            $("body").addClass("no-scroll-transition");
+            transitionTrigger.click();
+            setTimeout(() => {
+              window.location = transitionURL;
+            }, exitDurationMS);
+          }
+        });
+
       // On Back Button Tap
       window.onpageshow = (event) => {
         if (event.persisted) {
           window.location.reload();
         }
       };
-  
+
       // Hide Transition on Window Resize
       $(window).on("resize", function () {
         setTimeout(() => {
@@ -160,7 +163,7 @@ $(document).ready(function() {
         }, 50);
       });
     }
-  
+
     // Initialize the transitions dynamically
     const config = getPageConfig();
     if (config) {

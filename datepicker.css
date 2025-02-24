@@ -1,7 +1,8 @@
 /* Apply SF UI Text font globally */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF UI Text", "Segoe UI",
-    "Roboto", "Helvetica", "Arial", sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF UI Text", "Segoe UI", "Roboto", "Helvetica", "Arial",
+    sans-serif;
 }
 
 input {
@@ -144,7 +145,7 @@ input {
 
 /* Styling for in-range days between start and end */
 .calendar > .days-grid > .day.in-range {
-  background-color: #006FFF !important;
+  background-color: #006fff !important;
   color: #ffffff !important;
 }
 
@@ -154,7 +155,7 @@ input {
 
 /* Ensure the in-range days are still styled when they're also available and unlocked */
 .calendar > .days-grid > .day.unit.in-range:not(.not-available):not(.locked) {
-  background-color: #006FFF !important;
+  background-color: #006fff !important;
   color: #ffffff !important;
 }
 
@@ -174,7 +175,10 @@ input {
 /* Set spacing between rows and columns in the date grid */
 .days-grid {
   display: grid !important;
-  grid-template-columns: repeat(7, minmax(40px, 1fr)) !important; /* Always 7 columns with responsive sizing */
+  grid-template-columns: repeat(
+    7,
+    minmax(40px, 1fr)
+  ) !important; /* Always 7 columns with responsive sizing */
   grid-auto-rows: 1fr !important;
   box-sizing: border-box !important;
   width: 100% !important;
@@ -223,42 +227,42 @@ input {
   color: #ffffffcc !important;
 }
 
-.container[data-theme=dark] .next-button {
+.container[data-theme="dark"] .next-button {
   background-color: #ffffff00 !important;
   --color-fg-primary: white;
   fill: white;
   color: white;
 }
 
-.container[data-theme=dark] .next-button:hover {
+.container[data-theme="dark"] .next-button:hover {
   fill: white;
   color: white;
 }
 
-.container[data-theme=dark] .previous-button {
+.container[data-theme="dark"] .previous-button {
   background-color: #ffffff00 !important;
   --color-fg-primary: white;
   fill: white;
   color: white;
 }
 
-.container[data-theme=dark] .previous-button:hover {
+.container[data-theme="dark"] .previous-button:hover {
   fill: white;
   color: white;
 }
 
-
-.calendar>.daynames-row, .calendar>.days-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 0.5rem !important;
-    color: #ffffff !important;
+.calendar > .daynames-row,
+.calendar > .days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem !important;
+  color: #ffffff !important;
 }
 
-.calendar>.daynames-row>.dayname {
-    color: #ffffff !important;
-    font-size: 14px !important;
-    padding: 5px !important;
+.calendar > .daynames-row > .dayname {
+  color: #ffffff !important;
+  font-size: 14px !important;
+  padding: 5px !important;
 }
 
 /* Ensure the previous button is on the left */
@@ -272,10 +276,7 @@ input {
 }
 
 /* Remove background image for locked days */
-.container.lock-plugin
-  .calendar
-  > .days-grid
-  > .day.locked:not(.start):not(.end) {
+.container.lock-plugin .calendar > .days-grid > .day.locked:not(.start):not(.end) {
   background-color: #191919 !important; /* Remove background image */
   opacity: 0.2 !important; /* Maintain the reduced opacity */
   pointer-events: none !important; /* Prevent interaction */

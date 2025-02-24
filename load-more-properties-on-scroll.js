@@ -1,7 +1,6 @@
 // Ensure Wized is initialized and ready before running the custom script
 window.Wized = window.Wized || [];
 window.Wized.push((Wized) => {
-
   let swipers = [];
   let observer;
   let isLoading = false;
@@ -215,9 +214,7 @@ window.Wized.push((Wized) => {
       { root: null, rootMargin: "0px", threshold: 0.9 }
     );
 
-    const items = document.querySelectorAll(
-      ".properties_list .properties_item"
-    );
+    const items = document.querySelectorAll(".properties_list .properties_item");
     if (items.length > 0) {
       observer.observe(items[items.length - 1]);
     }
@@ -248,12 +245,8 @@ window.Wized.push((Wized) => {
       const newItems = result.data.items || [];
 
       // Filter out duplicates before merging arrays
-      const existingIds = new Set(
-        existingPropertyArray.map((item) => item.id)
-      );
-      const filteredNewItems = newItems.filter(
-        (item) => !existingIds.has(item.id)
-      );
+      const existingIds = new Set(existingPropertyArray.map((item) => item.id));
+      const filteredNewItems = newItems.filter((item) => !existingIds.has(item.id));
 
       // Now combine the arrays without duplicates
       const combinedArray = [...existingPropertyArray, ...filteredNewItems];
@@ -289,10 +282,7 @@ window.Wized.push((Wized) => {
 
       let significantChange = false;
       mutationsList.forEach((mutation) => {
-        if (
-          mutation.addedNodes.length > 0 ||
-          mutation.removedNodes.length > 0
-        ) {
+        if (mutation.addedNodes.length > 0 || mutation.removedNodes.length > 0) {
           significantChange = true;
         }
       });

@@ -333,15 +333,17 @@
   .calendar:first-child
   > .header.no-previous-month
   .previous-button,
-.container.lock-plugin
-  .calendars
-  .calendar:last-child
-  > .header.no-next-month
-  .next-button {
+.container.lock-plugin .calendars .calendar:last-child > .header.no-next-month .next-button {
   visibility: hidden;
 }
 .container.lock-plugin .calendar > .days-grid > .day.not-available {
-  background-image: repeating-linear-gradient(135deg, transparent, var(--color-bg-locked) 2px, transparent 2px, transparent 4px);
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent,
+    var(--color-bg-locked) 2px,
+    transparent 2px,
+    transparent 4px
+  );
   opacity: 0.2 !important;
   font-style: normal !important;
   color: white !important;
@@ -354,10 +356,7 @@
   color: var(--color-fg-locked);
   pointer-events: none;
 }
-.container.lock-plugin
-  .calendar
-  > .days-grid
-  > .day.locked:not(.start):not(.end) {
+.container.lock-plugin .calendar > .days-grid > .day.locked:not(.start):not(.end) {
   background-image: repeating-linear-gradient(
     135deg,
     transparent,
@@ -530,10 +529,7 @@
   border-bottom-right-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
 }
-.container.range-plugin
-  .calendar
-  > .days-grid
-  > div:nth-child(7n + 1).in-range {
+.container.range-plugin .calendar > .days-grid > div:nth-child(7n + 1).in-range {
   border-bottom-left-radius: var(--border-radius);
   border-top-left-radius: var(--border-radius);
 }
@@ -602,22 +598,13 @@
   font-size: 14px;
   padding: 3px;
 }
-.container.amp-plugin
-  .calendars
-  .calendar
-  > .header
-  .month-name
-  select.month-name--dropdown {
+.container.amp-plugin .calendars .calendar > .header .month-name select.month-name--dropdown {
   font-weight: 700;
 }
 .container.amp-plugin .calendars .calendar > .header .reset-button {
   order: 4;
 }
-.container.amp-plugin
-  .calendars.calendars:not(.grid-1)
-  .calendar
-  > .header
-  .reset-button {
+.container.amp-plugin .calendars.calendars:not(.grid-1) .calendar > .header .reset-button {
   visibility: hidden;
 }
 .container.amp-plugin
