@@ -2,8 +2,18 @@
 async function initializeMap() {
   try {
     const version = window.location.href.includes("artin-properties.webflow.io") ? "v1.4" : "v1.3";
+    const dataSource = window.location.href.includes("artin-properties.webflow.io")
+      ? "staging"
+      : "";
+
     const response = await fetch(
-      `https://api.artinproperties.ca/api:iwYORZ6t:${version}/map/token`
+      `https://api.artinproperties.ca/api:iwYORZ6t:${version}/map/token`,
+      {
+        headers: {
+          "X-Branch": version,
+          "X-Data-Source": dataSource,
+        },
+      }
     );
     if (!response.ok) {
       throw new Error("Failed to fetch Mapbox token");
