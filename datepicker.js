@@ -110,29 +110,32 @@ window.Wized.push(async (Wized) => {
             );
           },
         },
+        
         setup(picker) {
-          picker.on("preselect", (evt) => {
-           
-            const startDate = evt.detail.start;
-            const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
+          let isFirstSelection = true;
+      picker.on("preselect", (evt) => {
+  const startDate = evt.detail.start;
+  const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
 
-            // Ensure startDate is valid before setting minDate
-            if (startDate) {
-              lockPlugin.options.minDate = startDate;
-            }
-const rangePlugin = picker.PluginManager.getInstance("RangePlugin");
-
-rangePlugin.options.tooltipNumber = (num) => {
-  if(num === 1){
-    return null;
+  if (startDate) {
+    lockPlugin.options.minDate = startDate;
+    isFirstSelection = true; // Reset when selecting a new start date
   }
-  return num - 1;
-};
-let text = rangePlugin.options.tooltipNumber(1) === null ? `Minimum Nights ${minNights}` : "night"
-rangePlugin.options.locale = {
-  one: text,
-  other: "nights",
-};
+
+  const rangePlugin = picker.PluginManager.getInstance("RangePlugin");
+
+  rangePlugin.options.tooltipNumber = (num) => {
+    if (isFirstSelection) {
+      isFirstSelection = false; // Mark that the first selection happened
+      return `Minimum Nights ${minNights}`;
+    }
+    return num - 1; // For second selection, return adjusted nights count
+  };
+
+  rangePlugin.options.locale = {
+    one: "night",
+    other: "nights",
+  };
 
             let firstLockedDate = null;
 
