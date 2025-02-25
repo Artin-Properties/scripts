@@ -127,7 +127,7 @@ RangePlugin: {
       tooltip.style.visibility = 'hidden';
     }
   },
-};
+
 
         LockPlugin: {
           minDate: new Date(),
