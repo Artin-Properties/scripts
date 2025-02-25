@@ -309,13 +309,15 @@ if (minNights && totalNights < minNights) {
     // Error handling (no console logs as requested)
   }
 });
-document.addEventListener('mouseover', (event) => {
-  if (event.target.classList.contains('day') && event.target.classList.contains('selected') && event.target.classList.contains('start')) {
-    const tooltip = document.querySelector('.range-plugin-tooltip');
+document.addEventListener('DOMContentLoaded', () => {
+  const dayElement = document.querySelector('.day.unit.selected.start');
+  dayElement.addEventListener('mouseover', (event) => {
     console.log('Element:', event.target);
+    const tooltip = document.querySelector('.range-plugin-tooltip');
     console.log('Tooltip:', tooltip);
     const minNightsText = `Minimum Nights ${minNights}`;
     console.log('minNightsText:', minNightsText);
     tooltip.innerText = minNightsText;
-  }
+  });
 });
+
