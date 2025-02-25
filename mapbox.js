@@ -128,11 +128,13 @@ async function initializeMap() {
                 document.querySelector('[wized="map_PropertyTitle"]').textContent =
                   propertyData.name || "No Title";
                 const imageElement = document.querySelector('[wized="map_PropertyImageSrc"]');
-                imageElement.src = propertyData.meta_image?.url || ""; // Set image src
+                imageElement.src = propertyData.images_new[0].url || ""; // Set image src
 
                 // Format and set start and end dates using Moment.js
-                const formattedStartDate = moment(propertyData.avail_start_date).format("MMM Do");
-                const formattedEndDate = moment(propertyData.avail_end_date).format("MMM Do");
+                const formattedStartDate = moment(propertyData.date_object.startDate).format(
+                  "MMM Do"
+                );
+                const formattedEndDate = moment(propertyData.date_object.endDate).format("MMM Do");
                 document.querySelector('[wized="map_PropertyAvailableFrom"]').textContent =
                   `${formattedStartDate} - ${formattedEndDate}` || "N/A";
 
@@ -150,13 +152,13 @@ async function initializeMap() {
                 const priceElement = document.querySelector('[wized="map_PropertyPrice"]');
                 const rentalType = propertyData.rental_type;
 
-                if (rentalType === "MTR" || rentalType === "LTR") {
-                  // Multiply nightly cost by 30 for monthly rate
-                  const monthlyPrice = propertyData.price * 30;
-                  priceElement.textContent = `$${monthlyPrice.toLocaleString()}/month`;
+                if (rentalType === "MTR") {
+                  priceElement.textContent = `$${propertyData.date_object.totalPrice.toLocaleString()}/month`;
+                } else if (rentalType === "LTR") {
+                  priceElement.textContent = `$${propertyData.date_object.monthly_price.toLocaleString()}/month`;
                 } else {
                   // Default to nightly rate
-                  priceElement.textContent = `$${propertyData.price.toLocaleString()}/night`;
+                  priceElement.textContent = `$${propertyData.date_object.totalPrice.toLocaleString()}/night`;
                 }
 
                 document.querySelector('[wized="map-modal-link"]').href =
