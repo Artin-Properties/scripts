@@ -6,15 +6,12 @@ async function initializeMap() {
       ? "staging"
       : "";
 
-    const response = await fetch(
-      `https://api.artinproperties.ca/api:iwYORZ6t:${version}/map/token`,
-      {
-        headers: {
-          "X-Branch": version,
-          "X-Data-Source": dataSource,
-        },
-      }
-    );
+    const response = await fetch(`https://api.artinproperties.ca/api:iwYORZ6t/map/token`, {
+      headers: {
+        "X-Branch": version,
+        "X-Data-Source": dataSource,
+      },
+    });
     if (!response.ok) {
       throw new Error("Failed to fetch Mapbox token");
     }
