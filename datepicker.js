@@ -68,18 +68,19 @@ const [propertyDetail, result] = await Promise.all([
         zIndex: 10,
        
         plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
-       RangePlugin: {
+     RangePlugin: {
   tooltipNumber(num) {
-    if ((num - 1) == 0) {
-      return 'Minimum Nights' + minNights;
+    if (num === 1) {
+      return `Minimum Nights: ${minNights}`;
     }
     return num - 1;
   },
   locale: {
-    one: 'night',
-    other: 'nights',
+    one: "night",
+    other: "nights",
   },
 },
+
         LockPlugin: {
           minDate: new Date(),
           inseparable: true,
@@ -127,13 +128,7 @@ const [propertyDetail, result] = await Promise.all([
               lockPlugin.options.minDate = startDate;
             }
 
-const firstDateElement = document.querySelector(".day.unit.selected.start");
-    if (firstDateElement) {
-      const tooltipElement = document.createElement("div");
-      tooltipElement.className = "range-plugin-tooltip";
-      tooltipElement.textContent = `Minimum Nights ${minNights}`;
-      firstDateElement.appendChild(tooltipElement);
-    }
+
             let firstLockedDate = null;
 
             // Find the first locked date from the result data
