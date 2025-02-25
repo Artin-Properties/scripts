@@ -129,7 +129,10 @@ RangePlugin: {
             if (startDate) {
               lockPlugin.options.minDate = startDate;
             }
-
+if (startDate) {
+    const tooltipText = `Minimum Nights ${result.data.minNights}`;
+    picker.PluginManager.getInstance("RangePlugin").options.locale.one = tooltipText;
+  }
             let firstLockedDate = null;
 
             // Find the first locked date from the result data
