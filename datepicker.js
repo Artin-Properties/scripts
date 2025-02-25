@@ -123,9 +123,12 @@ window.Wized.push(async (Wized) => {
 const rangePlugin = picker.PluginManager.getInstance("RangePlugin");
 
 rangePlugin.options.tooltipNumber = (num) => {
-  return num;
+  if(num === 1){
+    return null;
+  }
+  return num - 1;
 };
-let text = rangePlugin.options.tooltipNumber(1) === 1 ? `Minimum Nights ${minNights}` : "night"
+let text = rangePlugin.options.tooltipNumber(1) === null ? `Minimum Nights ${minNights}` : "night"
 rangePlugin.options.locale = {
   one: text,
   other: "nights",
