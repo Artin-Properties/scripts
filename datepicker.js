@@ -12,14 +12,14 @@ function isPastBookingTime() {
   return now.getHours() >= 20; // 20 is 8 PM in 24-hour format
 }
 function getOneText(num) {
-  return num === 1 ? `Minimum Nights ${minNights}` : '1 night';
+  return num === 1 ? `Minimum Nights ${minNights}` : "1 night";
 }
 let minNights;
 // Initialize Easepick date picker after the Wized request completes
 window.Wized = window.Wized || [];
 window.Wized.push(async (Wized) => {
   try {
-   const [propertyDetail, result] = await Promise.all([
+    const [propertyDetail, result] = await Promise.all([
       Wized.requests.waitFor("Get_Property"),
       Wized.requests.waitFor("Get_Property_Dates"),
     ]);
@@ -68,10 +68,8 @@ window.Wized.push(async (Wized) => {
         ],
         inline: true,
         zIndex: 10,
-       
+
         plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
-
-
 
         LockPlugin: {
           minDate: new Date(),
@@ -110,42 +108,36 @@ window.Wized.push(async (Wized) => {
             );
           },
         },
-        
+
         setup(picker) {
           let isFirstSelection = true;
-      picker.on("preselect", (evt) => {
-  const startDate = evt.detail.start;
-  const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
+          picker.on("preselect", (evt) => {
+            const startDate = evt.detail.start;
+            const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
 
-  if (startDate) {
-    lockPlugin.options.minDate = startDate;
-    isFirstSelection = true; // Reset when selecting a new start date
-  }
+            if (startDate) {
+              lockPlugin.options.minDate = startDate;
+              isFirstSelection = true; // Reset when selecting a new start date
+            }
 
- const rangePlugin = picker.PluginManager.getInstance("RangePlugin");
- if (startDate) {
-    lockPlugin.options.minDate = startDate;
-    isFirstSelection = true; // Reset when selecting a new start date
+            const rangePlugin = picker.PluginManager.getInstance("RangePlugin");
+            rangePlugin.options.tooltipNumber = (num) => {
+              if (num === 1) {
+                isFirstSelection = true; // Ensure it applies only to the first date
+                return 1;
+              }
 
-    // ✅ Manually add tooltip to the first selected date
-    document.querySelectorAll(".day.selected.unit.start").forEach((el) => {
-      el.setAttribute("data-tooltip", `Minimum Nights ${minNights}`);
-    });
-  }
+              return num - 1; // Show adjusted night count for the second date
+            };
+            let text = `night`;
+            if (isFirstSelection) {
+              text = `Minimum Nights ${minNights}`;
+            }
+            rangePlugin.options.locale = {
+              one: text,
+              other: "nights",
+            };
 
-  // ✅ Modify tooltip behavior for the second date
-  rangePlugin.options.tooltipNumber = (num) => {
-    if (isFirstSelection) {
-      isFirstSelection = false;
-      return `Minimum Nights ${minNights}`;
-    }
-    return num - 1;
-  };
-
-  rangePlugin.options.locale = {
-    one: "night",
-    other: "nights",
-  };
             let firstLockedDate = null;
 
             // Find the first locked date from the result data
@@ -246,35 +238,35 @@ window.Wized.push(async (Wized) => {
                     (minNights && totalNights < minNights) ||
                     (maxNights && totalNights > maxNights)
                   ) {
-                  isInvalidRange = true;
-const targetElement = document.querySelector(".price_form-field-wrap-2");
+                    isInvalidRange = true;
+                    const targetElement = document.querySelector(".price_form-field-wrap-2");
 
-// Check if an error message already exists
-let existingError = targetElement.parentNode.querySelector(".input_error");
+                    // Check if an error message already exists
+                    let existingError = targetElement.parentNode.querySelector(".input_error");
 
-// Remove existing error if input becomes valid
-if (existingError) {
-  existingError.remove();
-}
+                    // Remove existing error if input becomes valid
+                    if (existingError) {
+                      existingError.remove();
+                    }
 
-// Create a new error element only if input is invalid
-if (minNights && totalNights < minNights) {
-  const newElement = document.createElement("div");
-  newElement.classList.add("input_error", "is-red");
-  newElement.style.marginTop = "1rem";
-  newElement.style.marginBottom = "0.5rem";
-  newElement.style.justifyContent = "center";
-  newElement.textContent = `The minimum stay is ${minNights} nights`;
-  targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
-} else if (maxNights && totalNights > maxNights) {
-  const newElement = document.createElement("div");
-  newElement.classList.add("input_error", "is-red");
-  newElement.style.marginTop = "1rem";
-  newElement.style.marginBottom = "0.5rem";
-  newElement.style.justifyContent = "center";
-  newElement.textContent = `The maximum stay is ${maxNights} nights`;
-  targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
-}
+                    // Create a new error element only if input is invalid
+                    if (minNights && totalNights < minNights) {
+                      const newElement = document.createElement("div");
+                      newElement.classList.add("input_error", "is-red");
+                      newElement.style.marginTop = "1rem";
+                      newElement.style.marginBottom = "0.5rem";
+                      newElement.style.justifyContent = "center";
+                      newElement.textContent = `The minimum stay is ${minNights} nights`;
+                      targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
+                    } else if (maxNights && totalNights > maxNights) {
+                      const newElement = document.createElement("div");
+                      newElement.classList.add("input_error", "is-red");
+                      newElement.style.marginTop = "1rem";
+                      newElement.style.marginBottom = "0.5rem";
+                      newElement.style.justifyContent = "center";
+                      newElement.textContent = `The maximum stay is ${maxNights} nights`;
+                      targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
+                    }
                   }
                 }
               }
@@ -323,15 +315,14 @@ if (minNights && totalNights < minNights) {
     // Error handling (no console logs as requested)
   }
 });
-document.addEventListener('DOMContentLoaded', () => {
-  const dayElement = document.querySelector('.day.unit.selected.start');
-  dayElement.addEventListener('mouseover', (event) => {
-    console.log('Element:', event.target);
-    const tooltip = document.querySelector('.range-plugin-tooltip');
-    console.log('Tooltip:', tooltip);
+document.addEventListener("DOMContentLoaded", () => {
+  const dayElement = document.querySelector(".day.unit.selected.start");
+  dayElement.addEventListener("mouseover", (event) => {
+    console.log("Element:", event.target);
+    const tooltip = document.querySelector(".range-plugin-tooltip");
+    console.log("Tooltip:", tooltip);
     const minNightsText = `Minimum Nights ${minNights}`;
-    console.log('minNightsText:', minNightsText);
+    console.log("minNightsText:", minNightsText);
     tooltip.innerText = minNightsText;
   });
 });
-
