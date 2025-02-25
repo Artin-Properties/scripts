@@ -16,14 +16,8 @@ function isPastBookingTime() {
 window.Wized = window.Wized || [];
 window.Wized.push(async (Wized) => {
   try {
+    const result = await Wized.requests.waitFor("Get_Property_Dates"); // Wait for the request to complete
 
-const [propertyDetail, result] = await Promise.all([
-      Wized.requests.waitFor("Get_Property"),
-      Wized.requests.waitFor("Get_Property_Dates"),
-    ]);
-
- const minNights = propertyDetail.data.minNights;
-    const maxNights = propertyDetail.data.maxNights;
     if (result && result.data && result.data.date_object) {
       const prices = {}; // Map date to price based on date_object array
       const today = new Date();
@@ -68,26 +62,21 @@ const [propertyDetail, result] = await Promise.all([
         zIndex: 10,
        
         plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
-RangePlugin: {
-tooltipNumber(num, dates) {
-  if (dates.length === 1) {
-    return `Minimum Nights ${minNights}`;
-  }
-
-  if (minNights && num === minNights) {
-    return `${minNights} ${this.locale.other}`;
-  }
-  if (num === 1) {
-    return this.locale.one;
-  }
-  return `${num} ${this.locale.other}`;
-},
-
-
+        RangePlugin: {
+          tooltip: true,
+          tooltipNumber(num) {
+            return num - 1;
+          },
+          locale: {
+            one: "night",
+            other: "nights",
+          },
+        },
         LockPlugin: {
           minDate: new Date(),
           inseparable: true,
-          maxDays: maxNights,
+            minDays: result.data.minNights,
+          maxDays: result.data.maxNights,
           filter(date, picked) {
             const formattedDate = date.format("YYYY-MM-DD");
             const dateObj = result.data.date_object.find((obj) => obj.date === formattedDate);
@@ -122,8 +111,12 @@ tooltipNumber(num, dates) {
           },
         },
         setup(picker) {
-  picker.on("preselect", (evt) => {
- const startDate = evt.detail.start;
+          picker.on("preselect", (evt) => {
+            console.log(result.data);
+
+            console.log(result.data.minNights);
+            console.log(result.data.maxNights);
+            const startDate = evt.detail.start;
             const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
 
             // Ensure startDate is valid before setting minDate
@@ -149,7 +142,6 @@ tooltipNumber(num, dates) {
               lockPlugin.options.maxDate = null; // No restriction if no locked date is found
             }
           });
-
 
           let lastEndDate = null;
           picker.on("select", () => {
@@ -232,7 +224,7 @@ tooltipNumber(num, dates) {
                     (minNights && totalNights < minNights) ||
                     (maxNights && totalNights > maxNights)
                   ) {
-                    isInvalidRange = true;
+                  isInvalidRange = true;
 const targetElement = document.querySelector(".price_form-field-wrap-2");
 
 // Check if an error message already exists
@@ -250,7 +242,7 @@ if (minNights && totalNights < minNights) {
   newElement.style.marginTop = "1rem";
   newElement.style.marginBottom = "0.5rem";
   newElement.style.justifyContent = "center";
-  newElement.textContent = `The minimum stay is ${minNights} nights`;
+  newElement.textContent = The minimum stay is ${minNights} nights;
   targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
 } else if (maxNights && totalNights > maxNights) {
   const newElement = document.createElement("div");
@@ -258,10 +250,10 @@ if (minNights && totalNights < minNights) {
   newElement.style.marginTop = "1rem";
   newElement.style.marginBottom = "0.5rem";
   newElement.style.justifyContent = "center";
-  newElement.textContent = `The maximum stay is ${maxNights} nights`;
+  newElement.textContent = The maximum stay is ${maxNights} nights;
   targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
 }
-  }                  
+                  }
                 }
               }
 
