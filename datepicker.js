@@ -136,7 +136,7 @@ RangePlugin: {
 document.addEventListener('mouseover', (event) => {
   if (event.target.classList.contains('day') && event.target.classList.contains('selected') && event.target.classList.contains('start')) {
     const tooltip = document.querySelector('.range-plugin-tooltip');
-    const minNightsText = `Minimum Nights ${result.data.minNights}`;
+    const minNightsText = `Minimum Nights ${minNights}`;
     tooltip.innerText = minNightsText;
   }
 });
