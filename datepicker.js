@@ -76,7 +76,7 @@ RangePlugin: {
     one: "", // Empty because tooltipNumber handles it
     other: "nights",
   },
-}
+},
 
         LockPlugin: {
           minDate: new Date(),
