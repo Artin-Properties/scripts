@@ -62,7 +62,7 @@ window.Wized.push(async (Wized) => {
         zIndex: 10,
        
         plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
-   RangePlugin: {
+  RangePlugin: {
   tooltipNumber(num) {
     if (num === 1) {
       return 1;
@@ -70,7 +70,9 @@ window.Wized.push(async (Wized) => {
     return num - 1;
   },
   locale: {
-    one: (num) => num === 1 ? `Minimum Nights ${minNights}` : 'night',
+    one: function(num) {
+      return num === 1 ? `Minimum Nights ${minNights}` : '1 night';
+    },
     other: "nights",
   },
 },
