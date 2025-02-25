@@ -122,10 +122,7 @@ RangePlugin: {
         },
         setup(picker) {
           picker.on("preselect", (evt) => {
-            console.log(result.data);
-
-            console.log(result.data.minNights);
-            console.log(result.data.maxNights);
+           
             const startDate = evt.detail.start;
             const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
 
@@ -136,7 +133,10 @@ RangePlugin: {
 document.addEventListener('mouseover', (event) => {
   if (event.target.classList.contains('day') && event.target.classList.contains('selected') && event.target.classList.contains('start')) {
     const tooltip = document.querySelector('.range-plugin-tooltip');
+    console.log('Element:', event.target);
+    console.log('Tooltip:', tooltip);
     const minNightsText = `Minimum Nights ${minNights}`;
+    console.log('minNightsText:', minNightsText);
     tooltip.innerText = minNightsText;
   }
 });
