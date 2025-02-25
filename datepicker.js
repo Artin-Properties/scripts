@@ -128,7 +128,7 @@ window.Wized.push(async (Wized) => {
       isFirstSelection = true; // Ensure it applies only to the first date
       return 1;
     }
-   isFirstSelection = false;
+
     return num - 1; // Show adjusted night count for the second date
   };
         let text = `night`;
