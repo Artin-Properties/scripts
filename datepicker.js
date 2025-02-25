@@ -127,7 +127,13 @@ const [propertyDetail, result] = await Promise.all([
               lockPlugin.options.minDate = startDate;
             }
 
-
+const firstDateElement = document.querySelector(".day.unit.selected.start");
+    if (firstDateElement) {
+      const tooltipElement = document.createElement("div");
+      tooltipElement.className = "range-plugin-tooltip";
+      tooltipElement.textContent = `Minimum Nights ${minNights}`;
+      firstDateElement.appendChild(tooltipElement);
+    }
             let firstLockedDate = null;
 
             // Find the first locked date from the result data
