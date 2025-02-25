@@ -125,7 +125,7 @@ const rangePlugin = picker.PluginManager.getInstance("RangePlugin");
 rangePlugin.options.tooltipNumber = (num) => {
   return num;
 };
-let text = rangePlugin.options.tooltipNumber(1) === 1 ? Minimum Nights ${minNights} : "night"
+let text = rangePlugin.options.tooltipNumber(1) === 1 ? `Minimum Nights ${minNights}` : "night"
 rangePlugin.options.locale = {
   one: text,
   other: "nights",
