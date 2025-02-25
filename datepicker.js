@@ -60,6 +60,8 @@ window.Wized.push(async (Wized) => {
         ],
         inline: true,
         zIndex: 10,
+         minDays: result.data.minNights,
+          maxDays: result.data.maxNights,
         plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
         RangePlugin: {
           tooltip: true,
