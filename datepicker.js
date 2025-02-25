@@ -124,13 +124,13 @@ const rangePlugin = picker.PluginManager.getInstance("RangePlugin");
 
   rangePlugin.options.tooltipNumber = (num) => {
     if (num === 1) {
-      return minNights;
+      return 1;
     }
     return num - 1;
   };
 
   rangePlugin.options.locale = {
-    one: `Minimum Nights ${minNights}`,
+    one: getOneText(num),
     other: "nights",
   };
             let firstLockedDate = null;
