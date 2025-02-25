@@ -62,25 +62,29 @@ window.Wized.push(async (Wized) => {
         zIndex: 10,
        
         plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
-        RangePlugin: {
-          tooltip: true,
-          tooltipNumber(num, dates) {
-  if (dates.length === 1) {
-    return `Minimum Nights ${minNights}`;
-  }
+      RangePlugin: {
 
-  if (minNights && num === minNights) {
-    return `${minNights} ${this.locale.other}`;
-  }
-  if (num === 1) {
-    return this.locale.one;
-  }
-  return `${num} ${this.locale.other}`;
+tooltipNumber(num) {
+
+if( num ===1){
+
+return 1
+
+}
+
+return num - 1
+
 },
-          tooltip: (data) => {
-    return data.tooltipNumber;
-  },
-        },
+
+locale: {
+
+one: "night", // Handled in tooltipNumber
+
+other: "nights", // Default
+
+},
+
+},
         LockPlugin: {
           minDate: new Date(),
           inseparable: true,
