@@ -16,7 +16,7 @@ function isPastBookingTime() {
 window.Wized = window.Wized || [];
 window.Wized.push(async (Wized) => {
   try {
-    const result = await Wized.requests.waitFor("Get_Property_Dates"); // Wait for the request to complete
+
 const [propertyDetail, result] = await Promise.all([
       Wized.requests.waitFor("Get_Property"),
       Wized.requests.waitFor("Get_Property_Dates"),
