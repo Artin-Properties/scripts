@@ -11,7 +11,9 @@ function isPastBookingTime() {
   const now = new Date();
   return now.getHours() >= 20; // 20 is 8 PM in 24-hour format
 }
-
+function getOneText(num) {
+  return num === 1 ? `Minimum Nights ${minNights}` : '1 night';
+}
 // Initialize Easepick date picker after the Wized request completes
 window.Wized = window.Wized || [];
 window.Wized.push(async (Wized) => {
@@ -62,6 +64,8 @@ window.Wized.push(async (Wized) => {
         zIndex: 10,
        
         plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
+
+
 RangePlugin: {
   tooltipNumber(num) {
     if (num === 1) {
@@ -70,9 +74,7 @@ RangePlugin: {
     return num - 1;
   },
   locale: {
-    one: function(num) {
-      return num === 1 ? `Minimum Nights ${minNights}` : '1 night';
-    },
+    one: getOneText(num),
     other: "nights",
   },
 },
