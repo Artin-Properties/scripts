@@ -127,7 +127,22 @@ const [propertyDetail, result] = await Promise.all([
             if (startDate) {
               lockPlugin.options.minDate = startDate;
             }
+  const tooltip = document.querySelector(".range-plugin-tooltip");
+          if (!tooltip) return;
 
+          // Clone tooltip for start & end dates
+          document.querySelectorAll(".day.selected").forEach((el) => {
+            const clonedTooltip = tooltip.cloneNode(true);
+            clonedTooltip.textContent = `${totalNights} nights`;
+
+            // Position it
+            const rect = el.getBoundingClientRect();
+            clonedTooltip.style.top = `${rect.top - 20}px`; // Adjust position
+            clonedTooltip.style.left = `${rect.left}px`;
+
+            // Append to document
+            document.body.appendChild(clonedTooltip);
+          });
 
             let firstLockedDate = null;
 
