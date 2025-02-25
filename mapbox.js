@@ -51,7 +51,7 @@ async function initializeMap() {
           // Add a GeoJSON source with clustering enabled
           map.addSource("locations", {
             type: "geojson",
-            data: data,
+            data: data.features || [],
             cluster: true,
             clusterMaxZoom: 14,
             clusterRadius: 37.5,
