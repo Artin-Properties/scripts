@@ -47,7 +47,11 @@ async function initializeMap() {
           // Add a GeoJSON source with clustering enabled
           map.addSource("locations", {
             type: "geojson",
-            data: `https://api.artinproperties.ca/api:iwYORZ6t:${version}/map/properties`, // Replace with your GeoJSON data URL
+            data: `https://api.artinproperties.ca/api:iwYORZ6t/map/properties`, // Replace with your GeoJSON data URL
+            headers: {
+              "X-Branch": version,
+              "X-Data-Source": dataSource,
+            },
             cluster: true,
             clusterMaxZoom: 14,
             clusterRadius: 37.5,
@@ -102,7 +106,13 @@ async function initializeMap() {
 
               try {
                 const property = await fetch(
-                  `https://api.artinproperties.ca/api:iwYORZ6t:${version}/map/property?id=${properties.id}`
+                  `https://api.artinproperties.ca/api:iwYORZ6t/map/property?id=${properties.id}`,
+                  {
+                    headers: {
+                      "X-Branch": version,
+                      "X-Data-Source": dataSource,
+                    },
+                  }
                 );
                 const propertyData = await property.json();
 
