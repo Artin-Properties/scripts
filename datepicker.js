@@ -112,6 +112,8 @@ window.Wized.push(async (Wized) => {
         },
         setup(picker) {
           picker.on("preselect", (evt) => {
+            console.log(result.data);
+
             console.log(result.data.minNights);
             console.log(result.data.maxNights);
             const startDate = evt.detail.start;
