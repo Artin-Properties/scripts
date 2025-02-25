@@ -17,7 +17,13 @@ window.Wized = window.Wized || [];
 window.Wized.push(async (Wized) => {
   try {
     const result = await Wized.requests.waitFor("Get_Property_Dates"); // Wait for the request to complete
+const [propertyDetail, result] = await Promise.all([
+      Wized.requests.waitFor("Get_Property"),
+      Wized.requests.waitFor("Get_Property_Dates"),
+    ]);
 
+ const minNights = propertyDetail.data.minNights;
+    const maxNights = propertyDetail.data.maxNights;
     if (result && result.data && result.data.date_object) {
       const prices = {}; // Map date to price based on date_object array
       const today = new Date();
@@ -75,8 +81,8 @@ window.Wized.push(async (Wized) => {
         LockPlugin: {
           minDate: new Date(),
           inseparable: true,
-            minDays: result.data.minNights,
-          maxDays: result.data.maxNights,
+            minDays: minNights,
+          maxDays: maxNights,
           filter(date, picked) {
             const formattedDate = date.format("YYYY-MM-DD");
             const dateObj = result.data.date_object.find((obj) => obj.date === formattedDate);
