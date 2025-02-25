@@ -140,19 +140,7 @@ text = `Minimum Nights ${minNights}`
     other: "nights",
   };
 
-  // ✅ Modify tooltip behavior for the second date
-  rangePlugin.options.tooltipNumber = (num) => {
-    if (isFirstSelection) {
-      isFirstSelection = false;
-      return `Minimum Nights ${minNights}`;
-    }
-    return num - 1;
-  };
 
-  rangePlugin.options.locale = {
-    one: "night",
-    other: "nights",
-  };
             let firstLockedDate = null;
 
             // Find the first locked date from the result data
