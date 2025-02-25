@@ -80,7 +80,6 @@ RangePlugin: {
     return num - 1;
   },
   locale: {
-    one: "night",
     other: "nights",
   },
 },
