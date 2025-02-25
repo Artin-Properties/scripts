@@ -227,29 +227,37 @@ const [propertyDetail, result] = await Promise.all([
                     (maxNights && totalNights > maxNights)
                   ) {
                     isInvalidRange = true;
-                    const targetElement = document.querySelector(".price_form-field-wrap-2");
+const targetElement = document.querySelector(".price_form-field-wrap-2");
 
-                    // Create the new div with the "gird" class
-                    const newElement = document.createElement("div");
-                    newElement.classList.add("input_error", "is-red");
-                    newElement.style.marginTop = "1rem";
-                    newElement.style.marginBottom = "0.5rem";
-                    newElement.style.justifyContent = "center";
+// Check if an error message already exists
+let existingError = targetElement.parentNode.querySelector(".input_error");
 
-                    // Check conditions for minNights and maxNights
-                    if (minNights && totalNights < minNights) {
-                      newElement.textContent = `The minimum stay is ${minNights} nights`;
-                    } else if (maxNights && totalNights > maxNights) {
-                      newElement.textContent = `The maximum stay is ${maxNights} nights`;
-                    } else {
-                      newElement.textContent = ""; // If within range, leave empty or remove the element
-                    }
+// Remove existing error if present
+if (existingError) {
+  existingError.remove();
+}
 
-                    // Insert after the target element if there's a message to display
-                    if (newElement.textContent !== "") {
-                      targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
-                    }
-                  }
+// Create the new div with the "input_error" class
+const newElement = document.createElement("div");
+newElement.classList.add("input_error", "is-red");
+newElement.style.marginTop = "1rem";
+newElement.style.marginBottom = "0.5rem";
+newElement.style.justifyContent = "center";
+
+// Check conditions for minNights and maxNights
+if (minNights && totalNights < minNights) {
+  newElement.textContent = `The minimum stay is ${minNights} nights`;
+} else if (maxNights && totalNights > maxNights) {
+  newElement.textContent = `The maximum stay is ${maxNights} nights`;
+} else {
+  newElement.textContent = ""; // No error message
+}
+
+// Insert after the target element if there's a message to display
+if (newElement.textContent !== "") {
+  targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
+}
+  }                  
                 }
               }
 
