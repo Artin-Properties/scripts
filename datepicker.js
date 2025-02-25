@@ -74,7 +74,7 @@ RangePlugin: {
     return num - 1;
   },
   locale: {
-    one: getOneText(num),
+    one: "night",
     other: "nights",
   },
 },
