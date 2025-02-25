@@ -68,16 +68,15 @@ const [propertyDetail, result] = await Promise.all([
         zIndex: 10,
        
         plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
-     RangePlugin: {
+RangePlugin: {
   tooltipNumber(num) {
-    return num; // Keeps the correct "nights" calculation
+    return num === 1 ? `Minimum stay ${minNights} nights` : num - 1; 
   },
   locale: {
-    zero: "Minimum nights " + minNights, // 👈 Custom message for 0 nights
-    one: "night",
+    one: "", // Empty because tooltipNumber handles it
     other: "nights",
   },
-},
+}
 
         LockPlugin: {
           minDate: new Date(),
