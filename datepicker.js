@@ -69,18 +69,18 @@ const [propertyDetail, result] = await Promise.all([
        
         plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
 RangePlugin: {
-tooltipNumber(num, dates) {
-  if (dates.length === 1) {
-    return `Minimum Nights ${minNights}`;
-  }
-
-  if (minNights && num === minNights) {
-    return `${minNights} nights`;
-  }
-  if (num === 1) {
-    return `1 night`;
-  }
-  return `${num} nights`;
+tooltipNumber(num) {
+if (minNights && num === minNights) {
+return `${minNights} ${this.locale.other}`;
+}
+if (num === 1) {
+return this.locale.one;
+}
+return `${num} ${this.locale.other}`;
+},
+locale: {
+one: "night",
+other: "nights",
 },
   onRender(picker) {
     this.picker = picker; // Store the picker instance
