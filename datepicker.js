@@ -70,10 +70,10 @@ const [propertyDetail, result] = await Promise.all([
         plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
 RangePlugin: {
   tooltipNumber(num) {
-    return num === 1 ? "min" : num - 1; // Return "min" for first selected date
+    return  num - 1; // Return "min" for first selected date
   },
   locale: {
-    one: (num) => (num === "min" ? `Minimum stay ${minNights} nights` : "1 night"),
+    one: "night",
     other: "nights",
   },
 }
@@ -118,33 +118,42 @@ RangePlugin: {
           },
         },
         setup(picker) {
-          picker.on("preselect", (evt) => {
- const startDate = evt.detail.start;
-            const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
+       picker.on("preselect", (evt) => {
+  const startDate = evt.detail.start;
+  const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
+  const rangePlugin = picker.PluginManager.getInstance("RangePlugin");
 
-            // Ensure startDate is valid before setting minDate
-            if (startDate) {
-              lockPlugin.options.minDate = startDate;
-            }
+  if (startDate) {
+    lockPlugin.options.minDate = startDate;
 
-            let firstLockedDate = null;
+    // Show tooltip for start date with "Minimum stay X nights"
+    rangePlugin.tooltip.innerText = `Minimum stay ${minNights} nights`;
+    rangePlugin.tooltip.style.visibility = "visible";
 
-            // Find the first locked date from the result data
-            for (const dateObj of result.data.date_object) {
-              if (!dateObj.available) {
-                // If the date is locked
-                firstLockedDate = new Date(dateObj.date);
-                break; // Stop at the first locked date
-              }
-            }
+    // Position tooltip at start date
+    const startEl = document.querySelector(`[data-time="${startDate.getTime()}"]`);
+    if (startEl) {
+      const rect = startEl.getBoundingClientRect();
+      rangePlugin.tooltip.style.top = `${rect.top}px`;
+      rangePlugin.tooltip.style.left = `${rect.left}px`;
+    }
+  }
 
-            // Set maxDate to the first locked date if found
-            if (firstLockedDate && firstLockedDate > startDate) {
-              lockPlugin.options.maxDate = firstLockedDate;
-            } else {
-              lockPlugin.options.maxDate = null; // No restriction if no locked date is found
-            }
-          });
+  let firstLockedDate = null;
+  for (const dateObj of result.data.date_object) {
+    if (!dateObj.available) {
+      firstLockedDate = new Date(dateObj.date);
+      break;
+    }
+  }
+
+  if (firstLockedDate && firstLockedDate > startDate) {
+    lockPlugin.options.maxDate = firstLockedDate;
+  } else {
+    lockPlugin.options.maxDate = null;
+  }
+});
+
 
           let lastEndDate = null;
           picker.on("select", () => {
