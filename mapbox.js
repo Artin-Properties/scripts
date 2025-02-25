@@ -32,7 +32,7 @@ async function initializeMap() {
     map.on("load", () => {
       map.loadImage(
         "https://cdn.prod.website-files.com/65ca509f965a4d9aaf54474f/671968afd2c8edd104402d26_property-icon.png",
-        (error, image) => {
+        async (error, image) => {
           if (error) {
             console.error("Error loading image:", error);
             return; // Exit if there's an error loading the image
@@ -41,14 +41,17 @@ async function initializeMap() {
           console.log("Image loaded successfully:", image);
           map.addImage("property-icon", image); // Add individual property icon
 
-          // Add a GeoJSON source with clustering enabled
-          map.addSource("locations", {
-            type: "geojson",
-            data: `https://api.artinproperties.ca/api:iwYORZ6t/map/properties`, // Replace with your GeoJSON data URL
+          const data = await fetch(`https://api.artinproperties.ca/api:iwYORZ6t/map/properties`, {
             headers: {
               "X-Branch": version,
               "X-Data-Source": dataSource,
             },
+          });
+
+          // Add a GeoJSON source with clustering enabled
+          map.addSource("locations", {
+            type: "geojson",
+            data: data,
             cluster: true,
             clusterMaxZoom: 14,
             clusterRadius: 37.5,
