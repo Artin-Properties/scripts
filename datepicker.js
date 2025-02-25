@@ -77,7 +77,7 @@ const [propertyDetail, result] = await Promise.all([
     one: "night",
     other: "nights",
   },
-}
+},
 
         LockPlugin: {
           minDate: new Date(),
