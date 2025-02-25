@@ -155,7 +155,7 @@ async function initializeMap() {
                 if (rentalType === "MTR") {
                   priceElement.textContent = `$${propertyData.date_object.totalPrice.toLocaleString()}/month`;
                 } else if (rentalType === "LTR") {
-                  priceElement.textContent = `$${propertyData.date_object.monthly_price.toLocaleString()}/month`;
+                  priceElement.textContent = `$${propertyData.monthly_price.toLocaleString()}/month`;
                 } else {
                   // Default to nightly rate
                   priceElement.textContent = `$${propertyData.date_object.totalPrice.toLocaleString()}/night`;
