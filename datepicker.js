@@ -70,7 +70,7 @@ const [propertyDetail, result] = await Promise.all([
         plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
      RangePlugin: {
   tooltipNumber(num) {
-    return num - 1; // Keeps the correct "nights" calculation
+    return num; // Keeps the correct "nights" calculation
   },
   locale: {
     zero: "Minimum nights " + minNights, // 👈 Custom message for 0 nights
