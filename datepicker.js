@@ -128,7 +128,7 @@ window.Wized.push(async (Wized) => {
 
     // 🟢 Manually show a tooltip for the first date
     setTimeout(() => {
-      const firstSelectedDay = document.querySelector(".day.focused"); // Get the first selected day
+      const firstSelectedDay = document.querySelector(".day.selected"); // Get the first selected day
       if (firstSelectedDay) {
         firstSelectedDay.setAttribute("data-tooltip", `Minimum Nights ${minNights}`);
       }
