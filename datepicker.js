@@ -84,7 +84,6 @@ const [propertyDetail, result] = await Promise.all([
         LockPlugin: {
           minDate: new Date(),
           inseparable: true,
-            minDays: minNights,
           maxDays: maxNights,
           filter(date, picked) {
             const formattedDate = date.format("YYYY-MM-DD");
@@ -121,17 +120,13 @@ const [propertyDetail, result] = await Promise.all([
         },
         setup(picker) {
           picker.on("preselect", (evt) => {
-       const startDate = evt.detail.start;
-const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
+ const startDate = evt.detail.start;
+            const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
 
-// Ensure startDate is valid before setting minDate
-if (startDate) {
-  // Add one day to startDate
-  const minSelectableDate = new Date(startDate);
-  minSelectableDate.setDate(minSelectableDate.getDate() - 1);
-
-  lockPlugin.options.minDate = minSelectableDate;
-}
+            // Ensure startDate is valid before setting minDate
+            if (startDate) {
+              lockPlugin.options.minDate = startDate;
+            }
 
 
             let firstLockedDate = null;
