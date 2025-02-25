@@ -78,7 +78,8 @@ RangePlugin: {
   },
 }
 
-,onRender(picker) {
+, onRender(picker) {
+    this.createCustomTooltip(picker); // Create the custom tooltip element
     this.updateTooltip(picker);
   },
   onSelect(picker) {
@@ -88,27 +89,29 @@ RangePlugin: {
     this.updateTooltip(picker);
   },
   onHide(picker) {
-    if (picker.ui.tooltip) {
-      picker.ui.tooltip.style.visibility = 'hidden';
+    if (this.customTooltip) {
+      this.customTooltip.style.visibility = 'hidden';
     }
   },
-  updateTooltip(picker) {  // This is OUR custom function, NOT Easepick's
+  createCustomTooltip(picker) {  // Create the custom tooltip
+    this.customTooltip = document.createElement('span');
+    this.customTooltip.classList.add('range-plugin-tooltip');
+    picker.ui.container.appendChild(this.customTooltip);
+  },
+  updateTooltip(picker) {
     const selectedDays = picker.ui.days.querySelectorAll('.day.start');
+    console.log(selectedDays);
     const selectedCount = selectedDays.length;
     const minNights = picker.options.minNights;
 
-    let tooltip = picker.ui.tooltip;
-    if (!tooltip) {
-      tooltip = document.createElement('span');
-      tooltip.classList.add('range-plugin-tooltip');
-      picker.ui.container.appendChild(tooltip);
-      picker.ui.tooltip = tooltip;
+    if (!this.customTooltip) { // Check if it has been created
+      this.createCustomTooltip(picker); // Create if it wasn't
     }
 
-    tooltip.style.visibility = 'visible';
-    tooltip.innerHTML = this.tooltipNumber(selectedCount, minNights);
+    this.customTooltip.style.visibility = 'visible';
+    this.customTooltip.innerHTML = this.tooltipNumber(selectedCount, minNights);
 
-    // Centroid calculation (same as before)
+    // Centroid calculation and positioning (same as before)
     let centerX = 0;
     let centerY = 0;
     if (selectedDays.length > 0) {
@@ -120,11 +123,11 @@ RangePlugin: {
       centerX /= selectedDays.length;
       centerY /= selectedDays.length;
 
-      const tooltipRect = tooltip.getBoundingClientRect();
-      tooltip.style.top = centerY - tooltipRect.height / 2 - 10 + 'px';
-      tooltip.style.left = centerX - tooltipRect.width / 2 + 'px';
+      const tooltipRect = this.customTooltip.getBoundingClientRect(); // Use customTooltip
+      this.customTooltip.style.top = centerY - tooltipRect.height / 2 - 10 + 'px';
+      this.customTooltip.style.left = centerX - tooltipRect.width / 2 + 'px';
     } else {
-      tooltip.style.visibility = 'hidden';
+      this.customTooltip.style.visibility = 'hidden';
     }
   },
 
