@@ -70,7 +70,9 @@ RangePlugin: {
     return num - 1;
   },
   locale: {
-    one: num === 1 ? `Minimum Nights ${minNights}` : '1 night',
+    one: function(num) {
+      return num === 1 ? `Minimum Nights ${minNights}` : '1 night';
+    },
     other: "nights",
   },
 },
