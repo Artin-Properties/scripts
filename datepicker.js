@@ -118,10 +118,7 @@ const [propertyDetail, result] = await Promise.all([
         },
         setup(picker) {
           picker.on("preselect", (evt) => {
-            console.log(result.data);
-
-            console.log(result.data.minNights);
-            console.log(result.data.maxNights);
+       
             const startDate = evt.detail.start;
             const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
 
