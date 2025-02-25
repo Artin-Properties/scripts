@@ -236,29 +236,27 @@ const targetElement = document.querySelector(".price_form-field-wrap-2");
 // Check if an error message already exists
 let existingError = targetElement.parentNode.querySelector(".input_error");
 
-// Remove existing error if present
+// Remove existing error if input becomes valid
 if (existingError) {
   existingError.remove();
 }
 
-// Create the new div with the "input_error" class
-const newElement = document.createElement("div");
-newElement.classList.add("input_error", "is-red");
-newElement.style.marginTop = "1rem";
-newElement.style.marginBottom = "0.5rem";
-newElement.style.justifyContent = "center";
-
-// Check conditions for minNights and maxNights
+// Create a new error element only if input is invalid
 if (minNights && totalNights < minNights) {
-  newElement.textContent = `The minimum stay is ${minNights} nights`;
+  const newElement = document.createElement("div");
+  newElement.classList.add("input_error", "is-red");
+  newElement.style.marginTop = "1rem";
+  newElement.style.marginBottom = "0.5rem";
+  newElement.style.justifyContent = "center";
+  newElement.textContent = The minimum stay is ${minNights} nights;
+  targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
 } else if (maxNights && totalNights > maxNights) {
-  newElement.textContent = `The maximum stay is ${maxNights} nights`;
-} else {
-  newElement.textContent = ""; // No error message
-}
-
-// Insert after the target element if there's a message to display
-if (newElement.textContent !== "") {
+  const newElement = document.createElement("div");
+  newElement.classList.add("input_error", "is-red");
+  newElement.style.marginTop = "1rem";
+  newElement.style.marginBottom = "0.5rem";
+  newElement.style.justifyContent = "center";
+  newElement.textContent = The maximum stay is ${maxNights} nights;
   targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
 }
   }                  
