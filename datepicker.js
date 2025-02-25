@@ -77,6 +77,9 @@ window.Wized.push(async (Wized) => {
   }
   return `${num} ${this.locale.other}`;
 },
+          tooltip: (data) => {
+    return data.tooltipNumber;
+  },
         },
         LockPlugin: {
           minDate: new Date(),
