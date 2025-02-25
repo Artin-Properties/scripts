@@ -124,7 +124,7 @@ window.Wized.push(async (Wized) => {
 
   rangePlugin.options.tooltipNumber = (num) => {
   
-    return num ;
+    return num - 1;
   };
 
   rangePlugin.options.locale = {
