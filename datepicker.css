@@ -155,7 +155,7 @@ input {
 
 /* Ensure the in-range days are still styled when they're also available and unlocked */
 .calendar > .days-grid > .day.unit.in-range:not(.not-available):not(.locked) {
-  background-color: #006fff !important;
+  background-color: #014CAF !important;
   color: #ffffff !important;
 }
 
