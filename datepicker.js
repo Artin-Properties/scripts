@@ -78,7 +78,56 @@ RangePlugin: {
   },
 }
 
-,
+,onRender(picker) {
+    this.updateTooltip(picker);
+  },
+  onSelect(picker) {
+    this.updateTooltip(picker);
+  },
+  onShow(picker) {
+    this.updateTooltip(picker);
+  },
+  onHide(picker) {
+    if (picker.ui.tooltip) {
+      picker.ui.tooltip.style.visibility = 'hidden';
+    }
+  },
+  updateTooltip(picker) {  // This is OUR custom function, NOT Easepick's
+    const selectedDays = picker.ui.days.querySelectorAll('.day.start');
+    const selectedCount = selectedDays.length;
+    const minNights = picker.options.minNights;
+
+    let tooltip = picker.ui.tooltip;
+    if (!tooltip) {
+      tooltip = document.createElement('span');
+      tooltip.classList.add('range-plugin-tooltip');
+      picker.ui.container.appendChild(tooltip);
+      picker.ui.tooltip = tooltip;
+    }
+
+    tooltip.style.visibility = 'visible';
+    tooltip.innerHTML = this.tooltipNumber(selectedCount, minNights);
+
+    // Centroid calculation (same as before)
+    let centerX = 0;
+    let centerY = 0;
+    if (selectedDays.length > 0) {
+      for (const day of selectedDays) {
+        const dayRect = day.getBoundingClientRect();
+        centerX += dayRect.left + dayRect.width / 2 + window.scrollX;
+        centerY += dayRect.top + dayRect.height / 2 + window.scrollY;
+      }
+      centerX /= selectedDays.length;
+      centerY /= selectedDays.length;
+
+      const tooltipRect = tooltip.getBoundingClientRect();
+      tooltip.style.top = centerY - tooltipRect.height / 2 - 10 + 'px';
+      tooltip.style.left = centerX - tooltipRect.width / 2 + 'px';
+    } else {
+      tooltip.style.visibility = 'hidden';
+    }
+  },
+};
 
         LockPlugin: {
           minDate: new Date(),
