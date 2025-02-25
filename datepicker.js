@@ -69,17 +69,22 @@ const [propertyDetail, result] = await Promise.all([
        
         plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
 RangePlugin: {
-  tooltipNumber(num) {
-    return  num - 1; // Return "min" for first selected date
-  },
-  locale: {
-    one: "night",
-    other: "nights",
-  },
-}
+tooltipNumber(num, dates) {
+  if (dates.length === 1) {
+    return `Minimum Nights ${minNights}`;
+  }
 
-, onRender(picker) {
-    this.createCustomTooltip(picker); // Create the custom tooltip element
+  if (minNights && num === minNights) {
+    return `${minNights} nights`;
+  }
+  if (num === 1) {
+    return `1 night`;
+  }
+  return `${num} nights`;
+},
+  onRender(picker) {
+    this.picker = picker; // Store the picker instance
+    this.createCustomTooltip(picker);
     this.updateTooltip(picker);
   },
   onSelect(picker) {
@@ -93,23 +98,21 @@ RangePlugin: {
       this.customTooltip.style.visibility = 'hidden';
     }
   },
-  createCustomTooltip(picker) {  // Create the custom tooltip
+  createCustomTooltip(picker) {
     this.customTooltip = document.createElement('span');
     this.customTooltip.classList.add('range-plugin-tooltip');
     picker.ui.container.appendChild(this.customTooltip);
   },
   updateTooltip(picker) {
     const selectedDays = picker.ui.days.querySelectorAll('.day.start');
-    console.log(selectedDays);
     const selectedCount = selectedDays.length;
-    const minNights = picker.options.minNights;
 
-    if (!this.customTooltip) { // Check if it has been created
-      this.createCustomTooltip(picker); // Create if it wasn't
+    if (!this.customTooltip) {
+      this.createCustomTooltip(picker);
     }
 
     this.customTooltip.style.visibility = 'visible';
-    this.customTooltip.innerHTML = this.tooltipNumber(selectedCount, minNights);
+    this.customTooltip.innerHTML = this.tooltipNumber(selectedCount); // Call without minNights
 
     // Centroid calculation and positioning (same as before)
     let centerX = 0;
@@ -123,7 +126,7 @@ RangePlugin: {
       centerX /= selectedDays.length;
       centerY /= selectedDays.length;
 
-      const tooltipRect = this.customTooltip.getBoundingClientRect(); // Use customTooltip
+      const tooltipRect = this.customTooltip.getBoundingClientRect();
       this.customTooltip.style.top = centerY - tooltipRect.height / 2 - 10 + 'px';
       this.customTooltip.style.left = centerX - tooltipRect.width / 2 + 'px';
     } else {
