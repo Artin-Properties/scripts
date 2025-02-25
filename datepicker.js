@@ -68,16 +68,19 @@ const [propertyDetail, result] = await Promise.all([
         zIndex: 10,
        
         plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
-        RangePlugin: {
-          tooltip: true,
-          tooltipNumber(num) {
-            return num - 1;
-          },
-          locale: {
-            one: "night",
-            other: "nights",
-          },
-        },
+       RangePlugin: {
+  tooltip: true,
+  tooltipFormatter(date, index) {
+    if (index === 0) {
+      return minNights;
+    }
+    return `${date.getDate() - 1} nights`;
+  },
+  locale: {
+    one: "night",
+    other: "nights",
+  },
+},
         LockPlugin: {
           minDate: new Date(),
           inseparable: true,
