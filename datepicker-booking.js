@@ -75,6 +75,8 @@ window.Wized.push(async (Wized) => {
         LockPlugin: {
           minDate: new Date(),
           inseparable: true,
+          minDays: result.data.minNights,
+          maxDays: result.data.maxNights,
           filter(date, picked) {
             const formattedDate = date.format("YYYY-MM-DD");
             const dateObj = result.data.date_object.find((obj) => obj.date === formattedDate);
