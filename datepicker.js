@@ -133,12 +133,13 @@ RangePlugin: {
             if (startDate) {
               lockPlugin.options.minDate = startDate;
             }
-if (startDate) {
-    const tooltipText = `Minimum Nights ${minNights}`;
-    picker.PluginManager.getInstance("RangePlugin").options.locale.one = tooltipText;
-  }else{
-  picker.PluginManager.getInstance("RangePlugin").options.locale.one = '1 Night';
+document.addEventListener('mouseover', (event) => {
+  if (event.target.classList.contains('day') && event.target.classList.contains('selected') && event.target.classList.contains('start')) {
+    const tooltip = document.querySelector('.range-plugin-tooltip');
+    const minNightsText = `Minimum Nights ${result.data.minNights}`;
+    tooltip.innerText = minNightsText;
   }
+});
             let firstLockedDate = null;
 
             // Find the first locked date from the result data
