@@ -248,7 +248,7 @@ if (minNights && totalNights < minNights) {
   newElement.style.marginTop = "1rem";
   newElement.style.marginBottom = "0.5rem";
   newElement.style.justifyContent = "center";
-  newElement.textContent = The minimum stay is ${minNights} nights;
+  newElement.textContent = `The minimum stay is ${minNights} nights`;
   targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
 } else if (maxNights && totalNights > maxNights) {
   const newElement = document.createElement("div");
@@ -256,7 +256,7 @@ if (minNights && totalNights < minNights) {
   newElement.style.marginTop = "1rem";
   newElement.style.marginBottom = "0.5rem";
   newElement.style.justifyContent = "center";
-  newElement.textContent = The maximum stay is ${maxNights} nights;
+  newElement.textContent = `The maximum stay is ${maxNights} nights`;
   targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
 }
                   }
