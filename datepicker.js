@@ -70,14 +70,13 @@ const [propertyDetail, result] = await Promise.all([
         plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
 RangePlugin: {
   tooltipNumber(num) {
-    return num === 1 
-      ? `Minimum stay ${minNights} nights`  // First selected date tooltip
-      : num - 1 === 1 
-        ? `1 night`  // If it's exactly 1 night
-        : `${num - 1} nights`;  // For 2+ nights
-  },
+    if( num ===1){
+      return 1
+    }
+    return num - 1 
+    },
   locale: {
-    one: "",  // Handled in tooltipNumber
+    one: "night",  // Handled in tooltipNumber
     other: "nights",  // Default
   },
 }
@@ -248,7 +247,7 @@ if (minNights && totalNights < minNights) {
   newElement.style.marginTop = "1rem";
   newElement.style.marginBottom = "0.5rem";
   newElement.style.justifyContent = "center";
-  newElement.textContent = The minimum stay is ${minNights} nights;
+  newElement.textContent = `The minimum stay is ${minNights} nights`;
   targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
 } else if (maxNights && totalNights > maxNights) {
   const newElement = document.createElement("div");
@@ -256,7 +255,7 @@ if (minNights && totalNights < minNights) {
   newElement.style.marginTop = "1rem";
   newElement.style.marginBottom = "0.5rem";
   newElement.style.justifyContent = "center";
-  newElement.textContent = The maximum stay is ${maxNights} nights;
+  newElement.textContent = `The maximum stay is ${maxNights} nights`;
   targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
 }
   }                  
