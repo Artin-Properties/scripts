@@ -14,6 +14,7 @@ function isPastBookingTime() {
 function getOneText(num) {
   return num === 1 ? `Minimum Nights ${minNights}` : '1 night';
 }
+let minNights;
 // Initialize Easepick date picker after the Wized request completes
 window.Wized = window.Wized || [];
 window.Wized.push(async (Wized) => {
@@ -23,7 +24,7 @@ window.Wized.push(async (Wized) => {
       Wized.requests.waitFor("Get_Property_Dates"),
     ]);
 
-    const minNights = propertyDetail.data.minNights;
+    minNights = propertyDetail.data.minNights;
     const maxNights = propertyDetail.data.maxNights;
     if (result && result.data && result.data.date_object) {
       const prices = {}; // Map date to price based on date_object array
@@ -130,16 +131,7 @@ RangePlugin: {
             if (startDate) {
               lockPlugin.options.minDate = startDate;
             }
-document.addEventListener('mouseover', (event) => {
-  if (event.target.classList.contains('day') && event.target.classList.contains('selected') && event.target.classList.contains('start')) {
-    const tooltip = document.querySelector('.range-plugin-tooltip');
-    console.log('Element:', event.target);
-    console.log('Tooltip:', tooltip);
-    const minNightsText = `Minimum Nights ${minNights}`;
-    console.log('minNightsText:', minNightsText);
-    tooltip.innerText = minNightsText;
-  }
-});
+
             let firstLockedDate = null;
 
             // Find the first locked date from the result data
@@ -315,5 +307,15 @@ if (minNights && totalNights < minNights) {
     }
   } catch (error) {
     // Error handling (no console logs as requested)
+  }
+});
+document.addEventListener('mouseover', (event) => {
+  if (event.target.classList.contains('day') && event.target.classList.contains('selected') && event.target.classList.contains('start')) {
+    const tooltip = document.querySelector('.range-plugin-tooltip');
+    console.log('Element:', event.target);
+    console.log('Tooltip:', tooltip);
+    const minNightsText = `Minimum Nights ${minNights}`;
+    console.log('minNightsText:', minNightsText);
+    tooltip.innerText = minNightsText;
   }
 });
