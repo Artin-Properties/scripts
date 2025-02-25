@@ -118,41 +118,33 @@ RangePlugin: {
           },
         },
         setup(picker) {
-       picker.on("preselect", (evt) => {
-  const startDate = evt.detail.start;
-  const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
-  const rangePlugin = picker.PluginManager.getInstance("RangePlugin");
+  picker.on("preselect", (evt) => {
+ const startDate = evt.detail.start;
+            const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
 
-  if (startDate) {
-    lockPlugin.options.minDate = startDate;
+            // Ensure startDate is valid before setting minDate
+            if (startDate) {
+              lockPlugin.options.minDate = startDate;
+            }
 
-    // Show tooltip for start date with "Minimum stay X nights"
-    rangePlugin.tooltip.innerText = `Minimum stay ${minNights} nights`;
-    rangePlugin.tooltip.style.visibility = "visible";
+            let firstLockedDate = null;
 
-    // Position tooltip at start date
-    const startEl = document.querySelector(`[data-time="${startDate.getTime()}"]`);
-    if (startEl) {
-      const rect = startEl.getBoundingClientRect();
-      rangePlugin.tooltip.style.top = `${rect.top}px`;
-      rangePlugin.tooltip.style.left = `${rect.left}px`;
-    }
-  }
+            // Find the first locked date from the result data
+            for (const dateObj of result.data.date_object) {
+              if (!dateObj.available) {
+                // If the date is locked
+                firstLockedDate = new Date(dateObj.date);
+                break; // Stop at the first locked date
+              }
+            }
 
-  let firstLockedDate = null;
-  for (const dateObj of result.data.date_object) {
-    if (!dateObj.available) {
-      firstLockedDate = new Date(dateObj.date);
-      break;
-    }
-  }
-
-  if (firstLockedDate && firstLockedDate > startDate) {
-    lockPlugin.options.maxDate = firstLockedDate;
-  } else {
-    lockPlugin.options.maxDate = null;
-  }
-});
+            // Set maxDate to the first locked date if found
+            if (firstLockedDate && firstLockedDate > startDate) {
+              lockPlugin.options.maxDate = firstLockedDate;
+            } else {
+              lockPlugin.options.maxDate = null; // No restriction if no locked date is found
+            }
+          });
 
 
           let lastEndDate = null;
