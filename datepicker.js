@@ -69,70 +69,19 @@ const [propertyDetail, result] = await Promise.all([
        
         plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
 RangePlugin: {
-tooltipNumber(num) {
-if (minNights && num === minNights) {
-return `${minNights} ${this.locale.other}`;
-}
-if (num === 1) {
-return this.locale.one;
-}
-return `${num} ${this.locale.other}`;
+tooltipNumber(num, dates) {
+  if (dates.length === 1) {
+    return `Minimum Nights ${minNights}`;
+  }
+
+  if (minNights && num === minNights) {
+    return `${minNights} ${this.locale.other}`;
+  }
+  if (num === 1) {
+    return this.locale.one;
+  }
+  return `${num} ${this.locale.other}`;
 },
-locale: {
-one: "night",
-other: "nights",
-},
-  onRender(picker) {
-    this.picker = picker; // Store the picker instance
-    this.createCustomTooltip(picker);
-    this.updateTooltip(picker);
-  },
-  onSelect(picker) {
-    this.updateTooltip(picker);
-  },
-  onShow(picker) {
-    this.updateTooltip(picker);
-  },
-  onHide(picker) {
-    if (this.customTooltip) {
-      this.customTooltip.style.visibility = 'hidden';
-    }
-  },
-  createCustomTooltip(picker) {
-    this.customTooltip = document.createElement('span');
-    this.customTooltip.classList.add('range-plugin-tooltip');
-    picker.ui.container.appendChild(this.customTooltip);
-  },
-  updateTooltip(picker) {
-    const selectedDays = picker.ui.days.querySelectorAll('.day.start');
-    const selectedCount = selectedDays.length;
-
-    if (!this.customTooltip) {
-      this.createCustomTooltip(picker);
-    }
-
-    this.customTooltip.style.visibility = 'visible';
-    this.customTooltip.innerHTML = this.tooltipNumber(selectedCount); // Call without minNights
-
-    // Centroid calculation and positioning (same as before)
-    let centerX = 0;
-    let centerY = 0;
-    if (selectedDays.length > 0) {
-      for (const day of selectedDays) {
-        const dayRect = day.getBoundingClientRect();
-        centerX += dayRect.left + dayRect.width / 2 + window.scrollX;
-        centerY += dayRect.top + dayRect.height / 2 + window.scrollY;
-      }
-      centerX /= selectedDays.length;
-      centerY /= selectedDays.length;
-
-      const tooltipRect = this.customTooltip.getBoundingClientRect();
-      this.customTooltip.style.top = centerY - tooltipRect.height / 2 - 10 + 'px';
-      this.customTooltip.style.left = centerX - tooltipRect.width / 2 + 'px';
-    } else {
-      this.customTooltip.style.visibility = 'hidden';
-    }
-  },
 
 
         LockPlugin: {
