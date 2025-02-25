@@ -6,20 +6,20 @@ async function initializeMap() {
       ? "staging"
       : "";
 
-    const response = await fetch(`https://api.artinproperties.ca/api:iwYORZ6t/map/token`, {
+    const tokenResponse = await fetch(`https://api.artinproperties.ca/api:iwYORZ6t/map/token`, {
       headers: {
         "X-Branch": version,
         "X-Data-Source": dataSource,
       },
     });
-    if (!response.ok) {
+    if (!tokenResponse.ok) {
       throw new Error("Failed to fetch Mapbox token");
     }
-    const data = await response.json();
-    if (!data.token) {
+    const tokenData = await tokenResponse.json();
+    if (!tokenData.token) {
       throw new Error("Invalid token response");
     }
-    mapboxgl.accessToken = data.token;
+    mapboxgl.accessToken = tokenData.token;
 
     const map = new mapboxgl.Map({
       container: "map", // ID of the div to render the map in
@@ -41,14 +41,20 @@ async function initializeMap() {
           console.log("Image loaded successfully:", image);
           map.addImage("property-icon", image); // Add individual property icon
 
-          const data = await fetch(`https://api.artinproperties.ca/api:iwYORZ6t/map/properties`, {
-            headers: {
-              "X-Branch": version,
-              "X-Data-Source": dataSource,
-            },
-          });
+          const propertiesResponse = await fetch(
+            `https://api.artinproperties.ca/api:iwYORZ6t/map/properties`,
+            {
+              headers: {
+                "X-Branch": version,
+                "X-Data-Source": dataSource,
+              },
+            }
+          );
+          let data = [];
 
-          console.log(data);
+          if (tokenResponse.ok) {
+            data = await propertiesResponse.json();
+          }
 
           // Add a GeoJSON source with clustering enabled
           map.addSource("locations", {
