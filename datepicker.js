@@ -124,23 +124,24 @@ window.Wized.push(async (Wized) => {
 
  const rangePlugin = picker.PluginManager.getInstance("RangePlugin");
 
-  if (startDate) {
-
-    // 🟢 Manually show a tooltip for the first date
+   if (startDate) {
+    lockPlugin.options.minDate = startDate;
+   
+    // 🟢 Wait for DOM update, then set tooltip manually on the first date
     setTimeout(() => {
-      const firstSelectedDay = document.querySelector(".day.selected"); // Get the first selected day
-      if (firstSelectedDay) {
-        firstSelectedDay.setAttribute("data-tooltip", `Minimum Nights ${minNights}`);
-      }
-    }, 10);
+      document.querySelectorAll(".day").forEach((day) => {
+        if (day.classList.contains("selected")) {
+          day.setAttribute("data-tooltip", `Minimum Nights ${minNights}`);
+        } else {
+          day.removeAttribute("data-tooltip"); // Clear tooltip from other days
+        }
+      });
+    }, 50);
   }
 
   rangePlugin.options.tooltipNumber = (num) => {
-    if (isFirstSelection) {
-      isFirstSelection = false; // Mark that the first selection happened
-      return null; // Hide tooltip for the first selection (since it's manually handled)
-    }
-    return num - 1; // Show the correct night count for the second date
+  
+    return num - 1; // Correct night count for the second date
   };
 
   rangePlugin.options.locale = {
