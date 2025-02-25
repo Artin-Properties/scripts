@@ -120,17 +120,15 @@ window.Wized.push(async (Wized) => {
             if (startDate) {
               lockPlugin.options.minDate = startDate;
             }
-const rangePlugin = picker.PluginManager.getInstance("RangePlugin");
+  const rangePlugin = picker.PluginManager.getInstance("RangePlugin");
 
   rangePlugin.options.tooltipNumber = (num) => {
-    if (num === 1) {
-      return 1;
-    }
-    return num - 1;
+  
+    return num ;
   };
 
   rangePlugin.options.locale = {
-    one: getOneText(num),
+    one: `Minimum Nights ${minNights}`,
     other: "nights",
   };
             let firstLockedDate = null;
