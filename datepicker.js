@@ -77,8 +77,8 @@ window.Wized.push(async (Wized) => {
                    tooltip: true,
           tooltipNumber(num) {
               console.log(num)
-              if (num == 1){
-                  return 0;
+              if (num === 1){
+                  return few;
               }
             return num - 1;
           },
@@ -86,6 +86,7 @@ window.Wized.push(async (Wized) => {
               zero: text,
                   one: "night",
             other: "nights",
+              few: text,
           },
 
                 },
