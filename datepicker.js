@@ -226,10 +226,10 @@ window.Wized.push(async (Wized) => {
               if (!dateObj.check_out_available && !dateObj.available) {
                 isInvalidRange = true;
               }
-              const targetElement = document.querySelector(".price_form-field-wrap-2");
+              //   const targetElement = document.querySelector(".price_form-field-wrap-2");
 
               // Check if an error message already exists
-              let existingError = targetElement.parentNode.querySelector(".input_error");
+              //   let existingError = targetElement.parentNode.querySelector(".input_error");
               if (startDate && endDate) {
                 const totalNights = Math.round(
                   (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
@@ -254,30 +254,30 @@ window.Wized.push(async (Wized) => {
                   isInvalidRange = true;
 
                   // Remove existing error if input becomes valid
-                  if (existingError) {
-                    existingError.remove();
-                  }
+                  //   if (existingError) {
+                  //     existingError.remove();
+                  //   }
 
-                  // Create a new error element only if input is invalid
-                  if (minNights && totalNights < minNights) {
-                    const newElement = document.createElement("div");
-                    newElement.classList.add("input_error", "is-red");
-                    newElement.style.marginTop = "1rem";
-                    newElement.style.marginBottom = "0.5rem";
-                    newElement.style.justifyContent = "center";
-                    newElement.textContent = `The minimum stay is ${minNights} nights`;
-                    targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
-                  } else if (maxNights && totalNights > maxNights) {
-                    const newElement = document.createElement("div");
-                    newElement.classList.add("input_error", "is-red");
-                    newElement.style.marginTop = "1rem";
-                    newElement.style.marginBottom = "0.5rem";
-                    newElement.style.justifyContent = "center";
-                    newElement.textContent = `The maximum stay is ${maxNights} nights`;
-                    targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
-                  } else if (existingError) {
-                    existingError.remove();
-                  }
+                  //   // Create a new error element only if input is invalid
+                  //   if (minNights && totalNights < minNights) {
+                  //     const newElement = document.createElement("div");
+                  //     newElement.classList.add("input_error", "is-red");
+                  //     newElement.style.marginTop = "1rem";
+                  //     newElement.style.marginBottom = "0.5rem";
+                  //     newElement.style.justifyContent = "center";
+                  //     newElement.textContent = `The minimum stay is ${minNights} nights`;
+                  //     targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
+                  //   } else if (maxNights && totalNights > maxNights) {
+                  //     const newElement = document.createElement("div");
+                  //     newElement.classList.add("input_error", "is-red");
+                  //     newElement.style.marginTop = "1rem";
+                  //     newElement.style.marginBottom = "0.5rem";
+                  //     newElement.style.justifyContent = "center";
+                  //     newElement.textContent = `The maximum stay is ${maxNights} nights`;
+                  //     targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
+                  //   } else if (existingError) {
+                  //     existingError.remove();
+                  //   }
                 }
               }
 
@@ -293,9 +293,9 @@ window.Wized.push(async (Wized) => {
                 Wized.data.v.arrival_date = arrivalDateStr;
                 Wized.data.v.departure_date = departureDateStr;
                 lastEndDate = endDate;
-                if (existingError) {
-                  existingError.remove();
-                }
+                // if (existingError) {
+                //   existingError.remove();
+                // }
               }
             }
           });
