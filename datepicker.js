@@ -125,11 +125,10 @@ window.Wized.push(async (Wized) => {
 
 
                         const rangePlugin = picker.PluginManager.getInstance("RangePlugin");
-                        rangePlugin.options.tooltipNumber = (num) => {
-                           if(num === 1){
-                               return num;
-                           }
-                            return num - 1; // Show adjusted night count for the second date
+
+                         if (!picker.getSelectedDates().length === 1) {
+                             rangePlugin.options.tooltipNumber = (num) => {
+                        return num - 1; // Show adjusted night count for the second date
                         };
                         let text = `night`;
                         if (isFirstSelection) {
@@ -137,9 +136,23 @@ window.Wized.push(async (Wized) => {
                             text = `Minimum Nights ${minNights}`;
                         }
                       rangePlugin.options.locale = {
-    one: "night",
-    other: "nights",
-};
+                        one: "night",
+                        other: "nights",
+                        };
+                         }
+                        rangePlugin.options.tooltipNumber = (num) => {
+                        return num; // Show adjusted night count for the second date
+                        };
+                        let text = `night`;
+                        if (isFirstSelection) {
+
+                            text = `Minimum Nights ${minNights}`;
+                        }
+                      rangePlugin.options.locale = {
+                        one: text,
+                        other: "nights",
+                        };
+                        
 
                         let firstLockedDate = null;
 
