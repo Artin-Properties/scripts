@@ -125,18 +125,12 @@ window.Wized.push(async (Wized) => {
                             isFirstSelection = true; // Reset when selecting a new start date
                         }
 let text = `Minimum Nights ${minNights}`;
-rangePlugin.options.tooltipNumber = (num) => num; // Keep normal count
-                    
-if(rangePlugin.options.tooltipNumber ===2){
-    text = `1 night`;
-}else if (rangePlugin.options.tooltipNumber > 2){
-    text = `nights`;
-}
-    rangePlugin.options.locale = {
-    one: text, // Replace "1 night" with "Minimum Nights X"
-    other: text, // Replace "2 nights" with "1 night"
+rangePlugin.options.tooltipNumber = (num) => num; // Must return only a number
+
+rangePlugin.options.locale = {
+    one: `Minimum Stay ${minNights} Night`,  // Show full text only for "1 night"
+    other: (num) => (num === 2 ? `1 night` : `${num} nights`), // Modify dynamically
 };
-         
                         
                 
 
