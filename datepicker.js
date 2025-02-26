@@ -240,12 +240,12 @@ window.Wized.push(async (Wized) => {
                   );
                   const minNights =
                     Wized.data.r.Get_Property.data.date_object.find(
-                      (entry) => entry.start_date === startDate
-                    ) ?? Wized.data.r.Get_Property.data.minNights;
+                      (entry) => entry.date === startDate
+                    )?.minimumNights ?? Wized.data.r.Get_Property.data.minNights;
                   const maxNights =
                     Wized.data.r.Get_Property.data.date_object.find(
-                      (entry) => entry.start_date === endDate
-                    ) ?? Wized.data.r.Get_Property.data.maxNights;
+                      (entry) => entry.date === endDate
+                    )?.maximumNights ?? Wized.data.r.Get_Property.data.maxNights;
 
                   if (
                     (minNights && totalNights < minNights) ||
