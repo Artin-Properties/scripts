@@ -77,7 +77,7 @@ window.Wized.push(async (Wized) => {
                    tooltip: true,
           tooltipNumber(num) {
               console.log(num);
-             if (num === 0) {
+             if (num === 1) {
         return ""; // Return empty string for zero
       }
             return num - 1;
