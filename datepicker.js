@@ -325,42 +325,52 @@ window.Wized.push(async (Wized) => {
     } catch (error) {
         // Error handling (no console logs as requested)
     }
-});
-document.addEventListener("DOMContentLoaded", function () {
-  const day = document.querySelector(".day.unit.selected.start.end");
-console.log(day);
-  if (day) {
-    // Create tooltip span
-    let tooltip = document.createElement("span");
-    tooltip.className = "range-plugin-tooltip";
-    tooltip.innerText = "1 night"; // Modify text dynamically if needed
+});document.addEventListener("DOMContentLoaded", function () {
+  const observer = new MutationObserver((mutationsList) => {
+    for (let mutation of mutationsList) {
+      if (mutation.type === "childList" || mutation.type === "attributes") {
+        const day = document.querySelector(".day.unit.selected.start.end");
+        
+        if (day && !day.querySelector(".range-plugin-tooltip")) {
+          console.log("Element found:", day);
 
-    // Style tooltip
-    tooltip.style.position = "absolute";
-    tooltip.style.visibility = "hidden";
-    tooltip.style.zIndex = "9999";
-    tooltip.style.background = "rgba(0, 0, 0, 0.8)";
-    tooltip.style.color = "#fff";
-    tooltip.style.padding = "5px 10px";
-    tooltip.style.borderRadius = "4px";
-    tooltip.style.fontSize = "12px";
-    tooltip.style.whiteSpace = "nowrap";
-    tooltip.style.transition = "opacity 0.2s ease-in-out";
+          // Create tooltip span
+          let tooltip = document.createElement("span");
+          tooltip.className = "range-plugin-tooltip";
+          tooltip.innerText = "1 night"; // Modify text dynamically if needed
 
-    // Append tooltip to the day element
-    day.appendChild(tooltip);
+          // Style tooltip
+          tooltip.style.position = "absolute";
+          tooltip.style.visibility = "hidden";
+          tooltip.style.zIndex = "9999";
+          tooltip.style.background = "rgba(0, 0, 0, 0.8)";
+          tooltip.style.color = "#fff";
+          tooltip.style.padding = "5px 10px";
+          tooltip.style.borderRadius = "4px";
+          tooltip.style.fontSize = "12px";
+          tooltip.style.whiteSpace = "nowrap";
+          tooltip.style.transition = "opacity 0.2s ease-in-out";
 
-    day.addEventListener("mouseenter", function () {
-      tooltip.style.visibility = "visible";
-      tooltip.style.top = "-25px"; // Adjust positioning above the element
-      tooltip.style.left = "50%";
-      tooltip.style.transform = "translateX(-50%)";
-    });
+          // Append tooltip to the day element
+          day.appendChild(tooltip);
 
-    day.addEventListener("mouseleave", function () {
-      tooltip.style.visibility = "hidden";
-    });
-  }
+          day.addEventListener("mouseenter", function () {
+            tooltip.style.visibility = "visible";
+            tooltip.style.top = "-25px"; // Adjust positioning above the element
+            tooltip.style.left = "50%";
+            tooltip.style.transform = "translateX(-50%)";
+          });
+
+          day.addEventListener("mouseleave", function () {
+            tooltip.style.visibility = "hidden";
+          });
+        }
+      }
+    }
+  });
+
+  // Observe the entire document for changes
+  observer.observe(document.body, { childList: true, subtree: true, attributes: true });
 });
 
 
