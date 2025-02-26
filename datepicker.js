@@ -76,7 +76,8 @@ window.Wized.push(async (Wized) => {
                 RangePlugin:{
                    tooltip: true,
           tooltipNumber(num) {
-              if (num === 1 ){
+              console.log(num)
+              if (num == 1){
                   return 0;
               }
             return num - 1;
