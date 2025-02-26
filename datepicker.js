@@ -127,10 +127,6 @@ window.Wized.push(async (Wized) => {
 let text = `Minimum Nights ${minNights}`;
 rangePlugin.options.tooltipNumber = (num) => num; // Must return only a number
 
-rangePlugin.options.locale = {
-    one: `Minimum Stay ${minNights} Night`,  // Show full text only for "1 night"
-    other: (num) => (num === 2 ? `1 night` : `${num} nights`), // Modify dynamically
-};
                         
                 const originalShowTooltip = rangePlugin.showTooltip;
 
