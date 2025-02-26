@@ -236,30 +236,33 @@ if (rentalType === "MTR" || rentalType === "STR") {
     );
     console.log(`Total Days Selected: ${totalNights}`);
 
-    const targetElement = document.querySelector(".price_form-field-wrap-2");
-    let existingError = targetElement?.parentNode?.querySelector(".input_error");
+   
+  const targetElement = document.querySelector(".price_form-field-wrap-2");
+let existingError = targetElement?.parentNode?.querySelector(".input_error");
 
-    // Remove existing error if input becomes valid
-    if (existingError) {
-      existingError.remove();
-    }
+// Remove existing error if input becomes valid
+if (existingError) {
+  existingError.remove();
+}
 
-    if ((minNights && totalNights < minNights) || (maxNights && totalNights > maxNights)) {
-      isInvalidRange = true;
-      const newElement = document.createElement("div");
-      newElement.classList.add("input_error", "is-red");
-      newElement.style.marginTop = "1rem";
-      newElement.style.marginBottom = "0.5rem";
-      newElement.style.justifyContent = "center";
+// Show error only if the selection is invalid
+if ((minNights && totalNights < minNights) || (maxNights && totalNights > maxNights)) {
+  isInvalidRange = true;
+  const newElement = document.createElement("div");
+  newElement.classList.add("input_error", "is-red");
+  newElement.style.marginTop = "1rem";
+  newElement.style.marginBottom = "0.5rem";
+  newElement.style.justifyContent = "center";
 
-      if (totalNights < minNights) {
-        newElement.textContent = `The minimum stay is ${minNights} nights`;
-      } else if (maxNights && totalNights > maxNights) {
-        newElement.textContent = `The maximum stay is ${maxNights} nights`;
-      }
+  if (totalNights < minNights) {
+    newElement.textContent = `The minimum stay is ${minNights} nights`;
+  } else if (maxNights && totalNights > maxNights) {
+    newElement.textContent = `The maximum stay is ${maxNights} nights`;
+  }
 
-      targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
-    }
+  targetElement.parentNode.insertBefore(newElement, targetElement);
+}
+
   }
 }
 
