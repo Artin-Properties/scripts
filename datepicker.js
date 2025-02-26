@@ -328,55 +328,61 @@ window.Wized.push(async (Wized) => {
 });
 document.addEventListener("DOMContentLoaded", function () {
   const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      // Find all elements with `.start.end` class
-      const days = document.querySelectorAll(".day.unit.start.end");
-      if (days.length > 0) {
-        days.forEach((day) => {
-          console.log("Tooltip added to:", day);
+    mutations.forEach(() => {
+      const mainElement = document.querySelector("main");
+      if (!mainElement) return;
 
-          // Create a NEW tooltip every time
-          let tooltip = document.createElement("span");
-          tooltip.className = "range-plugin-tooltip";
-          tooltip.innerText = "1 night";
+      let existingTooltip = document.querySelector(".range-plugin-tooltip");
+      if (!existingTooltip) {
+        console.log("Adding tooltip inside main...");
 
-          // Style tooltip
-          Object.assign(tooltip.style, {
-            position: "absolute",
-            zIndex: "9999",
-            background: "rgba(0, 0, 0, 0.8)",
-            color: "#fff",
-            padding: "5px 10px",
-            borderRadius: "4px",
-            fontSize: "12px",
-            whiteSpace: "nowrap",
-            transition: "opacity 0.2s ease-in-out",
-            top: "-30px", // Above day element
-            left: "50%",
-            transform: "translateX(-50%)",
-            opacity: "0",
-          });
+        // Create tooltip
+        let tooltip = document.createElement("span");
+        tooltip.className = "range-plugin-tooltip";
+        tooltip.innerText = "0 nights";
 
-          // Ensure relative positioning for correct placement
-          day.style.position = "relative"; 
-
-          // Append tooltip
-          day.appendChild(tooltip);
-
-          // Show/hide tooltip on hover
-          day.addEventListener("mouseenter", function () {
-            tooltip.style.opacity = "1";
-          });
-
-          day.addEventListener("mouseleave", function () {
-            tooltip.style.opacity = "0";
-          });
+        // Style tooltip
+        Object.assign(tooltip.style, {
+          position: "absolute",
+          visibility: "hidden",
+          zIndex: "9999",
+          background: "rgba(0, 0, 0, 0.8)",
+          color: "#fff",
+          padding: "5px 10px",
+          borderRadius: "4px",
+          fontSize: "12px",
+          whiteSpace: "nowrap",
+          transition: "opacity 0.2s ease-in-out",
         });
+
+        // Append tooltip to main
+        mainElement.style.position = "relative"; // Ensure relative positioning
+        mainElement.appendChild(tooltip);
       }
+
+      updateTooltipPosition();
     });
   });
 
-  // Observe changes in the document
+  function updateTooltipPosition() {
+    const startDay = document.querySelector(".day.unit.start");
+    const endDay = document.querySelector(".day.unit.end");
+    let tooltip = document.querySelector(".range-plugin-tooltip");
+
+    if (startDay && endDay && tooltip) {
+      let startRect = startDay.getBoundingClientRect();
+      let endRect = endDay.getBoundingClientRect();
+      let nightCount = Math.round((parseInt(endDay.dataset.time) - parseInt(startDay.dataset.time)) / (1000 * 60 * 60 * 24));
+
+      tooltip.innerText = `${nightCount} nights`;
+      tooltip.style.top = `${(startRect.top + endRect.top) / 2}px`;
+      tooltip.style.left = `${(startRect.left + endRect.left) / 2}px`;
+      tooltip.style.visibility = "visible";
+      tooltip.style.opacity = "1";
+    }
+  }
+
+  // Observe the calendar container for changes
   observer.observe(document.body, {
     childList: true,
     subtree: true,
@@ -384,9 +390,10 @@ document.addEventListener("DOMContentLoaded", function () {
     attributeFilter: ["class"], // Watch for class changes
   });
 
-  // Initial check in case elements already exist
+  // Run the function immediately in case elements are already present
   setTimeout(() => {
     console.log("Checking existing elements...");
     observer.takeRecords();
+    updateTooltipPosition();
   }, 100);
 });
