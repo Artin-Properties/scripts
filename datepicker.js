@@ -62,7 +62,7 @@ window.Wized.push(async (Wized) => {
                     }
                 }
             });
-
+ let text = `Minimum Nights ${minNights}`;
             picker = new easepick.create({
                 element: "#datepicker",
                 css: [
@@ -73,7 +73,22 @@ window.Wized.push(async (Wized) => {
                 zIndex: 10,
 
                 plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
+                RangePlugin:{
+                   tooltip: true,
+          tooltipNumber(num) {
+              if (num === 1 ){
+                  return 0;
+              }
+            return num - 1;
+          },
+          locale: {
+              zero: text,
+                  one: "night",
+            other: "nights",
+          },
 
+                },
+                
                 LockPlugin: {
                     minDate: new Date(),
                     inseparable: true,
@@ -125,23 +140,6 @@ window.Wized.push(async (Wized) => {
                         }
 
 
-                        const rangePlugin = picker.PluginManager.getInstance("RangePlugin");
-
-                        
-                             rangePlugin.options.tooltipNumber = (num) => {
-                                 console.log(num);
-                                 if(num === 0){
-                                     return 0;
-                                 }
-                        return num-1; // Show adjusted night count for the second date
-                        };
-                     let text = `Minimum Nights ${minNights}`;
-                      rangePlugin.options.locale = {
-                          zero:text,
-                            one: "night",
-                          other: "nights"
-                        };
-                         
                        
                         
                 
