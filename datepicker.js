@@ -230,7 +230,7 @@ window.Wized.push(async (Wized) => {
                   );
                   const minNights = Wized.data.r.Get_Property.data.minNights;
                   const maxNights = Wized.data.r.Get_Property.data.maxNights;
-                  console.log(Total Days Selected: ${totalNights});
+                  
 
                   if (
                     (minNights && totalNights < minNights) ||
