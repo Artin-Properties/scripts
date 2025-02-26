@@ -137,8 +137,8 @@ window.Wized.push(async (Wized) => {
                      let text = `Minimum Nights ${minNights}`;
                       rangePlugin.options.locale = {
                           zero:text,
-                        one: "night",
-                          others: "nights"
+                            one: "night",
+                          other: "nights"
                         };
                          
                        
