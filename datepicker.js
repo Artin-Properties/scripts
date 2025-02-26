@@ -73,7 +73,23 @@ window.Wized.push(async (Wized) => {
                 zIndex: 10,
 
                 plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
-              
+              RangePlugin:{
+                   tooltip: true,
+          tooltipNumber(num) {
+              console.log(num)
+              if (num === 1){
+                  return few;
+              }
+            return num - 1;
+          },
+          locale: {
+              zero: text,
+                  one: "night",
+            other: "nights",
+              few: text,
+          },
+
+                },
                 LockPlugin: {
                     minDate: new Date(),
                     inseparable: true,
@@ -124,21 +140,6 @@ window.Wized.push(async (Wized) => {
                             lockPlugin.options.minDate = startDate;
                             isFirstSelection = true; // Reset when selecting a new start date
                         }
-let text = `Minimum Nights ${minNights}`;
-rangePlugin.options.tooltipNumber = (num) => num; // Must return only a number
-
-                        
-                const originalShowTooltip = rangePlugin.showTooltip;
-
-rangePlugin.showTooltip = function (element, text) {
-    if (text.startsWith("1 night")) {
-        text = `Minimum Stay ${minNights} Night`;
-    } else if (text.startsWith("2 nights")) {
-        text = "1 night";
-    }
-
-    originalShowTooltip.call(this, element, text);
-};
 
 
                         let firstLockedDate = null;
