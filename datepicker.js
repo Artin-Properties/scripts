@@ -116,6 +116,7 @@ window.Wized.push(async (Wized) => {
                     let isFirstSelection = true;
                     picker.on("preselect", (evt) => {
                         const startDate = evt.detail.start;
+                        console.log(evt.detail);
                         const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
 
                         if (startDate) {
