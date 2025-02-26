@@ -27,7 +27,7 @@ window.Wized.push(async (Wized) => {
     ]);
 
     minNights = propertyDetail.data.minNights;
-    const maxNights = propertyDetail.data.maxNights;
+    maxNights = propertyDetail.data.maxNights;
     if (result && result.data && result.data.date_object) {
       const prices = {}; // Map date to price based on date_object array
       const today = new Date();
