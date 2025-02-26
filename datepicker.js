@@ -129,7 +129,8 @@ window.Wized.push(async (Wized) => {
 
                         
                              rangePlugin.options.tooltipNumber = (num) => {
-                                 if(num === 1){
+                                 console.log(num);
+                                 if(num === 0){
                                      return 0;
                                  }
                         return num-1; // Show adjusted night count for the second date
