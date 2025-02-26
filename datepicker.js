@@ -224,24 +224,26 @@ window.Wized.push(async (Wized) => {
                             if (!dateObj.check_out_available && !dateObj.available) {
                                 isInvalidRange = true;
                             }
+                              const targetElement = document.querySelector(".price_form-field-wrap-2");
+
+                                        // Check if an error message already exists
+                                           let existingError = targetElement.parentNode.querySelector(".input_error");
                             if (Wized.data.r.Get_Property.data.rental_type === "MTR" || Wized.data.r.Get_Property.data.rental_type === "STR") {
+                                
                                 if (startDate && endDate) {
                                     const totalNights = Math.round(
                                         (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
                                     );
                                     const minNights = Wized.data.r.Get_Property.data.minNights;
                                     const maxNights = Wized.data.r.Get_Property.data.maxNights;
-                                     let existingError = targetElement.parentNode.querySelector(".input_error");
+                                     
 
                                     if (
                                         (minNights && totalNights < minNights) ||
                                         (maxNights && totalNights > maxNights)
                                     ) {
                                         isInvalidRange = true;
-                                        const targetElement = document.querySelector(".price_form-field-wrap-2");
-
-                                        // Check if an error message already exists
-                                       
+                                      
 
                                         // Remove existing error if input becomes valid
                                         if (existingError) {
