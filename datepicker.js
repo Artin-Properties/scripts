@@ -223,48 +223,51 @@ window.Wized.push(async (Wized) => {
               if (!dateObj.check_out_available && !dateObj.available) {
                 isInvalidRange = true;
               }
+ if (Wized.data.r.Get_Property.data.rental_type === "MTR" || Wized.data.r.Get_Property.data.rental_type === "STR") {
+                if (startDate && endDate) {
+                  const totalNights = Math.round(
+                    (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+                  );
+                  const minNights = Wized.data.r.Get_Property.data.minNights;
+                  const maxNights = Wized.data.r.Get_Property.data.maxNights;
+                  console.log(Total Days Selected: ${totalNights});
 
-            
-const rentalType = propertyDetail.rental_type;
-minNights = propertyDetail.minNights || (rentalType === "MTR" ? 90 : rentalType === "STR" ? 3 : null);
-maxNights = propertyDetail.maxNights;
+                  if (
+                    (minNights && totalNights < minNights) ||
+                    (maxNights && totalNights > maxNights)
+                  ) {
+                    isInvalidRange = true;
+                    const targetElement = document.querySelector(".price_form-field-wrap-2");
 
-if (rentalType === "MTR" || rentalType === "STR") {
-  if (startDate && endDate) {
-    const totalNights = Math.round(
-      (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
-    );
-    console.log(`Total Days Selected: ${totalNights}`);
+                    // Check if an error message already exists
+                    let existingError = targetElement.parentNode.querySelector(".input_error");
 
-   
-  const targetElement = document.querySelector(".price_form-field-wrap-2");
-let existingError = targetElement?.parentNode?.querySelector(".input_error");
+                    // Remove existing error if input becomes valid
+                    if (existingError) {
+                      existingError.remove();
+                    }
 
-// Remove existing error if input becomes valid
-if (existingError) {
-  existingError.remove();
-}
-
-// Show error only if the selection is invalid
-if ((minNights && totalNights < minNights) || (maxNights && totalNights > maxNights)) {
-  isInvalidRange = true;
-  const newElement = document.createElement("div");
-  newElement.classList.add("input_error", "is-red");
-  newElement.style.marginTop = "1rem";
-  newElement.style.marginBottom = "0.5rem";
-  newElement.style.justifyContent = "center";
-
-  if (totalNights < minNights) {
-    newElement.textContent = `The minimum stay is ${minNights} nights`;
-  } else if (maxNights && totalNights > maxNights) {
-    newElement.textContent = `The maximum stay is ${maxNights} nights`;
-  }
-
-  targetElement.parentNode.insertBefore(newElement, targetElement);
-}
-
-  }
-}
+                    // Create a new error element only if input is invalid
+                    if (minNights && totalNights < minNights) {
+                      const newElement = document.createElement("div");
+                      newElement.classList.add("input_error", "is-red");
+                      newElement.style.marginTop = "1rem";
+                      newElement.style.marginBottom = "0.5rem";
+                      newElement.style.justifyContent = "center";
+                      newElement.textContent = The minimum stay is ${minNights} nights;
+                      targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
+                    } else if (maxNights && totalNights > maxNights) {
+                      const newElement = document.createElement("div");
+                      newElement.classList.add("input_error", "is-red");
+                      newElement.style.marginTop = "1rem";
+                      newElement.style.marginBottom = "0.5rem";
+                      newElement.style.justifyContent = "center";
+                      newElement.textContent = The maximum stay is ${maxNights} nights;
+                      targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
+                    }
+                  }
+                }
+              }
 
 
               // Log whether the selected range is invalid
