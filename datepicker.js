@@ -62,7 +62,7 @@ window.Wized.push(async (Wized) => {
                     }
                 }
             });
- let text = `Minimum Nights ${minNights}`;
+
             picker = new easepick.create({
                 element: "#datepicker",
                 css: [
@@ -124,23 +124,14 @@ window.Wized.push(async (Wized) => {
                             lockPlugin.options.minDate = startDate;
                             isFirstSelection = true; // Reset when selecting a new start date
                         }
+let text = `Minimum Nights ${minNights}`;
+rangePlugin.options.tooltipNumber = (num) => num; // Keep normal count
 
-  rangePlugin.options.tooltipNumber = (num) => {
-        if (num === 1) {
-            return "few"; // Force "few" for the first date tooltip
-        }
-        return num - 1; // Normal night count otherwise
-    };
-
-    rangePlugin.options.locale = {
-        zero: "0 nights",
-        one: "night",
-        two: "two nights",
-        few: "Minimum Nights 3", // Custom text when "few" is used
-        many: "many nights",
-        other: "nights",
-    };
-                       
+rangePlugin.options.locale = {
+    one: text, // Replace "1 night" with "Minimum Nights X"
+    other: ({ value }) => (value === 2 ? "1 night" : "nights"), // Replace "2 nights" with "1 night"
+};
+         
                         
                 
 
@@ -331,75 +322,4 @@ window.Wized.push(async (Wized) => {
     } catch (error) {
         // Error handling (no console logs as requested)
     }
-});
-document.addEventListener("DOMContentLoaded", function () {
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach(() => {
-      const mainElement = document.querySelector("main");
-      if (!mainElement) return;
-
-      let existingTooltip = document.querySelector(".range-plugin-tooltip");
-      if (!existingTooltip) {
-        console.log("Adding tooltip inside main...");
-
-        // Create tooltip
-        let tooltip = document.createElement("span");
-        tooltip.className = "range-plugin-tooltip";
-        tooltip.innerText = "0 nights";
-
-        // Style tooltip
-        Object.assign(tooltip.style, {
-          position: "absolute",
-          visibility: "hidden",
-          zIndex: "9999",
-          background: "rgba(0, 0, 0, 0.8)",
-          color: "#fff",
-          padding: "5px 10px",
-          borderRadius: "4px",
-          fontSize: "12px",
-          whiteSpace: "nowrap",
-          transition: "opacity 0.2s ease-in-out",
-        });
-
-        // Append tooltip to main
-        mainElement.style.position = "relative"; // Ensure relative positioning
-        mainElement.appendChild(tooltip);
-      }
-
-      updateTooltipPosition();
-    });
-  });
-
-  function updateTooltipPosition() {
-    const startDay = document.querySelector(".day.unit.start");
-    const endDay = document.querySelector(".day.unit.end");
-    let tooltip = document.querySelector(".range-plugin-tooltip");
-
-    if (startDay && endDay && tooltip) {
-      let startRect = startDay.getBoundingClientRect();
-      let endRect = endDay.getBoundingClientRect();
-      let nightCount = Math.round((parseInt(endDay.dataset.time) - parseInt(startDay.dataset.time)) / (1000 * 60 * 60 * 24));
-
-      tooltip.innerText = `${nightCount} nights`;
-      tooltip.style.top = `${(startRect.top + endRect.top) / 2}px`;
-      tooltip.style.left = `${(startRect.left + endRect.left) / 2}px`;
-      tooltip.style.visibility = "visible";
-      tooltip.style.opacity = "1";
-    }
-  }
-
-  // Observe the calendar container for changes
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true,
-    attributes: true,
-    attributeFilter: ["class"], // Watch for class changes
-  });
-
-  // Run the function immediately in case elements are already present
-  setTimeout(() => {
-    console.log("Checking existing elements...");
-    observer.takeRecords();
-    updateTooltipPosition();
-  }, 100);
 });
