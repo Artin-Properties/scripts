@@ -126,10 +126,15 @@ window.Wized.push(async (Wized) => {
                         }
 let text = `Minimum Nights ${minNights}`;
 rangePlugin.options.tooltipNumber = (num) => num; // Keep normal count
-
-rangePlugin.options.locale = {
+                    
+if(rangePlugin.options.tooltipNumber ===2){
+    text = `1 night`;
+}else if (rangePlugin.options.tooltipNumber > 2){
+    text = `nights`;
+}
+    rangePlugin.options.locale = {
     one: text, // Replace "1 night" with "Minimum Nights X"
-    other: ({ value }) => (value === 2 ? "1 night" : "nights"), // Replace "2 nights" with "1 night"
+    other: text, // Replace "2 nights" with "1 night"
 };
          
                         
