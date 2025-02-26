@@ -326,23 +326,41 @@ window.Wized.push(async (Wized) => {
         // Error handling (no console logs as requested)
     }
 });
-document.addEventListener("DOMContentLoaded", () => {
-    const dayElement = document.querySelector(".day.unit.selected.start");
+document.addEventListener("DOMContentLoaded", function () {
+  const day = document.querySelector(".day.unit.selected.start");
+console.log(day);
+  if (day) {
+    // Create tooltip span
+    let tooltip = document.createElement("span");
+    tooltip.className = "range-plugin-tooltip";
+    tooltip.innerText = "1 night"; // Modify text dynamically if needed
 
-    if (dayElement) { // ✅ Check if the element exists before adding the event listener
-        dayElement.addEventListener("mouseover", (event) => {
-            console.log("Element:", event.target);
+    // Style tooltip
+    tooltip.style.position = "absolute";
+    tooltip.style.visibility = "hidden";
+    tooltip.style.zIndex = "9999";
+    tooltip.style.background = "rgba(0, 0, 0, 0.8)";
+    tooltip.style.color = "#fff";
+    tooltip.style.padding = "5px 10px";
+    tooltip.style.borderRadius = "4px";
+    tooltip.style.fontSize = "12px";
+    tooltip.style.whiteSpace = "nowrap";
+    tooltip.style.transition = "opacity 0.2s ease-in-out";
 
-            const tooltip = document.querySelector(".range-plugin-tooltip");
-            if (tooltip) { // ✅ Check if the tooltip exists before modifying it
-                const minNightsText = `Minimum Nights ${minNights}`;
-                console.log("Tooltip found. Setting text:", minNightsText);
-                tooltip.innerText = minNightsText;
-            } else {
-                console.warn("Tooltip not found.");
-            }
-        });
-    } else {
-        console.warn("First selected date element not found.");
-    }
+    // Append tooltip to the day element
+    day.appendChild(tooltip);
+
+    day.addEventListener("mouseenter", function () {
+      tooltip.style.visibility = "visible";
+      tooltip.style.top = "-25px"; // Adjust positioning above the element
+      tooltip.style.left = "50%";
+      tooltip.style.transform = "translateX(-50%)";
+    });
+
+    day.addEventListener("mouseleave", function () {
+      tooltip.style.visibility = "hidden";
+    });
+  }
 });
+
+
