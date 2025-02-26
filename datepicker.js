@@ -62,7 +62,7 @@ window.Wized.push(async (Wized) => {
                     }
                 }
             });
-
+    let text = `Minimum Stay ${minNights} Night`;
             picker = new easepick.create({
                 element: "#datepicker",
                 css: [
@@ -76,9 +76,14 @@ window.Wized.push(async (Wized) => {
               RangePlugin:{
                    tooltip: true,
           tooltipNumber(num) {
+              console.log(num);
+             if (num === 0) {
+        return ""; // Return empty string for zero
+      }
             return num - 1;
           },
           locale: {
+              zero:text,
                   one: "night",
             other: "nights",
           },
