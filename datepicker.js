@@ -76,17 +76,11 @@ window.Wized.push(async (Wized) => {
               RangePlugin:{
                    tooltip: true,
           tooltipNumber(num) {
-              console.log(num)
-              if (num === 1){
-                  return few;
-              }
             return num - 1;
           },
           locale: {
-              zero: text,
                   one: "night",
             other: "nights",
-              few: text,
           },
 
                 },
