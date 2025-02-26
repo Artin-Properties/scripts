@@ -132,7 +132,18 @@ rangePlugin.options.locale = {
     other: (num) => (num === 2 ? `1 night` : `${num} nights`), // Modify dynamically
 };
                         
-                
+                const originalShowTooltip = rangePlugin.showTooltip;
+
+rangePlugin.showTooltip = function (element, text) {
+    if (text.startsWith("1 night")) {
+        text = `Minimum Stay ${minNights} Night`;
+    } else if (text.startsWith("2 nights")) {
+        text = "1 night";
+    }
+
+    originalShowTooltip.call(this, element, text);
+};
+
 
                         let firstLockedDate = null;
 
