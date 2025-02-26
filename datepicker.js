@@ -126,8 +126,8 @@ window.Wized.push(async (Wized) => {
 
                         const rangePlugin = picker.PluginManager.getInstance("RangePlugin");
                         rangePlugin.options.tooltipNumber = (num) => {
-                           if(num ===1){
-                               return 0;
+                           if(num === 1){
+                               return num;
                            }
                             return num - 1; // Show adjusted night count for the second date
                         };
