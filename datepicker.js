@@ -139,7 +139,7 @@ window.Wized.push(async (Wized) => {
                             lockPlugin.options.minDate = startDate;
                             isFirstSelection = true; // Reset when selecting a new start date
                         }
-
+                    console.log(rangePlugin.options.tooltip);
 
                         let firstLockedDate = null;
 
