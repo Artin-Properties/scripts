@@ -230,54 +230,49 @@ window.Wized.push(async (Wized) => {
 
               // Check if an error message already exists
               let existingError = targetElement.parentNode.querySelector(".input_error");
-              if (
-                Wized.data.r.Get_Property.data.rental_type === "MTR" ||
-                Wized.data.r.Get_Property.data.rental_type === "STR"
-              ) {
-                if (startDate && endDate) {
-                  const totalNights = Math.round(
-                    (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
-                  );
-                  const minNights =
-                    Wized.data.r.Get_Property_Dates.data.date_object.find(
-                      (entry) => entry.date === arrivalDateStr
-                    )?.minimumStay ?? Wized.data.r.Get_Property.data.minNights;
-                  const maxNights =
-                    Wized.data.r.Get_Property_Dates.data.date_object.find(
-                      (entry) => entry.date === departureDateStr
-                    )?.maximumStay ?? Wized.data.r.Get_Property.data.maxNights;
+              if (startDate && endDate) {
+                const totalNights = Math.round(
+                  (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+                );
+                const minNights =
+                  Wized.data.r.Get_Property_Dates.data.date_object.find(
+                    (entry) => entry.date === arrivalDateStr
+                  )?.minimumStay ?? Wized.data.r.Get_Property.data.minNights;
+                const maxNights =
+                  Wized.data.r.Get_Property_Dates.data.date_object.find(
+                    (entry) => entry.date === departureDateStr
+                  )?.maximumStay ?? Wized.data.r.Get_Property.data.maxNights;
 
-                  if (
-                    (minNights && totalNights < minNights) ||
-                    (maxNights && totalNights > maxNights)
-                  ) {
-                    isInvalidRange = true;
+                if (
+                  (minNights && totalNights < minNights) ||
+                  (maxNights && totalNights > maxNights)
+                ) {
+                  isInvalidRange = true;
 
-                    // Remove existing error if input becomes valid
-                    if (existingError) {
-                      existingError.remove();
-                    }
+                  // Remove existing error if input becomes valid
+                  if (existingError) {
+                    existingError.remove();
+                  }
 
-                    // Create a new error element only if input is invalid
-                    if (minNights && totalNights < minNights) {
-                      const newElement = document.createElement("div");
-                      newElement.classList.add("input_error", "is-red");
-                      newElement.style.marginTop = "1rem";
-                      newElement.style.marginBottom = "0.5rem";
-                      newElement.style.justifyContent = "center";
-                      newElement.textContent = `The minimum stay is ${minNights} nights`;
-                      targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
-                    } else if (maxNights && totalNights > maxNights) {
-                      const newElement = document.createElement("div");
-                      newElement.classList.add("input_error", "is-red");
-                      newElement.style.marginTop = "1rem";
-                      newElement.style.marginBottom = "0.5rem";
-                      newElement.style.justifyContent = "center";
-                      newElement.textContent = `The maximum stay is ${maxNights} nights`;
-                      targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
-                    } else if (existingError) {
-                      existingError.remove();
-                    }
+                  // Create a new error element only if input is invalid
+                  if (minNights && totalNights < minNights) {
+                    const newElement = document.createElement("div");
+                    newElement.classList.add("input_error", "is-red");
+                    newElement.style.marginTop = "1rem";
+                    newElement.style.marginBottom = "0.5rem";
+                    newElement.style.justifyContent = "center";
+                    newElement.textContent = `The minimum stay is ${minNights} nights`;
+                    targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
+                  } else if (maxNights && totalNights > maxNights) {
+                    const newElement = document.createElement("div");
+                    newElement.classList.add("input_error", "is-red");
+                    newElement.style.marginTop = "1rem";
+                    newElement.style.marginBottom = "0.5rem";
+                    newElement.style.justifyContent = "center";
+                    newElement.textContent = `The maximum stay is ${maxNights} nights`;
+                    targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
+                  } else if (existingError) {
+                    existingError.remove();
                   }
                 }
               }
