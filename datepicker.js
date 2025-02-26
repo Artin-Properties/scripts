@@ -327,7 +327,7 @@ window.Wized.push(async (Wized) => {
     }
 });
 document.addEventListener("DOMContentLoaded", function () {
-  const day = document.querySelector(".day.unit.selected.start");
+  const day = document.querySelector(".day.unit.selected.start.end");
 console.log(day);
   if (day) {
     // Create tooltip span
