@@ -224,10 +224,10 @@ window.Wized.push(async (Wized) => {
                 isInvalidRange = true;
               }
 
-              const propertyData = Wized.data.r.Get_Property.data;
-const rentalType = propertyData.rental_type;
-minNights = propertyData.minNights || (rentalType === "MTR" ? 90 : rentalType === "STR" ? 3 : null);
-maxNights = propertyData.maxNights;
+            
+const rentalType = propertyDetail.rental_type;
+minNights = propertyDetail.minNights || (rentalType === "MTR" ? 90 : rentalType === "STR" ? 3 : null);
+maxNights = propertyDetail.maxNights;
 
 if (rentalType === "MTR" || rentalType === "STR") {
   if (startDate && endDate) {
