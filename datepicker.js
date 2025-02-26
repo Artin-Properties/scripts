@@ -329,57 +329,54 @@ window.Wized.push(async (Wized) => {
 document.addEventListener("DOMContentLoaded", function () {
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
-      // Check if any new elements have the class .start.end
+      // Find all elements with `.start.end` class
       const days = document.querySelectorAll(".day.unit.start.end");
       if (days.length > 0) {
         days.forEach((day) => {
-          let existingTooltip = day.querySelector(".range-plugin-tooltip");
-          if (!existingTooltip) {
-            console.log("Tooltip added to:", day);
+          console.log("Tooltip added to:", day);
 
-            // Create tooltip
-            let tooltip = document.createElement("span");
-            tooltip.className = "range-plugin-tooltip";
-            tooltip.innerText = "1 night";
+          // Create a NEW tooltip every time
+          let tooltip = document.createElement("span");
+          tooltip.className = "range-plugin-tooltip";
+          tooltip.innerText = "1 night";
 
-            // Style tooltip
-            Object.assign(tooltip.style, {
-              position: "absolute",
-              visibility: "hidden",
-              zIndex: "9999",
-              background: "rgba(0, 0, 0, 0.8)",
-              color: "#fff",
-              padding: "5px 10px",
-              borderRadius: "4px",
-              fontSize: "12px",
-              whiteSpace: "nowrap",
-              transition: "opacity 0.2s ease-in-out",
-              top: "-30px", // Above day element
-              left: "50%",
-              transform: "translateX(-50%)",
-            });
+          // Style tooltip
+          Object.assign(tooltip.style, {
+            position: "absolute",
+            zIndex: "9999",
+            background: "rgba(0, 0, 0, 0.8)",
+            color: "#fff",
+            padding: "5px 10px",
+            borderRadius: "4px",
+            fontSize: "12px",
+            whiteSpace: "nowrap",
+            transition: "opacity 0.2s ease-in-out",
+            top: "-30px", // Above day element
+            left: "50%",
+            transform: "translateX(-50%)",
+            opacity: "0",
+          });
 
-            // Append tooltip
-            day.style.position = "relative"; // Ensure relative positioning for absolute tooltip
-            day.appendChild(tooltip);
+          // Ensure relative positioning for correct placement
+          day.style.position = "relative"; 
 
-            // Show/hide tooltip on hover
-            day.addEventListener("mouseenter", function () {
-              tooltip.style.visibility = "visible";
-              tooltip.style.opacity = "1";
-            });
+          // Append tooltip
+          day.appendChild(tooltip);
 
-            day.addEventListener("mouseleave", function () {
-              tooltip.style.visibility = "hidden";
-              tooltip.style.opacity = "0";
-            });
-          }
+          // Show/hide tooltip on hover
+          day.addEventListener("mouseenter", function () {
+            tooltip.style.opacity = "1";
+          });
+
+          day.addEventListener("mouseleave", function () {
+            tooltip.style.opacity = "0";
+          });
         });
       }
     });
   });
 
-  // Observe the calendar container for changes
+  // Observe changes in the document
   observer.observe(document.body, {
     childList: true,
     subtree: true,
@@ -387,7 +384,7 @@ document.addEventListener("DOMContentLoaded", function () {
     attributeFilter: ["class"], // Watch for class changes
   });
 
-  // Run the function immediately in case elements are already present
+  // Initial check in case elements already exist
   setTimeout(() => {
     console.log("Checking existing elements...");
     observer.takeRecords();
