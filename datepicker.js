@@ -326,55 +326,70 @@ window.Wized.push(async (Wized) => {
         // Error handling (no console logs as requested)
     }
 });
-
 document.addEventListener("DOMContentLoaded", function () {
-  const observer = new MutationObserver(() => {
-    const day = document.querySelector(".start.end");
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      // Check if any new elements have the class .start.end
+      const days = document.querySelectorAll(".day.unit.start.end");
+      if (days.length > 0) {
+        days.forEach((day) => {
+          let existingTooltip = day.querySelector(".range-plugin-tooltip");
+          if (!existingTooltip) {
+            console.log("Tooltip added to:", day);
 
-    if (day) {
-      // Check if tooltip already exists
-      let existingTooltip = day.querySelector(".range-plugin-tooltip");
-      if (!existingTooltip) {
-        console.log("Element found:", day);
+            // Create tooltip
+            let tooltip = document.createElement("span");
+            tooltip.className = "range-plugin-tooltip";
+            tooltip.innerText = "1 night";
 
-        // Create tooltip span
-        let tooltip = document.createElement("span");
-        tooltip.className = "range-plugin-tooltip";
-        tooltip.innerText = "1 night";
+            // Style tooltip
+            Object.assign(tooltip.style, {
+              position: "absolute",
+              visibility: "hidden",
+              zIndex: "9999",
+              background: "rgba(0, 0, 0, 0.8)",
+              color: "#fff",
+              padding: "5px 10px",
+              borderRadius: "4px",
+              fontSize: "12px",
+              whiteSpace: "nowrap",
+              transition: "opacity 0.2s ease-in-out",
+              top: "-30px", // Above day element
+              left: "50%",
+              transform: "translateX(-50%)",
+            });
 
-        // Apply styles
-        tooltip.style.position = "absolute";
-        tooltip.style.visibility = "hidden";
-        tooltip.style.zIndex = "9999";
-        tooltip.style.background = "rgba(0, 0, 0, 0.8)";
-        tooltip.style.color = "#fff";
-        tooltip.style.padding = "5px 10px";
-        tooltip.style.borderRadius = "4px";
-        tooltip.style.fontSize = "12px";
-        tooltip.style.whiteSpace = "nowrap";
-        tooltip.style.transition = "opacity 0.2s ease-in-out";
-        tooltip.style.top = "-30px"; // Place above the day div
-        tooltip.style.left = "50%";
-        tooltip.style.transform = "translateX(-50%)";
+            // Append tooltip
+            day.style.position = "relative"; // Ensure relative positioning for absolute tooltip
+            day.appendChild(tooltip);
 
-        // Append tooltip inside the day element
-        day.appendChild(tooltip);
+            // Show/hide tooltip on hover
+            day.addEventListener("mouseenter", function () {
+              tooltip.style.visibility = "visible";
+              tooltip.style.opacity = "1";
+            });
 
-        // Show tooltip on hover
-        day.addEventListener("mouseenter", function () {
-          tooltip.style.visibility = "visible";
-          tooltip.style.opacity = "1";
-        });
-
-        // Hide tooltip on mouse leave
-        day.addEventListener("mouseleave", function () {
-          tooltip.style.visibility = "hidden";
-          tooltip.style.opacity = "0";
+            day.addEventListener("mouseleave", function () {
+              tooltip.style.visibility = "hidden";
+              tooltip.style.opacity = "0";
+            });
+          }
         });
       }
-    }
+    });
   });
 
   // Observe the calendar container for changes
-  observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ["class"], // Watch for class changes
+  });
+
+  // Run the function immediately in case elements are already present
+  setTimeout(() => {
+    console.log("Checking existing elements...");
+    observer.takeRecords();
+  }, 100);
 });
