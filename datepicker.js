@@ -123,12 +123,7 @@ window.Wized.push(async (Wized) => {
                             isFirstSelection = true; // Reset when selecting a new start date
                         }
 
-const tooltipText = 'This is a custom tooltip for a specific date!';
 
-  // Show custom tooltip for start date
-  if (evt.detail.start.toString() === startDate.toString()) {
-    picker.tooltip.show(startDate, tooltipText);
-  }
                         const rangePlugin = picker.PluginManager.getInstance("RangePlugin");
                         rangePlugin.options.tooltipNumber = (num) => {
 
