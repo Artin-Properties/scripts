@@ -319,12 +319,22 @@ window.Wized.push(async (Wized) => {
 });
 document.addEventListener("DOMContentLoaded", () => {
   const dayElement = document.querySelector(".day.unit.selected.start");
-  dayElement.addEventListener("mouseover", (event) => {
-    console.log("Element:", event.target);
-    const tooltip = document.querySelector(".range-plugin-tooltip");
-    console.log("Tooltip:", tooltip);
-    const minNightsText = `Minimum Nights ${minNights}`;
-    console.log("minNightsText:", minNightsText);
-    tooltip.innerText = minNightsText;
-  });
+
+  if (dayElement) { // ✅ Check if the element exists before adding the event listener
+    dayElement.addEventListener("mouseover", (event) => {
+      console.log("Element:", event.target);
+
+      const tooltip = document.querySelector(".range-plugin-tooltip");
+      if (tooltip) { // ✅ Check if the tooltip exists before modifying it
+        const minNightsText = `Minimum Nights ${minNights}`;
+        console.log("Tooltip found. Setting text:", minNightsText);
+        tooltip.innerText = minNightsText;
+      } else {
+        console.warn("Tooltip not found.");
+      }
+    });
+  } else {
+    console.warn("First selected date element not found.");
+  }
 });
+
