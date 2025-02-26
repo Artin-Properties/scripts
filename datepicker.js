@@ -125,7 +125,21 @@ window.Wized.push(async (Wized) => {
                             isFirstSelection = true; // Reset when selecting a new start date
                         }
 
+  rangePlugin.options.tooltipNumber = (num) => {
+        if (num === 1) {
+            return "few"; // Force "few" for the first date tooltip
+        }
+        return num - 1; // Normal night count otherwise
+    };
 
+    rangePlugin.options.locale = {
+        zero: "0 nights",
+        one: "night",
+        two: "two nights",
+        few: "Minimum Nights 3", // Custom text when "few" is used
+        many: "many nights",
+        other: "nights",
+    };
                        
                         
                 
