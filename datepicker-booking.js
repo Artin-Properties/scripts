@@ -221,7 +221,7 @@ window.Wized.push(async (Wized) => {
                     (maxNights && totalNights > maxNights)
                   ) {
                     isInvalidRange = true;
-                    const targetElement = document.querySelector(".price_form-field-wrap-2");
+                    /*const targetElement = document.querySelector(".price_form-field-wrap-2");
 
                     // Create the new div with the "gird" class
                     const newElement = document.createElement("div");
@@ -243,6 +243,7 @@ window.Wized.push(async (Wized) => {
                     if (newElement.textContent !== "") {
                       targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
                     }
+                    */
                   }
                 }
               }
