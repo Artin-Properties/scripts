@@ -251,8 +251,8 @@ window.Wized.push(async (Wized) => {
                 console.log(maxNights);
                 console.log(totalNights);
                 if (
-                  (minNights && totalNights < minNights) ||
-                  (maxNights && totalNights > maxNights)
+                  (totalNights < minNights) ||
+                  (totalNights > maxNights)
                 ) {
                   isInvalidRange = true;
 
