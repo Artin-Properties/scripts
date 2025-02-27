@@ -247,6 +247,9 @@ window.Wized.push(async (Wized) => {
                     )?.maximumStay
                   ) ?? Wized.data.r.Get_Property.data.maxNights;
 
+                console.log(minNights);
+                console.log(maxNights);
+                console.log(totalNights);
                 if (
                   (minNights && totalNights < minNights) ||
                   (maxNights && totalNights > maxNights)
