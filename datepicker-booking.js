@@ -12,12 +12,23 @@ function isPastBookingTime() {
   return now.getHours() >= 20; // 20 is 8 PM in 24-hour format
 }
 
+function getOneText(num) {
+  return num === 1 ? `Minimum Nights ${minNights}` : "1 night";
+}
+let minNights;
+let maxNights;
+
 // Initialize Easepick date picker after the Wized request completes
 window.Wized = window.Wized || [];
 window.Wized.push(async (Wized) => {
   try {
-    const result = await Wized.requests.waitFor("Get_Property_Dates"); // Wait for the request to complete
+    const [propertyDetail, result] = await Promise.all([
+      Wized.requests.waitFor("Get_Property"),
+      Wized.requests.waitFor("Get_Property_Dates"),
+    ]);
 
+    minNights = propertyDetail.data.minNights;
+    maxNights = propertyDetail.data.maxNights;
     if (result && result.data && result.data.date_object) {
       const prices = {}; // Map date to price based on date_object array
       const today = new Date();
@@ -51,7 +62,7 @@ window.Wized.push(async (Wized) => {
           }
         }
       });
-
+      let text = `Minimum Stay ${minNights} Night`;
       picker = new easepick.create({
         element: "#datepicker",
         css: [
@@ -60,14 +71,19 @@ window.Wized.push(async (Wized) => {
         ],
         inline: true,
         zIndex: 10,
-        calendars: 2,
+
         plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"],
         RangePlugin: {
           tooltip: true,
           tooltipNumber(num) {
+            console.log(num);
+            if (num === 1) {
+              return ""; // Return empty string for zero
+            }
             return num - 1;
           },
           locale: {
+            zero: text,
             one: "night",
             other: "nights",
           },
@@ -75,8 +91,7 @@ window.Wized.push(async (Wized) => {
         LockPlugin: {
           minDate: new Date(),
           inseparable: true,
-          minDays: result.data.minNights,
-          maxDays: result.data.maxNights,
+          maxNights: maxNights,
           filter(date, picked) {
             const formattedDate = date.format("YYYY-MM-DD");
             const dateObj = result.data.date_object.find((obj) => obj.date === formattedDate);
@@ -112,15 +127,18 @@ window.Wized.push(async (Wized) => {
         },
 
         setup(picker) {
-          let lastEndDate = null;
+          let isFirstSelection = true;
           picker.on("preselect", (evt) => {
             const startDate = evt.detail.start;
+            console.log(evt.detail);
             const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
+            const rangePlugin = picker.PluginManager.getInstance("RangePlugin");
 
-            // Ensure startDate is valid before setting minDate
             if (startDate) {
               lockPlugin.options.minDate = startDate;
+              isFirstSelection = true; // Reset when selecting a new start date
             }
+            console.log(rangePlugin.options.tooltip);
 
             let firstLockedDate = null;
 
@@ -141,6 +159,7 @@ window.Wized.push(async (Wized) => {
             }
           });
 
+          let lastEndDate = null;
           picker.on("select", () => {
             const startDate = picker.getStartDate();
             const endDate = picker.getEndDate();
@@ -154,6 +173,7 @@ window.Wized.push(async (Wized) => {
               lockPlugin.options.minDate = new Date(); // Keep minDate at today to avoid unwanted locking
               picker.PluginManager.reloadInstance("LockPlugin");
             }
+
             console.log(startDate, endDate);
 
             if (startDate && endDate) {
@@ -171,9 +191,6 @@ window.Wized.push(async (Wized) => {
                 endDate.getDate()
               );
 
-              const totalNights = Math.round(
-                (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
-              );
               let isInvalidRange = false;
               const selectedDates = [];
               let currentDate = new Date(arrivalDate);
@@ -209,42 +226,61 @@ window.Wized.push(async (Wized) => {
               if (!dateObj.check_out_available && !dateObj.available) {
                 isInvalidRange = true;
               }
+              //   const targetElement = document.querySelector(".price_form-field-wrap-2");
 
-              if (Wized.data.r.Get_Property.data.rental_type === "MTR") {
-                if (startDate && endDate) {
-                  const minNights = Wized.data.r.Get_Property.data.minNights;
-                  const maxNights = Wized.data.r.Get_Property.data.maxNights;
-                  console.log(`Total Days Selected: ${totalNights}`);
+              // Check if an error message already exists
+              //   let existingError = targetElement.parentNode.querySelector(".input_error");
+              if (startDate && endDate) {
+                const totalNights = Math.round(
+                  (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+                );
+                const minNights =
+                  parseInt(
+                    Wized.data.r.Get_Property_Dates.data.date_object.find(
+                      (entry) => entry.date === arrivalDateStr
+                    )?.minimumStay
+                  ) ?? Wized.data.r.Get_Property.data.minNights;
+                const maxNights =
+                  parseInt(
+                    Wized.data.r.Get_Property_Dates.data.date_object.find(
+                      (entry) => entry.date === departureDateStr
+                    )?.maximumStay
+                  ) ?? Wized.data.r.Get_Property.data.maxNights;
 
-                  if (
-                    (minNights && totalNights < minNights) ||
-                    (maxNights && totalNights > maxNights)
-                  ) {
-                    isInvalidRange = true;
-                    /*const targetElement = document.querySelector(".price_form-field-wrap-2");
+                console.log(minNights);
+                console.log(maxNights);
+                console.log(totalNights);
+                if (
+                  (minNights && totalNights < minNights) ||
+                  (maxNights && totalNights > maxNights)
+                ) {
+                  isInvalidRange = true;
 
-                    // Create the new div with the "gird" class
-                    const newElement = document.createElement("div");
-                    newElement.classList.add("input_error", "is-red");
-                    newElement.style.marginTop = "1rem";
-                    newElement.style.marginBottom = "0.5rem";
-                    newElement.style.justifyContent = "center";
+                  // Remove existing error if input becomes valid
+                  //   if (existingError) {
+                  //     existingError.remove();
+                  //   }
 
-                    // Check conditions for minNights and maxNights
-                    if (minNights && totalNights < minNights) {
-                      newElement.textContent = `The minimum stay is ${minNights} nights`;
-                    } else if (maxNights && totalNights > maxNights) {
-                      newElement.textContent = `The maximum stay is ${maxNights} nights`;
-                    } else {
-                      newElement.textContent = ""; // If within range, leave empty or remove the element
-                    }
-
-                    // Insert after the target element if there's a message to display
-                    if (newElement.textContent !== "") {
-                      targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
-                    }
-                    */
-                  }
+                  //   // Create a new error element only if input is invalid
+                  //   if (minNights && totalNights < minNights) {
+                  //     const newElement = document.createElement("div");
+                  //     newElement.classList.add("input_error", "is-red");
+                  //     newElement.style.marginTop = "1rem";
+                  //     newElement.style.marginBottom = "0.5rem";
+                  //     newElement.style.justifyContent = "center";
+                  //     newElement.textContent = `The minimum stay is ${minNights} nights`;
+                  //     targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
+                  //   } else if (maxNights && totalNights > maxNights) {
+                  //     const newElement = document.createElement("div");
+                  //     newElement.classList.add("input_error", "is-red");
+                  //     newElement.style.marginTop = "1rem";
+                  //     newElement.style.marginBottom = "0.5rem";
+                  //     newElement.style.justifyContent = "center";
+                  //     newElement.textContent = `The maximum stay is ${maxNights} nights`;
+                  //     targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
+                  //   } else if (existingError) {
+                  //     existingError.remove();
+                  //   }
                 }
               }
 
@@ -254,11 +290,15 @@ window.Wized.push(async (Wized) => {
               if (isInvalidRange) {
                 picker.setStartDate(endDate);
                 picker.setEndDate(endDate);
+                Wized.data.v.arrival_date = departureDateStr;
+                Wized.data.v.departure_date = departureDateStr;
               } else {
-                Wized.data.v.booking_property_data.arrival_date = arrivalDateStr;
-                Wized.data.v.booking_property_data.departure_date = departureDateStr;
-                Wized.data.v.booking_property_data.length = totalNights;
+                Wized.data.v.arrival_date = arrivalDateStr;
+                Wized.data.v.departure_date = departureDateStr;
                 lastEndDate = endDate;
+                // if (existingError) {
+                //   existingError.remove();
+                // }
               }
             }
           });
