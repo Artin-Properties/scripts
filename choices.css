@@ -59,6 +59,7 @@
 .is-focused .choices__inner,
 .is-open .choices__inner {
   border-color: var(--border-color--line-darker);
+  border-radius: 8px;
 }
 
 .choices__list--dropdown .choices__item--selectable.is-highlighted,
