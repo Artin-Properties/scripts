@@ -69,8 +69,8 @@
 .choices__list--multiple .choices__item {
   margin-right: 3px;
   margin-left: 3px;
-  background-color: var(--base-color-neutral--neutral-dark);
-  border: 1px solid var(--border-color--neutral);
+  background-color: #303030;
+  border: 1px solid #303030;
   font-family:
     SF UI Text,
     sans-serif;
