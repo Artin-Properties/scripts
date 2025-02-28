@@ -12,7 +12,7 @@
 .choices__inner {
   border: 1px solid var(--border-color--line-darker);
   background-color: var(--base-color-neutral--neutral-darker);
-  border-radius: 2px;
+  border-radius: 8px;
   width: 100%;
   height: auto;
   min-height: 2.75rem;
