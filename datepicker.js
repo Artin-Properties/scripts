@@ -207,15 +207,6 @@ window.Wized.push(async (Wized) => {
               for (let date of leadingdates) {
                 const dateObj = result.data.date_object.find((obj) => obj.date === date);
 
-                // Log the date and its availability status
-                if (dateObj) {
-                  console.log(
-                    `Date: ${date}, available: ${dateObj.available}, check_in_available: ${dateObj.check_in_available}, check_out_available: ${dateObj.check_out_available}`
-                  );
-                } else {
-                  console.log(`Date: ${date}, no data found`);
-                }
-
                 if (!dateObj.check_in_available && !dateObj.available) {
                   isInvalidRange = true;
                   break;
@@ -247,9 +238,6 @@ window.Wized.push(async (Wized) => {
                     )?.maximumStay
                   ) ?? Wized.data.r.Get_Property.data.maxNights;
 
-                console.log(minNights);
-                console.log(maxNights);
-                console.log(totalNights);
                 if (
                   (minNights && totalNights < minNights) ||
                   (maxNights && totalNights > maxNights)

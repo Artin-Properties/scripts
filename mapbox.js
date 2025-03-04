@@ -1,7 +1,8 @@
 // Fetch the Mapbox token from your backend
 async function initializeMap() {
   try {
-    const version = window.location.href.includes("artin-properties.webflow.io") ? "v1.4" : "v1.3";
+    // const version = window.location.href.includes("artin-properties.webflow.io") ? "v1.4" : "v1.3";
+    const version = "v1.4";
     const dataSource = window.location.href.includes("artin-properties.webflow.io")
       ? "staging"
       : "";
