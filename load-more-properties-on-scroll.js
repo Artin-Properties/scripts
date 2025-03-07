@@ -211,7 +211,9 @@ function observeLastElement() {
         if (entry.isIntersecting && !isLoading && !isEndReached && scrollLoadCount < 3) {
           loadMoreItems();
           scrollLoadCount++;
+        console.log(scrollLoadCount);  
         }
+        
         if (scrollLoadCount === 3) {
           const showMoreBtn = document.getElementById("showMore");
           if (showMoreBtn) {
