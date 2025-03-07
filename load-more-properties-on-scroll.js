@@ -201,25 +201,34 @@ window.Wized.push((Wized) => {
     }
   }
 
-  // Observe the last property item for lazy loading
-  function observeLastElement() {
-    observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !isLoading && !isEndReached) {
-            loadMoreItems();
+let scrollLoadCount = 0;
+
+// Observe the last property item for lazy loading
+function observeLastElement() {
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !isLoading && !isEndReached && scrollLoadCount < 3) {
+          loadMoreItems();
+          scrollLoadCount++;
+        }
+        if (scrollLoadCount === 3) {
+          const showMoreBtn = document.getElementById("showMore");
+          if (showMoreBtn) {
+            showMoreBtn.style.display = "block";
           }
-        });
-      },
-      { root: null, rootMargin: "0px", threshold: 0.9 }
-    );
+          observer.disconnect();
+        }
+      });
+    },
+    { root: null, rootMargin: "0px", threshold: 0.9 }
+  );
 
-    const items = document.querySelectorAll(".properties_list .properties_item");
-    if (items.length > 0) {
-      observer.observe(items[items.length - 1]);
-    }
+  const items = document.querySelectorAll(".properties_list .properties_item");
+  if (items.length > 0) {
+    observer.observe(items[items.length - 1]);
   }
-
+}
   // Load more property items when the last element is visible
   async function loadMoreItems() {
     isLoading = true;
@@ -303,7 +312,7 @@ window.Wized.push((Wized) => {
     await checkInitialData();
     setupFilterClickListeners();
     initSwiper();
-    //observeLastElement();
+    observeLastElement();
     observeDOMChanges();
     const showMoreBtn = document.getElementById("showMore");
     if (showMoreBtn) {
