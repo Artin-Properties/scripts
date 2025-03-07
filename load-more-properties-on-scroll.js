@@ -204,7 +204,7 @@ window.Wized.push((Wized) => {
 let scrollLoadCount = 0;
 
 // Observe the last property item for lazy loading
-function observeFirstElement() {
+function observeLastElement() {
   observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
