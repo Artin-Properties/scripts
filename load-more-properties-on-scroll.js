@@ -252,9 +252,7 @@ async function loadMoreItems() {
 for (let i = 0; i < 5; i++) {
   const loaderItem = document.createElement("div");
   loaderItem.innerHTML = loaderItemHtml;
-  const propertyContentDiv = document.querySelector('[wized="home_PropertyContent"]');
-  const propertiesListDiv = propertyContentDiv.querySelector(".properties_list");
-  propertiesListDiv.appendChild(loaderItem);
+  document.querySelector('[wized="home_PropertyContent"] .properties_list').appendChild(loaderItem);
 }
 
 
