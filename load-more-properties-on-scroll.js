@@ -272,7 +272,9 @@ function observeLastElement() {
       }
 
       reinitializeComponents();
-      //observeLastElement();
+        if (scrollLoadCount !== 3) {
+      observeLastElement();
+        }
     } catch (error) {
       // Optional error handling
     } finally {
