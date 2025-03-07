@@ -211,9 +211,9 @@ function observeLastElement() {
         if (entry.isIntersecting && !isLoading && !isEndReached && scrollLoadCount < 3) {
           loadMoreItems();
           scrollLoadCount++;
-        console.log(scrollLoadCount);  
+          console.log(scrollLoadCount);
         }
-        
+
         if (scrollLoadCount === 3) {
           setTimeout(() => {
             const showMoreBtn = document.getElementById("showMore");
@@ -228,9 +228,12 @@ function observeLastElement() {
     { root: null, rootMargin: "0px", threshold: 0.9 }
   );
 
-  const items = document.querySelectorAll(".properties_list .properties_item");
-  if (items.length > 0) {
-    observer.observe(items[items.length - 1]);
+  const homePropertyContent = document.querySelector('[wized="home_PropertyContent"]');
+  if (homePropertyContent) {
+    const lastChild = homePropertyContent.lastElementChild;
+    if (lastChild) {
+      observer.observe(lastChild);
+    }
   }
 }
  
