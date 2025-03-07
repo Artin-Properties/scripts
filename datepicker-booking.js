@@ -76,7 +76,6 @@ window.Wized.push(async (Wized) => {
         RangePlugin: {
           tooltip: true,
           tooltipNumber(num) {
-            console.log(num);
             if (num === 1) {
               return ""; // Return empty string for zero
             }
@@ -130,7 +129,6 @@ window.Wized.push(async (Wized) => {
           let isFirstSelection = true;
           picker.on("preselect", (evt) => {
             const startDate = evt.detail.start;
-            console.log(evt.detail);
             const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
             const rangePlugin = picker.PluginManager.getInstance("RangePlugin");
 
@@ -138,7 +136,6 @@ window.Wized.push(async (Wized) => {
               lockPlugin.options.minDate = startDate;
               isFirstSelection = true; // Reset when selecting a new start date
             }
-            console.log(rangePlugin.options.tooltip);
 
             let firstLockedDate = null;
 
@@ -173,8 +170,6 @@ window.Wized.push(async (Wized) => {
               lockPlugin.options.minDate = new Date(); // Keep minDate at today to avoid unwanted locking
               picker.PluginManager.reloadInstance("LockPlugin");
             }
-
-            console.log(startDate, endDate);
 
             if (startDate && endDate) {
               const arrivalDateStr = startDate.format("YYYY-MM-DD");
@@ -234,25 +229,19 @@ window.Wized.push(async (Wized) => {
                 const totalNights = Math.round(
                   (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
                 );
-                const minNights =
-                  parseInt(
-                    Wized.data.r.Get_Property_Dates.data.date_object.find(
-                      (entry) => entry.date === arrivalDateStr
-                    )?.minimumStay
-                  ) ?? Wized.data.r.Get_Property.data.minNights;
-                const maxNights =
-                  parseInt(
-                    Wized.data.r.Get_Property_Dates.data.date_object.find(
-                      (entry) => entry.date === departureDateStr
-                    )?.maximumStay
-                  ) ?? Wized.data.r.Get_Property.data.maxNights;
+                const minStay = Wized.data.r.Get_Property_Dates.data.date_object.find(
+                  (entry) => entry.date === arrivalDateStr
+                )?.minimumStay;
+                const parsedMinStay = Number(minStay) || Wized.data.r.Get_Property.data.minNights;
 
-                console.log(minNights);
-                console.log(maxNights);
-                console.log(totalNights);
+                const maxStay = Wized.data.r.Get_Property_Dates.data.date_object.find(
+                  (entry) => entry.date === departureDateStr
+                )?.maximumStay;
+                const parsedMaxStay = Number(maxStay) || Wized.data.r.Get_Property.data.maxNights;
+
                 if (
-                  (totalNights < minNights) ||
-                  (totalNights > maxNights)
+                  (parsedMinStay && totalNights < parsedMinStay) ||
+                  (parsedMaxStay && totalNights > parsedMaxStay)
                 ) {
                   isInvalidRange = true;
 
