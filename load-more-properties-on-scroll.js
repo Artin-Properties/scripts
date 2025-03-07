@@ -229,13 +229,14 @@ function observeLastElement() {
   );
 
   // Select the first `.properties_list` found
-  const firstList = document.querySelector(".properties_list");
-  if (firstList) {
-   const items = firstList.querySelector(".properties_item");
-     if (items.length > 0) {
-    observer.observe(items[items.length - 1]);
+ const firstList = document.querySelector(".properties_list");
+if (firstList) {
+  const items = firstList.querySelectorAll(".properties_item"); // Select all items
+  if (items.length > 0) {
+    observer.observe(items[items.length - 1]); // Observe the last item
   }
-  }
+}
+
 }
 
   let loaderItemsAppended = false;
