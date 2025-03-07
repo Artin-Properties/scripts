@@ -305,16 +305,13 @@ window.Wized.push((Wized) => {
     initSwiper();
     //observeLastElement();
     observeDOMChanges();
+    const showMoreBtn = document.getElementById("showMore");
+    if (showMoreBtn) {
+      showMoreBtn.addEventListener("click", async () => {
+        if (!isLoading && !isEndReached) {
+          await loadMoreItems();
+        }
+      });
+    }
   })();
 });
-document.addEventListener("DOMContentLoaded", () => {
-  const showMoreBtn = document.getElementById("showMore");
-  if (showMoreBtn) {
-    showMoreBtn.addEventListener("click", () => {
-      if (!isLoading && !isEndReached) {
-        loadMoreItems();
-      }
-    });
-  }
-});
-
