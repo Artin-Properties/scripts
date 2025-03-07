@@ -214,12 +214,14 @@ function observeLastElement() {
         console.log(scrollLoadCount);  
         }
         
-        if (scrollLoadCount === 4) {
-          const showMoreBtn = document.getElementById("showMore");
-          if (showMoreBtn) {
-            showMoreBtn.style.display = "flex";
-          }
-          observer.disconnect();
+        if (scrollLoadCount === 3) {
+          setTimeout(() => {
+            const showMoreBtn = document.getElementById("showMore");
+            if (showMoreBtn) {
+              showMoreBtn.style.display = "block";
+            }
+            observer.disconnect();
+          }, 3000); // 3-second delay
         }
       });
     },
