@@ -214,7 +214,7 @@ function observeLastElement() {
         console.log(scrollLoadCount);  
         }
         
-        if (scrollLoadCount === 3) {
+        if (scrollLoadCount === 4) {
           const showMoreBtn = document.getElementById("showMore");
           if (showMoreBtn) {
             showMoreBtn.style.display = "block";
