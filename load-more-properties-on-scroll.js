@@ -240,7 +240,7 @@ function observeLastElement() {
          `;
 async function loadMoreItems() {
     if (isLoading) return;
-    
+
     isLoading = true;
     const now = Date.now();
     if (now - lastRequestTime < 1000) {
@@ -251,19 +251,12 @@ async function loadMoreItems() {
 
     const propertyList = document.querySelector('[wized="home_PropertyContent"] .properties_list');
 
-    if (isFirstLoad) {
-        // Append loaders for the first load
-        let loaderHtml = "";
-        for (let i = 0; i < 5; i++) {
-            loaderHtml += loaderItemHtml;
-        }
-        propertyList.innerHTML += loaderHtml;
-    } else {
-        // Show existing loaders for subsequent loads
-        document.querySelectorAll('.loader-item').forEach(loader => {
-            loader.style.display = 'block';
-        });
+    // Add loader items
+    let loaderHtml = "";
+    for (let i = 0; i < 5; i++) {
+        loaderHtml += loaderItemHtml;
     }
+    propertyList.innerHTML += loaderHtml;
 
     try {
         let searchPagination = Wized.data.v.search_pagination || 1;
@@ -271,26 +264,29 @@ async function loadMoreItems() {
 
         const existingPropertyArray = Wized.data.v.property_array || [];
         const result = await Wized.requests.execute("Search_Properties");
+        console.log("API Response:", result.data.items);
+
         const newItems = result.data.items || [];
+        console.log("New Items Before Filtering:", newItems);
 
         // Filter out duplicates
         const existingIds = new Set(existingPropertyArray.map(item => item.id));
         const filteredNewItems = newItems.filter(item => !existingIds.has(item.id));
+        console.log("New Items After Filtering:", filteredNewItems);
 
         // Update property array
         Wized.data.v.property_array = [...existingPropertyArray, ...filteredNewItems];
 
-        // Wait for items to load, then hide loaders
+        // Insert new items
+        insertMixItemsIntoDOM();
+        setPropertyLinks();
+
+        // Remove loaders after items are inserted
         setTimeout(() => {
             document.querySelectorAll('.loader-item').forEach(loader => {
                 loader.style.display = 'none';
             });
-        }, 500); // Adjust timeout if needed
-
-        // Insert new items
-        insertMixItemsIntoDOM();
-
-        setPropertyLinks();
+        }, 500);
 
         if (result.data.nextPage === null) {
             isEndReached = true;
@@ -301,15 +297,13 @@ async function loadMoreItems() {
         if (scrollLoadCount !== 3) {
             observeLastElement();
         }
-
-        // Set isFirstLoad to false after first load
-        isFirstLoad = false;
     } catch (error) {
         console.error("Error loading items:", error);
     } finally {
         isLoading = false;
     }
 }
+
 
 
   // Observe DOM changes to reinitialize Swiper when necessary
