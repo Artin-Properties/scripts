@@ -261,7 +261,7 @@ window.Wized.push((Wized) => {
       }
 
       reinitializeComponents();
-      observeLastElement();
+      //observeLastElement();
     } catch (error) {
       // Optional error handling
     } finally {
