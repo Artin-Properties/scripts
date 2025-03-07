@@ -101,83 +101,36 @@ window.Wized.push((Wized) => {
   window.resetPropertyArrayOnClick = resetPropertyArrayOnClick;
 
   // Insert mix items into the DOM after every 6th property item
- function insertMixItemsIntoDOM() {
-  clearExistingMixItems();
+  function insertMixItemsIntoDOM() {
+    clearExistingMixItems();
 
-  const items = document.querySelectorAll(
-    ".properties_list .properties_item:not(#mix-1):not(#mix-2):not(#mix-3):not(.mix-item)"
-  );
-  const mixItems = ["mix-1", "mix-2", "mix-3"];
-  let currentMixIndex = 0;
-  const cloneCounts = { "mix-1": 0, "mix-2": 0, "mix-3": 0 };
+    const items = document.querySelectorAll(
+      ".properties_list .properties_item:not(#mix-1):not(#mix-2):not(#mix-3):not(.mix-item)"
+    );
+    const mixItems = ["mix-1", "mix-2", "mix-3"];
+    let currentMixIndex = 0;
+    const cloneCounts = { "mix-1": 0, "mix-2": 0, "mix-3": 0 };
 
-  items.forEach((item, index) => {
-    if (index % 6 === 5) {
-      const mixId = mixItems[currentMixIndex];
-      const originalMixItem = document.getElementById(mixId);
+    items.forEach((item, index) => {
+      if (index % 6 === 5) {
+        const mixId = mixItems[currentMixIndex];
+        const originalMixItem = document.getElementById(mixId);
 
-      if (originalMixItem) {
-        cloneCounts[mixId] += 1;
-        const mixItemClone = originalMixItem.cloneNode(true);
-        mixItemClone.id = `${mixId}-clone-${cloneCounts[mixId]}`;
-        mixItemClone.classList.add("mix-item"); // Add class to identify mix items
-        item.after(mixItemClone);
-        mixItemClone.style.display = "";
+        if (originalMixItem) {
+          cloneCounts[mixId] += 1;
+          const mixItemClone = originalMixItem.cloneNode(true);
+          mixItemClone.id = `${mixId}-clone-${cloneCounts[mixId]}`;
+          mixItemClone.classList.add("mix-item"); // Add class to identify mix items
+          item.after(mixItemClone);
+          mixItemClone.style.display = "";
 
-        // Add shimmer effect to new items
-        const shimmerItem = document.createElement("div");
-        shimmerItem.classList.add("content-shimmer");
-        shimmerItem.innerHTML = `
-          <div class="properties_card-visual is-fav">
-            <div class="swiper is-properties-card swiper-initialized swiper-horizontal swiper-pointer-events">
-              <div class="swiper-wrapper is-properties-card">
-                <div class="swiper-slide is-properties-card">
-                  <div class="properties_card-img is-dash-fav">
-                    <div class="shimmer is-square is-absolute"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="properties_card-content">
-            <div class="spacer-xsmall"></div>
-            <div class="preloader-layout gap-24">
-              <div class="shimmer is-rectangular height-20"></div>
-            </div>
-            <div class="preloader-layout gap-24">
-              <div class="shimmer is-rectangular height-20"></div>
-              <div class="shimmer is-rectangular height-20"></div>
-            </div>
-            <div class="preloader-layout gap-24">
-              <div class="shimmer is-rectangular height-12"></div>
-              <div class="shimmer is-rectangular height-12"></div>
-            </div>
-            <div class="preloader-layout gap-4">
-              <div class="preloader-row gap-8">
-                <div class="shimmer is-square is-tiny"></div>
-              </div>
-              <div class="preloader-row gap-8">
-                <div class="shimmer is-square is-tiny"></div>
-              </div>
-              <div class="preloader-row gap-8">
-                <div class="shimmer is-square is-tiny"></div>
-              </div>
-              <div class="preloader-row gap-8">
-                <div class="shimmer is-square is-tiny"></div>
-                <div class="shimmer is-rectangular is-small"></div>
-              </div>
-            </div>
-          </div>
-        `;
-        mixItemClone.innerHTML = "";
-        mixItemClone.appendChild(shimmerItem);
-
-        // Cycle through the mix items in order
-        currentMixIndex = (currentMixIndex + 1) % mixItems.length;
+          // Cycle through the mix items in order
+          currentMixIndex = (currentMixIndex + 1) % mixItems.length;
+        }
       }
-    }
-  });
-}
+    });
+  }
+
   // Function to set the href attributes of property items
   function setPropertyLinks() {
     const origin = getOrigin();
@@ -282,59 +235,54 @@ function observeLastElement() {
 }
   // Load more property items when the last element is visible
   async function loadMoreItems() {
-  isLoading = true;
-  const now = Date.now();
-  if (now - lastRequestTime < 1000) {
-    // Throttle requests to 1 second
-    isLoading = false;
-    return;
-  }
-  lastRequestTime = now;
-
-  try {
-    let searchPagination = Wized.data.v.search_pagination;
-    if (searchPagination === undefined) {
-      searchPagination = 1;
-    } else {
-      searchPagination += 1;
+    isLoading = true;
+    const now = Date.now();
+    if (now - lastRequestTime < 1000) {
+      // Throttle requests to 1 second
+      isLoading = false;
+      return;
     }
-    Wized.data.v.search_pagination = searchPagination;
+    lastRequestTime = now;
 
-    const existingPropertyArray = Wized.data.v.property_array || [];
-    const result = await Wized.requests.execute("Search_Properties");
-    const newItems = result.data.items || [];
+    try {
+      let searchPagination = Wized.data.v.search_pagination;
+      if (searchPagination === undefined) {
+        searchPagination = 1;
+      } else {
+        searchPagination += 1;
+      }
+      Wized.data.v.search_pagination = searchPagination;
 
-    // Filter out duplicates before merging arrays
-    const existingIds = new Set(existingPropertyArray.map((item) => item.id));
-    const filteredNewItems = newItems.filter((item) => !existingIds.has(item.id));
-     const combinedArray = [...existingPropertyArray, ...filteredNewItems];
-    Wized.data.v.property_array = combinedArray;
+      const existingPropertyArray = Wized.data.v.property_array || [];
+      const result = await Wized.requests.execute("Search_Properties");
+      const newItems = result.data.items || [];
 
-    // Remove shimmer effect and insert new items
-    const shimmerItems = document.querySelectorAll(".content-shimmer");
-    shimmerItems.forEach((shimmerItem) => {
-      const parent = shimmerItem.parentNode;
-      parent.innerHTML = ""; // Clear the parent element
-      insertMixItemsIntoDOM(); // Insert new items
-    });
+      // Filter out duplicates before merging arrays
+      const existingIds = new Set(existingPropertyArray.map((item) => item.id));
+      const filteredNewItems = newItems.filter((item) => !existingIds.has(item.id));
 
-    setPropertyLinks(); // Set href attributes with correct IDs and dynamic URL
+      // Now combine the arrays without duplicates
+      const combinedArray = [...existingPropertyArray, ...filteredNewItems];
+      Wized.data.v.property_array = combinedArray;
 
-    if (result.data.nextPage === null) {
-      isEndReached = true;
-      observer.disconnect();
-    }
+      insertMixItemsIntoDOM();
+      setPropertyLinks(); // Set href attributes with correct IDs and dynamic URL
 
-    reinitializeComponents();
-    if (scrollLoadCount !== 3) {
+      if (result.data.nextPage === null) {
+        isEndReached = true;
+        observer.disconnect();
+      }
+
+      reinitializeComponents();
+        if (scrollLoadCount !== 3) {
       observeLastElement();
+        }
+    } catch (error) {
+      // Optional error handling
+    } finally {
+      isLoading = false;
     }
-  } catch (error) {
-    // Optional error handling
-  } finally {
-    isLoading = false;
   }
-}
 
   // Observe DOM changes to reinitialize Swiper when necessary
   function observeDOMChanges() {
