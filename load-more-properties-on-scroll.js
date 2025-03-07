@@ -231,10 +231,10 @@ function observeLastElement() {
   // Select the first `.properties_list` found
   const firstList = document.querySelector(".properties_list");
   if (firstList) {
-    const firstItem = firstList.querySelector(".properties_item");
-    if (firstItem) {
-      observer.observe(firstItem);
-    }
+   const items = firstList.querySelector(".properties_item");
+     if (items.length > 0) {
+    observer.observe(items[items.length - 1]);
+  }
   }
 }
 
