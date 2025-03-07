@@ -261,7 +261,7 @@ window.Wized.push((Wized) => {
       }
 
       reinitializeComponents();
-      //observeLastElement();
+      observeLastElement();
     } catch (error) {
       // Optional error handling
     } finally {
@@ -303,15 +303,8 @@ window.Wized.push((Wized) => {
     await checkInitialData();
     setupFilterClickListeners();
     initSwiper();
-    //observeLastElement();
+    observeLastElement();
     observeDOMChanges();
-    const showMoreBtn = document.getElementById("showMore");
-    if (showMoreBtn) {
-      showMoreBtn.addEventListener("click", async () => {
-        if (!isLoading && !isEndReached) {
-          await loadMoreItems();
-        }
-      });
-    }
+
   })();
 });
