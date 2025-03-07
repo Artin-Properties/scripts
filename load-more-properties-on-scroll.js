@@ -303,7 +303,18 @@ window.Wized.push((Wized) => {
     await checkInitialData();
     setupFilterClickListeners();
     initSwiper();
-    observeLastElement();
+    //observeLastElement();
     observeDOMChanges();
   })();
 });
+document.addEventListener("DOMContentLoaded", () => {
+  const showMoreBtn = document.getElementById("showMore");
+  if (showMoreBtn) {
+    showMoreBtn.addEventListener("click", () => {
+      if (!isLoading && !isEndReached) {
+        loadMoreItems();
+      }
+    });
+  }
+});
+
