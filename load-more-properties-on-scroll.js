@@ -217,7 +217,7 @@ function observeLastElement() {
         if (scrollLoadCount === 4) {
           const showMoreBtn = document.getElementById("showMore");
           if (showMoreBtn) {
-            showMoreBtn.style.display = "block";
+            showMoreBtn.style.display = "flex";
           }
           observer.disconnect();
         }
