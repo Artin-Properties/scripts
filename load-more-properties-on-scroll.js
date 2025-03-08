@@ -202,44 +202,40 @@ window.Wized.push((Wized) => {
   }
 
 let scrollLoadCount = 0;
-const maxLoadCount = 3;
 
-function observeFirstListLastItem() {
-  if (observer) observer.disconnect(); // Ensure only one observer is active
-
+function observeLastElementInFirstList() {
   observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting && !isLoading && !isEndReached && scrollLoadCount < maxLoadCount) {
-          loadMoreItems(); // Load more items into the first list
+        if (entry.isIntersecting && !isLoading && !isEndReached && scrollLoadCount < 3) {
+          loadMoreItems();
           scrollLoadCount++;
-          console.log("Scroll Load Count:", scrollLoadCount);
-          
-          // Re-observe new last item after loading
-          setTimeout(() => observeFirstListLastItem(), 100); 
+          console.log(scrollLoadCount);
         }
 
-        // After max load, show "Show More" button and stop observing
-        if (scrollLoadCount === maxLoadCount) {
+        if (scrollLoadCount === 3) {
           setTimeout(() => {
             const showMoreBtn = document.getElementById("showMore");
             if (showMoreBtn) {
               showMoreBtn.style.display = "block";
             }
             observer.disconnect();
-          }, 3000);
+          }, 3000); // 3-second delay
         }
       });
     },
     { root: null, rootMargin: "0px", threshold: 0.9 }
   );
 
-  // Select only the first property list
-  const firstListItems = document.querySelectorAll(".properties_list:first-of-type .properties_item");
-  
-  if (firstListItems.length > 0) {
-    observer.observe(firstListItems[firstListItems.length - 1]); // Observe last item of the first list
+  // Select the first `.properties_list`
+const firstList = document.querySelector(".properties_list");
+if (firstList) {
+  const items = firstList.querySelectorAll(".properties_item"); // Select all items
+  if (items.length > 0) {
+    observer.observe(items[items.length - 1]); // Observe the last item
   }
+}
+
 }
 
   let loaderItemsAppended = false;
