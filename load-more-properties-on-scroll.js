@@ -203,7 +203,7 @@ window.Wized.push((Wized) => {
 
 let scrollLoadCount = 0;
 
-function observeLastElementInFirstList() {
+function observeLastElement() {
   observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
