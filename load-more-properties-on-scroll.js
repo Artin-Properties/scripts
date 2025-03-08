@@ -232,7 +232,7 @@ const firstList = document.querySelector(".properties_list");
 if (firstList) {
   const items = firstList.querySelectorAll(".properties_item"); // Select all items
   if (items.length > 0) {
-    observer.observe(items[items.length - 1]); // Observe the last item
+    observer.observe(items[items.length - 5]); // Observe the last item
   }
 }
 
