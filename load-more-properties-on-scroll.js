@@ -202,35 +202,47 @@ window.Wized.push((Wized) => {
   }
 
 let scrollLoadCount = 0;
-function observeLastElement() {
+let scrollLoadCount = 0;
+const maxLoadCount = 3;
+
+function observeFirstListLastItem() {
+  if (observer) observer.disconnect(); // Ensure only one observer is active
+
   observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting && !isLoading && !isEndReached && scrollLoadCount < 3) {
-          loadMoreItems();
+        if (entry.isIntersecting && !isLoading && !isEndReached && scrollLoadCount < maxLoadCount) {
+          loadMoreItems(); // Load more items into the first list
           scrollLoadCount++;
-        console.log(scrollLoadCount);  
+          console.log("Scroll Load Count:", scrollLoadCount);
+          
+          // Re-observe new last item after loading
+          setTimeout(() => observeFirstListLastItem(), 100); 
         }
-        
-        if (scrollLoadCount === 3) {
+
+        // After max load, show "Show More" button and stop observing
+        if (scrollLoadCount === maxLoadCount) {
           setTimeout(() => {
             const showMoreBtn = document.getElementById("showMore");
             if (showMoreBtn) {
               showMoreBtn.style.display = "block";
             }
             observer.disconnect();
-          }, 3000); // 3-second delay
+          }, 3000);
         }
       });
     },
     { root: null, rootMargin: "0px", threshold: 0.9 }
   );
 
-  const items = document.querySelectorAll(".properties_list .properties_item");
-  if (items.length > 0) {
-    observer.observe(items[items.length - 1]);
+  // Select only the first property list
+  const firstListItems = document.querySelectorAll(".properties_list:first-of-type .properties_item");
+  
+  if (firstListItems.length > 0) {
+    observer.observe(firstListItems[firstListItems.length - 1]); // Observe last item of the first list
   }
 }
+
   let loaderItemsAppended = false;
   const loaderItemHtml = `
         <div class="properties_item loader-item"><div class="properties_card"><div class="content-shimmer"><div class="properties_card-visual is-fav"><div class="swiper is-properties-card swiper-backface-hidden swiper-initialized swiper-horizontal swiper-pointer-events"><div class="swiper-wrapper is-properties-card" id="swiper-wrapper-ba218b613edad798" aria-live="polite" style="transition-duration: 0ms; transform: translate3d(-251px, 0px, 0px);"><div class="swiper-slide is-properties-card swiper-slide-duplicate is-active swiper-slide-prev" role="group" aria-label="1 / 1" data-swiper-slide-index="0" style="width: 251px; margin-right: 0px;"><div class="properties_card-img is-dash-fav"><div class="shimmer is-square is-absolute"></div></div></div><div class="swiper-slide is-properties-card is-active swiper-slide-duplicate-next swiper-slide-duplicate-prev" role="group" aria-label="1 / 1" data-swiper-slide-index="0" style="width: 251px; margin-right: 0px;"><div class="properties_card-img is-dash-fav"><div class="shimmer is-square is-absolute"></div></div></div><div class="swiper-slide is-properties-card swiper-slide-duplicate is-active swiper-slide-next" role="group" aria-label="1 / 1" data-swiper-slide-index="0" style="width: 251px; margin-right: 0px;"><div class="properties_card-img is-dash-fav"><div class="shimmer is-square is-absolute"></div></div></div></div><span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span><span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span><span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span><span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span><span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div></div><div class="properties_card-content"><div class="spacer-xsmall"></div><div class="preloader-layout gap-24"><div id="w-node-_5c663453-3525-5ad6-3ff5-f2f21dc0ec46-af544784" class="shimmer is-rectangular height-20"></div></div><div class="preloader-layout gap-24"><div id="w-node-_5c663453-3525-5ad6-3ff5-f2f21dc0ec48-af544784" class="shimmer is-rectangular height-20"></div><div id="w-node-_5c663453-3525-5ad6-3ff5-f2f21dc0ec49-af544784" class="shimmer is-rectangular height-20"></div></div><div class="preloader-layout gap-24"><div id="w-node-_5c663453-3525-5ad6-3ff5-f2f21dc0ec4b-af544784" class="shimmer is-rectangular height-12"></div><div id="w-node-_5c663453-3525-5ad6-3ff5-f2f21dc0ec4c-af544784" class="shimmer is-rectangular height-12"></div></div><div class="preloader-layout gap-4"><div id="w-node-_5c663453-3525-5ad6-3ff5-f2f21dc0ec4e-af544784" class="preloader-row gap-8"><div class="shimmer is-square is-tiny"></div></div><div id="w-node-_5c663453-3525-5ad6-3ff5-f2f21dc0ec50-af544784" class="preloader-row gap-8"><div class="shimmer is-square is-tiny"></div></div><div id="w-node-_5c663453-3525-5ad6-3ff5-f2f21dc0ec52-af544784" class="preloader-row gap-8"><div class="shimmer is-square is-tiny"></div></div><div id="w-node-_5c663453-3525-5ad6-3ff5-f2f21dc0ec54-af544784" class="preloader-row gap-8"><div class="shimmer is-square is-tiny"></div><div class="shimmer is-rectangular is-small"></div></div></div></div></div></div></div>
