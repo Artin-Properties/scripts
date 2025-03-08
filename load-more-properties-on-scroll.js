@@ -202,7 +202,6 @@ window.Wized.push((Wized) => {
   }
 
 let scrollLoadCount = 0;
-let scrollLoadCount = 0;
 const maxLoadCount = 3;
 
 function observeFirstListLastItem() {
