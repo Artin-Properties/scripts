@@ -211,9 +211,9 @@ function observeLastElement() {
         if (entry.isIntersecting && !isLoading && !isEndReached && scrollLoadCount < 3) {
           loadMoreItems();
           scrollLoadCount++;
-        console.log(scrollLoadCount);  
+          console.log(scrollLoadCount);
         }
-        
+
         if (scrollLoadCount === 3) {
           setTimeout(() => {
             const showMoreBtn = document.getElementById("showMore");
@@ -228,10 +228,15 @@ function observeLastElement() {
     { root: null, rootMargin: "0px", threshold: 0.9 }
   );
 
-  const items = document.querySelectorAll(".properties_list .properties_item");
-  if (items.length > 0) {
-    observer.observe(items[items.length - 1]);
+  // Select the first `.properties_list`
+  const firstList = document.querySelector(".properties_list");
+  if (firstList) {
+    const items = firstList.querySelectorAll(".properties_item"); // Select all items
+    if (items.length > 0) {
+      observer.observe(items[items.length - 1]); // Observe the last item
+    }
   }
+  
 }
   let loaderItemsAppended = false;
   const loaderItemHtml = `
