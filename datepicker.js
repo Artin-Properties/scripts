@@ -230,6 +230,9 @@ window.Wized.push(async (Wized) => {
                 )?.maximumStay;
                 const parsedMaxStay = Number(maxStay) || Wized.data.r.Get_Property.data.maxNights;
 
+                console.log(parsedMinStay);
+                console.log(parsedMaxStay);
+                console.log(totalNights);
                 if (
                   (parsedMinStay && totalNights < parsedMinStay) ||
                   (parsedMaxStay && totalNights > parsedMaxStay)
@@ -242,8 +245,8 @@ window.Wized.push(async (Wized) => {
               console.log("Is Invalid Range:", isInvalidRange);
 
               if (isInvalidRange) {
-                picker.setStartDate(endDate);
-                picker.setEndDate(endDate);
+                picker.setStartDate(startDate);
+                picker.setEndDate(startDate);
                 Wized.data.v.arrival_date = departureDateStr;
                 Wized.data.v.departure_date = departureDateStr;
               } else {
