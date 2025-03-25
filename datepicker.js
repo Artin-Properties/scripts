@@ -271,13 +271,12 @@ window.Wized.push(async (Wized) => {
                 picker.setEndDate(endDate);
                 Wized.data.v.arrival_date = departureDateStr;
                 Wized.data.v.departure_date = departureDateStr;
+                Wized.data.v.invalidRange = true;
               } else {
                 Wized.data.v.arrival_date = arrivalDateStr;
                 Wized.data.v.departure_date = departureDateStr;
+                Wized.data.v.invalidRange = false;
                 lastEndDate = endDate;
-                // if (existingError) {
-                //   existingError.remove();
-                // }
               }
             }
           });
