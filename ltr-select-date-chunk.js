@@ -145,6 +145,7 @@ function setupClickListeners(dates, dateMap) {
       Wized.data.v.departure_date = availableRange.endDate;
       Wized.data.v.invalidRange = false;
     } else {
+      Wized.data.v.invalidRange = true;
       console.warn("No available date range found.");
     }
   }, 300); // 300ms delay; adjust as needed
