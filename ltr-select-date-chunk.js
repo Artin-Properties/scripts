@@ -134,6 +134,7 @@ function setupClickListeners(dates, dateMap) {
 
   // Debounced click handler
   const handleClick = debounce((button, months) => {
+    window.Wized.data.v.invalidRange = false;
     // Remove 'is-blue' class from all buttons to reset
     buttons.forEach((btn) => btn.classList.remove("is-blue"));
 
