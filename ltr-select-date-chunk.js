@@ -114,7 +114,7 @@ function debounce(func, delay) {
 // Attach Click Listener to Buttons with Debounced Handler
 function setupClickListeners(dates, dateMap) {
   const buttons = document.querySelectorAll(
-    '[wized="ltr_3_Months"], [wized="ltr_6_Months"], [wized="ltr_12_Months"]'
+    '[wized="ltr_6_Months"], [wized="ltr_12_Months"], [wized="ltr_18_Months"]'
   );
 
   // Precompute the months value for each button to avoid recalculating
@@ -122,9 +122,9 @@ function setupClickListeners(dates, dateMap) {
   buttons.forEach((button) => {
     const wizedVal = button.getAttribute("wized");
     let months = 0;
-    if (wizedVal === "ltr_3_Months") months = 3;
-    else if (wizedVal === "ltr_6_Months") months = 6;
+    if (wizedVal === "ltr_6_Months") months = 6;
     else if (wizedVal === "ltr_12_Months") months = 12;
+    else if (wizedVal === "ltr_18_Months") months = 18;
     buttonMonthsMap.set(button, months);
   });
 
@@ -166,7 +166,7 @@ function setupClickListeners(dates, dateMap) {
 // Initialize Button States
 function initializeButtonStates(dates, dateMap) {
   const buttons = document.querySelectorAll(
-    '[wized="ltr_3_Months"], [wized="ltr_6_Months"], [wized="ltr_12_Months"]'
+    '[wized="ltr_6_Months"], [wized="ltr_12_Months"], [wized="ltr_18_Months"]'
   );
 
   // Precompute the months value for each button
@@ -174,9 +174,9 @@ function initializeButtonStates(dates, dateMap) {
   buttons.forEach((button) => {
     const wizedVal = button.getAttribute("wized");
     let months = 0;
-    if (wizedVal === "ltr_3_Months") months = 3;
-    else if (wizedVal === "ltr_6_Months") months = 6;
+    if (wizedVal === "ltr_6_Months") months = 6;
     else if (wizedVal === "ltr_12_Months") months = 12;
+    else if (wizedVal === "ltr_18_Months") months = 18;
     buttonMonthsMap.set(button, months);
   });
 
