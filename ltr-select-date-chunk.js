@@ -27,7 +27,7 @@ function createDateMap(dates) {
 // Find Available Date Range Optimized
 function findAvailableDateRange(dates, months, dateMap) {
   const today = Wized.data.v.arrival_date ? parsePSTDate(Wized.data.v.arrival_date) : Date.now();
-  console.log(today);
+  console.log(picker.getStartDate());
   const daysInMonths = months * 30; // Approximate days
   let startDate = null;
   let endDate = null;
