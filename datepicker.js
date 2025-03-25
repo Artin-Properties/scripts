@@ -133,8 +133,7 @@ window.Wized.push(async (Wized) => {
             const rangePlugin = picker.PluginManager.getInstance("RangePlugin");
 
             if (Wized.data.r.Get_Property.data.rental_type === "LTR") {
-              console.log(startDate);
-              // Wized.data.v.arrival_date = startDate.format("YYYY-MM-DD");
+              Wized.data.v.ltr_start_date = startDate.format("YYYY-MM-DD");
             }
 
             if (startDate) {
