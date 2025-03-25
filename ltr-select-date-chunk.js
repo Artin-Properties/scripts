@@ -220,11 +220,6 @@ window.Wized.push(async (Wized) => {
       const dateMap = createDateMap(dates);
       initializeButtonStates(dates, dateMap);
       setupClickListeners(dates, dateMap);
-
-      window.picker.on("select", (e) => {
-        const selectedDate = picker.getDate(); // for single date
-        console.log("User selected:", selectedDate ? selectedDate.format("YYYY-MM-DD") : "None");
-      });
     } else {
       console.error("Invalid data structure for dates.");
     }

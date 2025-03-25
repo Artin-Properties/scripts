@@ -163,6 +163,10 @@ window.Wized.push(async (Wized) => {
             const lockPlugin = picker.PluginManager.getInstance("LockPlugin");
 
             if (startDate) {
+              if (Wized.data.r.Get_Property.data.rental_type === "LTR") {
+                Wized.data.v.arrival_date = startDate.format("YYYY-MM-DD");
+              }
+
               lockPlugin.options.minDate = new Date(); // Ensure minDate is always today
               picker.PluginManager.reloadInstance("LockPlugin");
             } else {
