@@ -113,6 +113,11 @@ function debounce(func, delay) {
   };
 }
 
+window.picker.on("select", (e) => {
+  const selectedDate = picker.getDate(); // for single date
+  console.log("User selected:", selectedDate ? selectedDate.format("YYYY-MM-DD") : "None");
+});
+
 // Attach Click Listener to Buttons with Debounced Handler
 function setupClickListeners(dates, dateMap) {
   const buttons = document.querySelectorAll(
@@ -139,8 +144,6 @@ function setupClickListeners(dates, dateMap) {
     button.classList.add("is-blue");
 
     const availableRange = findAvailableDateRange(dates, months, dateMap);
-    console.log(availableRange);
-    console.log(window.picker.getStartDate());
 
     if (availableRange.startDate && availableRange.endDate) {
       attachDateToPicker(availableRange.startDate, availableRange.endDate);
