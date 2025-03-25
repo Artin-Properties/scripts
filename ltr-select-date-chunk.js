@@ -26,7 +26,8 @@ function createDateMap(dates) {
 
 // Find Available Date Range Optimized
 function findAvailableDateRange(dates, months, dateMap) {
-  const today = Date.now();
+  const today = Wized.data.v.arrival_date ? parsePSTDate(Wized.data.v.arrival_date) : Date.now();
+  console.log(today);
   const daysInMonths = months * 30; // Approximate days
   let startDate = null;
   let endDate = null;
@@ -136,8 +137,6 @@ function setupClickListeners(dates, dateMap) {
 
     // Add 'is-blue' class to the selected button
     button.classList.add("is-blue");
-
-    console.log(dates, months, dateMap);
 
     const availableRange = findAvailableDateRange(dates, months, dateMap);
     console.log(availableRange);
