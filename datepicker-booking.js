@@ -285,10 +285,9 @@ window.Wized.push(async (Wized) => {
                 Wized.data.v.arrival_date = arrivalDateStr;
                 Wized.data.v.departure_date = departureDateStr;
                 lastEndDate = endDate;
-                // if (existingError) {
-                //   existingError.remove();
-                // }
               }
+
+              Wized.data.v.invalidRange = isInvalidRange;
             }
           });
 
