@@ -77,6 +77,8 @@ function findAvailableDateRange(dates, months, dateMap) {
     }
   }
 
+  Wized.data.v.invalidRange = isRangeValid;
+
   return { startDate, endDate };
 }
 
@@ -136,16 +138,18 @@ function setupClickListeners(dates, dateMap) {
     // Add 'is-blue' class to the selected button
     button.classList.add("is-blue");
 
+    console.log(dates, months, dateMap);
+
     const availableRange = findAvailableDateRange(dates, months, dateMap);
+    console.log(availableRange);
+
     if (availableRange.startDate && availableRange.endDate) {
       attachDateToPicker(availableRange.startDate, availableRange.endDate);
       // Sync to Wized variables
 
       Wized.data.v.arrival_date = availableRange.startDate;
       Wized.data.v.departure_date = availableRange.endDate;
-      Wized.data.v.invalidRange = false;
     } else {
-      Wized.data.v.invalidRange = true;
       console.warn("No available date range found.");
     }
   }, 300); // 300ms delay; adjust as needed
