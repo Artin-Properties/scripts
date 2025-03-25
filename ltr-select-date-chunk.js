@@ -30,6 +30,7 @@ function findAvailableDateRange(dates, months, dateMap) {
   const daysInMonths = months * 30; // Approximate days
   let startDate = null;
   let endDate = null;
+  let isRangeValid = true;
 
   for (let i = 0; i < dates.length; i++) {
     const dateObj = dates[i];
@@ -37,8 +38,6 @@ function findAvailableDateRange(dates, months, dateMap) {
 
     if (startTimestamp < today) continue;
     if (!(dateObj.available || dateObj.check_in_available)) continue;
-
-    let isRangeValid = true;
 
     for (let j = 0; j < daysInMonths; j++) {
       const checkTimestamp = startTimestamp + j * MS_IN_DAY;
