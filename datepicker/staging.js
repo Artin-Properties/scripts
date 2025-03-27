@@ -13,11 +13,11 @@ function isPastBookingTime() {
   return now.getHours() >= 20; // 20 is 8 PM in 24-hour format
 }
 
-function getOneText(num) {
-  return num === 1 ? `Minimum Nights ${minNights}` : "1 night";
-}
-let minNights;
-let maxNights;
+// function getOneText(num) {
+//   return num === 1 ? `Minimum Nights ${minNights}` : "1 night";
+// }
+// let minNights;
+// let maxNights;
 
 // Initialize Easepick date picker after the Wized request completes
 window.Wized = window.Wized || [];
@@ -83,7 +83,7 @@ window.Wized.push(async (Wized) => {
             return num - 1;
           },
           locale: {
-            zero: text,
+            // zero: text,
             one: "night",
             other: "nights",
           },
