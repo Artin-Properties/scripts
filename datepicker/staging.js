@@ -246,8 +246,9 @@ window.Wized.push(async (Wized) => {
               if (isInvalidRange) {
                 picker.setStartDate(startDate);
                 picker.setEndDate(startDate);
-                Wized.data.v.arrival_date = departureDateStr;
-                Wized.data.v.departure_date = departureDateStr;
+                Wized.data.v.arrival_date = null;
+                Wized.data.v.departure_date = null;
+                picker.gotoDate(startDate);
               } else {
                 Wized.data.v.arrival_date = arrivalDateStr;
                 Wized.data.v.departure_date = departureDateStr;
