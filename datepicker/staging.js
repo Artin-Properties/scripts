@@ -247,7 +247,7 @@ window.Wized.push(async (Wized) => {
                 picker.setEndDate(startDate);
                 Wized.data.v.arrival_date = arrivalDateStr;
                 Wized.data.v.departure_date = departureDateStr;
-                picker.gotoDate(new Date(arrivalDateStr));
+                // picker.gotoDate(new Date(arrivalDateStr));
               } else {
                 Wized.data.v.arrival_date = arrivalDateStr;
                 Wized.data.v.departure_date = departureDateStr;
