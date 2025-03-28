@@ -12,12 +12,6 @@ function isPastBookingTime() {
   return now.getHours() >= 20; // 20 is 8 PM in 24-hour format
 }
 
-function getOneText(num) {
-  return num === 1 ? `Minimum Nights ${minNights}` : "1 night";
-}
-let minNights;
-let maxNights;
-
 // Initialize Easepick date picker after the Wized request completes
 window.Wized = window.Wized || [];
 window.Wized.push(async (Wized) => {
@@ -27,8 +21,6 @@ window.Wized.push(async (Wized) => {
       Wized.requests.waitFor("Get_Property_Dates"),
     ]);
 
-    minNights = propertyDetail.data.minNights;
-    maxNights = propertyDetail.data.maxNights;
     if (result && result.data && result.data.date_object) {
       const prices = {}; // Map date to price based on date_object array
       const today = new Date();
@@ -62,7 +54,7 @@ window.Wized.push(async (Wized) => {
           }
         }
       });
-      let text = `Minimum Stay ${minNights} Night`;
+
       picker = new easepick.create({
         element: "#datepicker",
         css: [
@@ -82,7 +74,6 @@ window.Wized.push(async (Wized) => {
             return num - 1;
           },
           locale: {
-            zero: text,
             one: "night",
             other: "nights",
           },
@@ -90,7 +81,6 @@ window.Wized.push(async (Wized) => {
         LockPlugin: {
           minDate: new Date(),
           inseparable: true,
-          maxNights: maxNights,
           filter(date, picked) {
             const formattedDate = date.format("YYYY-MM-DD");
             const dateObj = result.data.date_object.find((obj) => obj.date === formattedDate);
@@ -105,6 +95,11 @@ window.Wized.push(async (Wized) => {
 
             if (isToday && isPastBookingTime()) {
               return true; // Lock the date if it's today and past 8 PM
+            }
+
+            const firstAvailableDate = new Date(result.data.datestreak.startDate);
+            if (date.getTime() < firstAvailableDate.getTime()) {
+              return true;
             }
 
             const isAvailable = dateObj.available;
@@ -230,8 +225,6 @@ window.Wized.push(async (Wized) => {
                 )?.maximumStay;
                 const parsedMaxStay = Number(maxStay) || Wized.data.r.Get_Property.data.maxNights;
 
-                console.log(parsedMinStay, parsedMaxStay, totalNights);
-
                 if (
                   (parsedMinStay && totalNights < parsedMinStay) ||
                   (parsedMaxStay && totalNights > parsedMaxStay)
@@ -246,8 +239,9 @@ window.Wized.push(async (Wized) => {
               if (isInvalidRange) {
                 picker.setStartDate(startDate);
                 picker.setEndDate(startDate);
-                Wized.data.v.arrival_date = departureDateStr;
-                Wized.data.v.departure_date = departureDateStr;
+                Wized.data.v.arrival_date = null;
+                Wized.data.v.departure_date = null;
+                picker.gotoDate(startDate);
               } else {
                 Wized.data.v.arrival_date = arrivalDateStr;
                 Wized.data.v.departure_date = departureDateStr;
