@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ? "staging"
     : "production";
 
-  const script = document.createElement("datepicker-script");
+  const script = document.createElement("script");
   script.src = `https://artin-properties.github.io/scripts/datepicker/${environment}.js`;
   script.defer = true;
 
