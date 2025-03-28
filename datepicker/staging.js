@@ -44,12 +44,16 @@ window.Wized.push(async (Wized) => {
           // If a date is the first day of a booking, it should only allow checkout (not selectable for check-in)
           const isFirstDayOfBooking = dateObj.check_in_available && !dateObj.available;
 
+          // find first available date - find first unavaille date - check if difference is more than minNights - add to dateobject
+
+          const firstAvailableDate = result.data.date_object.find((obj) => obj.available);
+          const firstUnavailableDate = result.data.date_object.find((obj) => !obj.available);
+          const difference = moment(firstUnavailableDate.date).diff(
+            moment(firstAvailableDate.date),
+            "days"
+          );
+          console.log(difference);
           // Add price only if it's available, or if today is a valid check-in/check-out scenario
-          console.log(dateObj);
-          console.log(dateObj.available);
-          console.log(isLastDayOfBooking);
-          console.log(dateObj.check_out_available);
-          console.log(!isFirstDayOfBooking);
           if (
             dateObj.available ||
             isLastDayOfBooking ||
