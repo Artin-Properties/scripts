@@ -59,7 +59,7 @@ window.Wized.push(async (Wized) => {
             dateObj.available ||
             isLastDayOfBooking ||
             (dateObj.check_out_available && !isFirstDayOfBooking) ||
-            difference > dateObj.minNights
+            difference - 1 >= Number(dateObj.minimumStay)
           ) {
             prices[formattedDate] = dateObj.price;
           }
