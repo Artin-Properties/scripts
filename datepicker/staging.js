@@ -98,6 +98,7 @@ window.Wized.push(async (Wized) => {
             }
 
             const test = new Date(dateObj.date);
+            console.log(date.getTime(), test.getTime());
             if (date.getTime() < test.getTime()) {
               return true;
             }
