@@ -46,14 +46,10 @@ window.Wized.push(async (Wized) => {
 
           // find first available date - find first unavaille date - check if difference is more than minNights - add to dateobject
 
-          const firstAvailableDate = result.data.date_object.find((obj) => obj.available);
           const firstUnavailableDate = result.data.date_object.find(
-            (obj) => !obj.available && obj.date > firstAvailableDate.date
+            (obj) => !obj.available && obj.date > dateObj.date
           );
-          const difference = moment(firstUnavailableDate.date).diff(
-            moment(firstAvailableDate.date),
-            "days"
-          );
+          const difference = moment(firstUnavailableDate.date).diff(moment(dateObj.date), "days");
           console.log(difference);
           // Add price only if it's available, or if today is a valid check-in/check-out scenario
           if (
