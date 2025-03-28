@@ -97,9 +97,8 @@ window.Wized.push(async (Wized) => {
               return true; // Lock the date if it's today and past 8 PM
             }
 
-            const test = new Date(dateObj.date);
-            console.log(date.getTime(), test.getTime());
-            if (date.getTime() < test.getTime()) {
+            const firstAvailableDate = new Date(result.data.datestreak.startDate);
+            if (date.getTime() < firstAvailableDate.getTime()) {
               return true;
             }
 
