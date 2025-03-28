@@ -37,6 +37,7 @@ window.Wized.push(async (Wized) => {
 
         if (date >= today) {
           const formattedDate = formatDate(date);
+          let available = true;
 
           // If today is the last day of a booking, allow check-in
           const isLastDayOfBooking = dateObj.check_out_available && !dateObj.available;
@@ -47,19 +48,21 @@ window.Wized.push(async (Wized) => {
           const firstUnavailableDateObject = result.data.date_object.find(
             (obj) => !obj.available && obj.date > dateObj.date
           );
-          console.log(firstUnavailableDateObject);
 
-          const difference = moment(firstUnavailableDateObject.date).diff(
-            moment(dateObj.date),
-            "days"
-          );
+          if (firstUnavailableDateObject) {
+            const difference = moment(firstUnavailableDateObject.date).diff(
+              moment(dateObj.date),
+              "days"
+            );
+            available = difference - 1 >= Number(dateObj.minimumStay);
+          }
 
           // Add price only if it's available, or if today is a valid check-in/check-out scenario
           if (
             dateObj.available ||
             isLastDayOfBooking ||
             (dateObj.check_out_available && !isFirstDayOfBooking) ||
-            difference - 1 >= Number(dateObj.minimumStay)
+            available
           ) {
             prices[formattedDate] = dateObj.price;
           }
