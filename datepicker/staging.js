@@ -46,11 +46,10 @@ window.Wized.push(async (Wized) => {
 
           // Add price only if it's available, or if today is a valid check-in/check-out scenario
           console.log(dateObj);
-          console.log(
-            dateObj.available ||
-              isLastDayOfBooking ||
-              (dateObj.check_out_available && !isFirstDayOfBooking)
-          );
+          console.log(dateObj.available);
+          console.log(isLastDayOfBooking);
+          console.log(dateObj.check_out_available);
+          console.log(!isFirstDayOfBooking);
           if (
             dateObj.available ||
             isLastDayOfBooking ||
