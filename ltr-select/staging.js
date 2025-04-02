@@ -46,7 +46,8 @@ function findAvailableDateRange(dates, months, dateMap) {
     if (startTimestamp < today) continue;
     if (!(dateObj.available || dateObj.check_in_available)) continue;
 
-    for (let j = 0; j < daysInMonths; j++) {
+    // Check one additional day to ensure full range
+    for (let j = 0; j <= daysInMonths; j++) {
       const checkTimestamp = startTimestamp + j * MS_IN_DAY;
       const checkDate = new Date(checkTimestamp);
       const formattedCheckDate = formatDate(checkDate);
@@ -62,7 +63,7 @@ function findAvailableDateRange(dates, months, dateMap) {
           isRangeValid = false;
           break;
         }
-      } else if (j === daysInMonths - 1) {
+      } else if (j === daysInMonths) {
         if (!(checkDateObj.available || checkDateObj.check_out_available)) {
           isRangeValid = false;
           break;
@@ -77,7 +78,7 @@ function findAvailableDateRange(dates, months, dateMap) {
 
     if (isRangeValid) {
       startDate = formatDate(new Date(startTimestamp));
-      const endTimestamp = startTimestamp + (daysInMonths - 1) * MS_IN_DAY;
+      const endTimestamp = startTimestamp + daysInMonths * MS_IN_DAY;
       endDate = formatDate(new Date(endTimestamp));
       console.log(startDate, endDate);
       break;
