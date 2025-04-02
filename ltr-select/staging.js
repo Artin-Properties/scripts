@@ -30,14 +30,10 @@ function findAvailableDateRange(dates, months, dateMap) {
     ? parsePSTDate(Wized.data.v.ltr_start_date)
     : Date.now();
 
-  console.log(today);
-
   const daysInMonths = months * 30; // Approximate days
   let startDate = null;
   let endDate = null;
   let isRangeValid = true;
-
-  console.log(daysInMonths);
 
   for (let i = 0; i < dates.length; i++) {
     const dateObj = dates[i];
@@ -80,7 +76,6 @@ function findAvailableDateRange(dates, months, dateMap) {
       startDate = formatDate(new Date(startTimestamp));
       const endTimestamp = startTimestamp + daysInMonths * MS_IN_DAY;
       endDate = formatDate(new Date(endTimestamp));
-      console.log(startDate, endDate);
       break;
     }
   }
