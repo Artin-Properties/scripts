@@ -94,29 +94,24 @@ window.Wized.push(async (Wized) => {
             const today = new Date();
             const dateToCheck = new Date(date.getTime());
             const isToday = dateToCheck.toDateString() === today.toDateString();
+            console.log("----------");
+            console.log(isToday, dateToCheck, isPastBookingTime());
+            console.log("date", new Date());
 
             if (isToday && isPastBookingTime()) {
+              console.log("isToday");
               return true; // Lock the date if it's today and past 8 PM
             }
 
             // Compare dates using YYYY-MM-DD format to avoid timezone issues
             const firstAvailableDate = result.data.datestreak.startDate; // Already in YYYY-MM-DD format
-            console.log("----------");
-            console.log(formattedDate, firstAvailableDate);
-            console.log("date", new Date());
             if (formattedDate < firstAvailableDate) {
-              console.log("block");
               return true;
             }
 
             const isAvailable = dateObj.available;
             const isAvailableForCheckIn = dateObj.check_in_available;
             const isAvailableForCheckOut = dateObj.check_out_available;
-
-            console.log("isAvailable", isAvailable);
-            console.log("isAvailableForCheckIn", isAvailableForCheckIn);
-            console.log("isAvailableForCheckOut", isAvailableForCheckOut);
-            console.log("----------");
 
             // If today is the last day of a booking, allow check-in
             const isLastDayOfBooking = isAvailableForCheckOut && !isAvailable;
