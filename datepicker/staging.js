@@ -9,9 +9,7 @@ function formatDate(date) {
 // Helper function to check if current time is past 8 PM PST
 function isPastBookingTime() {
   const now = new Date();
-  // Convert UTC to PST by subtracting 7 or 8 hours depending on daylight savings
-  const pstDate = new Date(now.getTime() - (now.getTimezoneOffset() + 420) * 60000); // 420 mins = 7 hours (PST)
-  return pstDate.getHours() >= 20; // 20 is 8 PM in 24-hour format
+  return now.getHours() >= 20;
 }
 
 // Initialize Easepick date picker after the Wized request completes
@@ -101,22 +99,13 @@ window.Wized.push(async (Wized) => {
 
             // Compare dates using YYYY-MM-DD format to avoid timezone issues
             const firstAvailableDate = result.data.datestreak.startDate; // Already in YYYY-MM-DD format
-            console.log("----------");
-            console.log(formattedDate, firstAvailableDate);
-            console.log("date", new Date());
             if (formattedDate < firstAvailableDate) {
-              console.log("block");
               return true;
             }
 
             const isAvailable = dateObj.available;
             const isAvailableForCheckIn = dateObj.check_in_available;
             const isAvailableForCheckOut = dateObj.check_out_available;
-
-            console.log("isAvailable", isAvailable);
-            console.log("isAvailableForCheckIn", isAvailableForCheckIn);
-            console.log("isAvailableForCheckOut", isAvailableForCheckOut);
-            console.log("----------");
 
             // If today is the last day of a booking, allow check-in
             const isLastDayOfBooking = isAvailableForCheckOut && !isAvailable;

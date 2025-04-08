@@ -92,12 +92,8 @@ window.Wized.push(async (Wized) => {
             const today = new Date();
             const dateToCheck = new Date(date.getTime());
             const isToday = dateToCheck.toDateString() === today.toDateString();
-            console.log("----------");
-            console.log(isToday, dateToCheck, isPastBookingTime());
-            console.log("date", new Date());
 
             if (isToday && isPastBookingTime()) {
-              console.log("isToday");
               return true; // Lock the date if it's today and past 8 PM
             }
 
