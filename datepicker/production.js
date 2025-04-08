@@ -6,10 +6,12 @@ function formatDate(date) {
   return `${year}-${month}-${day}`;
 }
 
-// Helper function to check if current time is past 8 PM
+// Helper function to check if current time is past 8 PM PST
 function isPastBookingTime() {
   const now = new Date();
-  return now.getHours() >= 20; // 20 is 8 PM in 24-hour format
+  // Convert UTC to PST by subtracting 7 or 8 hours depending on daylight savings
+  const pstDate = new Date(now.getTime() - (now.getTimezoneOffset() + 420) * 60000); // 420 mins = 7 hours (PST)
+  return pstDate.getHours() >= 20; // 20 is 8 PM in 24-hour format
 }
 
 // Initialize Easepick date picker after the Wized request completes
@@ -97,8 +99,9 @@ window.Wized.push(async (Wized) => {
               return true; // Lock the date if it's today and past 8 PM
             }
 
-            const firstAvailableDate = new Date(result.data.datestreak.startDate);
-            if (date.getTime() < firstAvailableDate.getTime()) {
+            // Compare dates using YYYY-MM-DD format to avoid timezone issues
+            const firstAvailableDate = result.data.datestreak.startDate; // Already in YYYY-MM-DD format
+            if (formattedDate < firstAvailableDate) {
               return true;
             }
 
