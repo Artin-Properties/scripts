@@ -9,9 +9,7 @@ function formatDate(date) {
 // Helper function to check if current time is past 8 PM PST
 function isPastBookingTime() {
   const now = new Date();
-  // Convert UTC to PST by subtracting 7 or 8 hours depending on daylight savings
-  const pstDate = new Date(now.getTime() - (now.getTimezoneOffset() + 420) * 60000); // 420 mins = 7 hours (PST)
-  return pstDate.getHours() >= 20; // 20 is 8 PM in 24-hour format
+  return now.getHours() >= 20;
 }
 
 // Initialize Easepick date picker after the Wized request completes
