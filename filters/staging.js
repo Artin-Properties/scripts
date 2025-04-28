@@ -7,6 +7,8 @@ $('input[name="Property-Type"]').on("click", function (e) {
     return $(this).val() === clickedValue;
   });
 
+  console.log(clicked.prop("checked"));
+
   // If the clicked radio was already checked -> uncheck both
   if (clicked.prop("checked")) {
     const wasAlreadyChecked = clicked.data("waschecked");
