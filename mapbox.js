@@ -32,7 +32,7 @@ async function initializeMap() {
     // Load custom icon for individual properties
     map.on("load", () => {
       map.loadImage(
-        "https://cdn.prod.website-files.com/65ca509f965a4d9aaf54474f/680ff1a6c69d1e35ace54893_property-icon.jpg",
+        "https://cdn.prod.website-files.com/65ca509f965a4d9aaf54474f/680ff2561db8cb27d679aa97_black_pointer.png",
         async (error, image) => {
           if (error) {
             console.error("Error loading image:", error);
