@@ -1,30 +1,44 @@
-$('input[name="Property-Type"]').on("click", function (e) {
-  const clicked = $(this);
-  const clickedValue = clicked.val();
+document.querySelectorAll('input[name="Property-Type"]').forEach(function (radio) {
+  radio.addEventListener("click", function (e) {
+    const clicked = e.target;
+    const clickedValue = clicked.value;
 
-  // Find all radios with same value (STR, MTR, LTR) across both forms
-  const matchingRadios = $('input[name="Property-Type"]').filter(function () {
-    return $(this).val() === clickedValue;
-  });
+    // Find all radios with same value across both forms
+    const matchingRadios = Array.from(
+      document.querySelectorAll('input[name="Property-Type"]')
+    ).filter(function (radio) {
+      return radio.value === clickedValue;
+    });
 
-  // If the clicked radio was already checked -> uncheck both
-  if (clicked.prop("checked")) {
-    const wasAlreadyChecked = clicked.data("waschecked");
+    const wasAlreadyChecked = clicked.dataset.waschecked === "true";
 
-    if (wasAlreadyChecked) {
-      // Uncheck all radios
-      matchingRadios.prop("checked", false).trigger("change");
-      // Reset waschecked state
-      $('input[name="Property-Type"]').data("waschecked", false);
-    } else {
-      // First time checked, make sure all matching are checked
-      matchingRadios.prop("checked", true).trigger("change");
-      // Uncheck others
-      $('input[name="Property-Type"]').not(matchingRadios).prop("checked", false).trigger("change");
+    if (clicked.checked) {
+      if (wasAlreadyChecked) {
+        // Uncheck all matching radios
+        matchingRadios.forEach(function (radio) {
+          radio.checked = false;
+          radio.dispatchEvent(new Event("change"));
+          radio.dataset.waschecked = "false";
+        });
+      } else {
+        // Check all matching radios
+        matchingRadios.forEach(function (radio) {
+          radio.checked = true;
+          radio.dispatchEvent(new Event("change"));
+          radio.dataset.waschecked = "true";
+        });
 
-      // Set this one as waschecked
-      $('input[name="Property-Type"]').data("waschecked", false);
-      matchingRadios.data("waschecked", true);
+        // Uncheck all non-matching radios
+        Array.from(document.querySelectorAll('input[name="Property-Type"]')).forEach(
+          function (radio) {
+            if (!matchingRadios.includes(radio)) {
+              radio.checked = false;
+              radio.dispatchEvent(new Event("change"));
+              radio.dataset.waschecked = "false";
+            }
+          }
+        );
+      }
     }
-  }
+  });
 });
