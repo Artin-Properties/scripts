@@ -73,7 +73,8 @@ async function initializeMap() {
             source: "locations",
             filter: ["has", "point_count"],
             paint: {
-              "circle-color": "#FFFFFF",
+              "circle-color": "#000000",
+              "text-color": "#ffffff",
               "circle-radius": ["step", ["get", "point_count"], 15, 7.5, 22.5, 15, 30, 22.5, 37.5],
             },
           });
@@ -92,7 +93,8 @@ async function initializeMap() {
               "text-anchor": "center",
             },
             paint: {
-              "text-color": "#000000",
+              "circle-color": "#000000",
+              "text-color": "#ffffff",
             },
           });
 
@@ -105,6 +107,10 @@ async function initializeMap() {
             layout: {
               "icon-image": "property-icon",
               "icon-size": 0.375,
+            },
+            paint: {
+              "circle-color": "#000000",
+              "text-color": "#ffffff",
             },
           });
 
@@ -228,13 +234,16 @@ async function initializeMap() {
             }, 500);
           };
 
-          const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+          const isMobile = /Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+            navigator.userAgent
+          );
           if (isMobile) {
             map.on("click", "unclustered-point", showModal);
             map.on("movestart", closeModal);
             map.getCanvas().addEventListener("touchstart", (e) => {
               const modal = document.getElementById("property-modal");
               if (!modal.contains(e.target)) {
+                console.log("close modal");
                 closeModal();
               }
             });
