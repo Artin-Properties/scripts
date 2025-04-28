@@ -32,7 +32,7 @@ async function initializeMap() {
     // Load custom icon for individual properties
     map.on("load", () => {
       map.loadImage(
-        "https://cdn.prod.website-files.com/65ca509f965a4d9aaf54474f/671968afd2c8edd104402d26_property-icon.png",
+        "https://cdn.prod.website-files.com/65ca509f965a4d9aaf54474f/680ff1a6c69d1e35ace54893_property-icon.jpg",
         async (error, image) => {
           if (error) {
             console.error("Error loading image:", error);
@@ -73,7 +73,7 @@ async function initializeMap() {
             source: "locations",
             filter: ["has", "point_count"],
             paint: {
-              "circle-color": "#000000",
+              "circle-color": "#060606",
               "text-color": "#ffffff",
               "circle-radius": ["step", ["get", "point_count"], 15, 7.5, 22.5, 15, 30, 22.5, 37.5],
             },
@@ -93,7 +93,7 @@ async function initializeMap() {
               "text-anchor": "center",
             },
             paint: {
-              "circle-color": "#000000",
+              "circle-color": "#060606",
               "text-color": "#ffffff",
             },
           });
@@ -109,7 +109,7 @@ async function initializeMap() {
               "icon-size": 0.375,
             },
             paint: {
-              "circle-color": "#000000",
+              "circle-color": "#060606",
               "text-color": "#ffffff",
             },
           });
@@ -240,13 +240,13 @@ async function initializeMap() {
           if (isMobile) {
             map.on("click", "unclustered-point", showModal);
             map.on("movestart", closeModal);
-            map.getCanvas().addEventListener("touchstart", (e) => {
-              const modal = document.getElementById("property-modal");
-              if (!modal.contains(e.target)) {
-                console.log("close modal");
-                closeModal();
-              }
-            });
+            // map.getCanvas().addEventListener("touchstart", (e) => {
+            //   const modal = document.getElementById("property-modal");
+            //   if (!modal.contains(e.target)) {
+            //     console.log("close modal");
+            //     closeModal();
+            //   }
+            // });
           } else {
             map.on("click", "unclustered-point", showModal);
             map.on("movestart", closeModal);
