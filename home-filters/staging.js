@@ -26,6 +26,7 @@ document.querySelectorAll('input[name="Property-Type"]').forEach((input) => {
 
       document.querySelectorAll(`.properties_link-button.is-${clickedValue}`).forEach((el) => {
         el.classList.add("w--redirected-checked", "w--redirected-focus");
+        console.log("add", el);
       });
     }, 50);
   });
