@@ -6,7 +6,7 @@ document.querySelectorAll('input[name="Home-Filter"]').forEach((input) => {
 
     // Clicking the same filter again → remove visual classes and reset lastClickedValueHomeFilter
     if (lastClickedValueHomeFilter === clickedValue) {
-      document.querySelectorAll(`.properties_link-button.is-${clickedValue}`).forEach((el) => {
+      document.querySelectorAll(`.home_filter_radio-button.is-${clickedValue}`).forEach((el) => {
         el.classList.remove("w--redirected-checked", "w--redirected-focus");
       });
       lastClickedValueHomeFilter = null;
