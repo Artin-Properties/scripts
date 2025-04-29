@@ -1,32 +1,33 @@
-$('input[name="Property-Type"]').on("click", function (e) {
-  const clicked = $(this);
-  const clickedValue = clicked.val();
+let lastClickedValue = null;
 
-  // Find all radios with same value (STR, MTR, LTR) across both forms
-  const matchingRadios = $('input[name="Property-Type"]').filter(function () {
-    return $(this).val() === clickedValue;
-  });
+document.querySelectorAll('input[name="Property-Type"]').forEach((input) => {
+  input.addEventListener("click", function () {
+    const clickedValue = input.value;
 
-  console.log(clicked.prop("checked"));
-
-  // If the clicked radio was already checked -> uncheck both
-  if (clicked.prop("checked")) {
-    const wasAlreadyChecked = clicked.data("waschecked");
-
-    if (wasAlreadyChecked) {
-      // Uncheck all radios
-      matchingRadios.prop("checked", false).trigger("change");
-      // Reset waschecked state
-      $('input[name="Property-Type"]').data("waschecked", false);
-    } else {
-      // First time checked, make sure all matching are checked
-      matchingRadios.prop("checked", true).trigger("change");
-      // Uncheck others
-      $('input[name="Property-Type"]').not(matchingRadios).prop("checked", false).trigger("change");
-
-      // Set this one as waschecked
-      $('input[name="Property-Type"]').data("waschecked", false);
-      matchingRadios.data("waschecked", true);
+    // Clicking the same filter again → remove visual classes and reset lastClickedValue
+    if (lastClickedValue === clickedValue) {
+      document.querySelectorAll(`.properties_link-button.is-${clickedValue}`).forEach((el) => {
+        el.classList.remove("w--redirected-checked", "w--redirected-focus");
+      });
+      lastClickedValue = null;
+      return;
     }
-  }
+
+    lastClickedValue = clickedValue;
+
+    setTimeout(() => {
+      document.querySelectorAll(".properties_link-button").forEach((el) => {
+        el.classList.remove("w--redirected-focus");
+      });
+
+      document.querySelectorAll(`.properties_link-button.is-${clickedValue}`).forEach((el) => {
+        el.classList.remove("w--redirected-checked");
+      });
+
+      document.querySelectorAll(`.properties_link-button.is-${clickedValue}`).forEach((el) => {
+        el.classList.add("w--redirected-checked", "w--redirected-focus");
+        console.log("add", el);
+      });
+    }, 50);
+  });
 });
