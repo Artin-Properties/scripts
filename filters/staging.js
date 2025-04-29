@@ -1,34 +1,18 @@
-$('input[name="Property-Type"]').on("click", function (e) {
-  const clicked = $(this);
-  const clickedValue = clicked.val();
+document.querySelectorAll('input[name="Property-Type"]').forEach((input) => {
+  input.addEventListener("click", function () {
+    const clickedValue = input.value;
+    const wrapper = input.closest("label")?.querySelector(".w-radio-input");
 
-  // Find all radios with same value (STR, MTR, LTR) across both forms
-  const matchingRadios = $('input[name="Property-Type"]').filter(function () {
-    return $(this).val() === clickedValue;
-  });
+    const isActive = wrapper?.classList.contains("w--redirected-checked");
 
-  console.log(clicked.prop("checked"));
+    // Remove class from all
+    document.querySelectorAll(".w-radio-input").forEach((el) => {
+      el.classList.remove("w--redirected-checked");
+    });
 
-  // If the clicked radio was already checked -> uncheck both
-  if (clicked.prop("checked")) {
-    const wasAlreadyChecked = clicked.data("waschecked");
-
-    if (wasAlreadyChecked) {
-      // Uncheck all radios
-      matchingRadios.prop("checked", false).trigger("change");
-      console.log(matchingRadio);
-      // Reset waschecked state
-      $('input[name="Property-Type"]').data("waschecked", false);
-      console.log($('input[name="Property-Type"]'));
-    } else {
-      // First time checked, make sure all matching are checked
-      matchingRadios.prop("checked", true).trigger("change");
-      // Uncheck others
-      $('input[name="Property-Type"]').not(matchingRadios).prop("checked", false).trigger("change");
-
-      // Set this one as waschecked
-      $('input[name="Property-Type"]').data("waschecked", false);
-      matchingRadios.data("waschecked", true);
+    // If it was not active before, re-add the class to this one
+    if (!isActive && wrapper) {
+      wrapper.classList.add("w--redirected-checked");
     }
-  }
+  });
 });
