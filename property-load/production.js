@@ -107,9 +107,9 @@ window.Wized.push((Wized) => {
     const items = document.querySelectorAll(
       ".properties_list .properties_item:not(#mix-1):not(#mix-2):not(#mix-3):not(.mix-item)"
     );
-    console.log(Wized.data.v.property_array);
+
     // If there are no property items, don't insert any mix items
-    if (items.length === 0) {
+    if (Wized.data.v.property_array === 0) {
       return;
     }
 

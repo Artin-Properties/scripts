@@ -109,7 +109,7 @@ window.Wized.push((Wized) => {
     );
 
     // If there are no property items, don't insert any mix items
-    if (items.length === 0) {
+    if (Wized.data.v.property_array === 0) {
       return;
     }
 
