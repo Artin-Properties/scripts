@@ -100,7 +100,7 @@ window.Wized.push((Wized) => {
   // Expose the reset function globally if needed
   window.resetPropertyArrayOnClick = resetPropertyArrayOnClick;
 
-  // Insert mix items into the DOM after every 6th property item
+  // Insert mix items into the DOM after every 4th property item
   function insertMixItemsIntoDOM() {
     clearExistingMixItems();
 
@@ -112,7 +112,7 @@ window.Wized.push((Wized) => {
     const cloneCounts = { "mix-1": 0, "mix-2": 0, "mix-3": 0 };
 
     items.forEach((item, index) => {
-      if (index % 6 === 5) {
+      if (index % 4 === 3) {
         const mixId = mixItems[currentMixIndex];
         const originalMixItem = document.getElementById(mixId);
 
