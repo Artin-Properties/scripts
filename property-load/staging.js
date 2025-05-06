@@ -112,7 +112,9 @@ window.Wized.push((Wized) => {
     const cloneCounts = { "mix-1": 0, "mix-2": 0, "mix-3": 0 };
 
     items.forEach((item, index) => {
-      if (index % 4 === 3) {
+      // Insert mix item after every 4th property (at position 4, 8, 12, etc.)
+      // This means we check if index is 3, 7, 11, etc. (zero-based indexing)
+      if ((index + 1) % 4 === 0) {
         const mixId = mixItems[currentMixIndex];
         const originalMixItem = document.getElementById(mixId);
 
