@@ -232,7 +232,7 @@ window.Wized.push((Wized) => {
           }
         });
       },
-      { root: null, rootMargin: "0px", threshold: 0.9 }
+      { root: null, rootMargin: "350px", threshold: 0.9 }
     );
 
     // Select the first `.properties_list`
