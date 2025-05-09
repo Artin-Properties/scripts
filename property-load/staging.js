@@ -300,22 +300,13 @@ window.Wized.push((Wized) => {
 
       reinitializeComponents();
 
-      // Calculate new position based on the scroll offset
-      const newPropertyItems = document.querySelectorAll('[wized="home_PropertyItem"]');
-      const newLastPropertyItem = newPropertyItems[newPropertyItems.length - 1];
-      if (newLastPropertyItem) {
-        const newLastItemPosition =
-          newLastPropertyItem.getBoundingClientRect().top + window.scrollY;
-        const newScrollPosition = newLastItemPosition + scrollOffset;
-
-        // Use requestAnimationFrame to ensure DOM has updated
-        requestAnimationFrame(() => {
-          window.scrollTo({
-            top: newScrollPosition,
-            behavior: "instant",
-          });
+      // Use requestAnimationFrame to ensure DOM has updated
+      requestAnimationFrame(() => {
+        window.scrollTo({
+          top: lastItemPosition,
+          behavior: "instant",
         });
-      }
+      });
 
       // Reconnect the observer if we haven't reached the end
       if (!isEndReached && scrollLoadCount !== 3) {
