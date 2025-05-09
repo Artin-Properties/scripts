@@ -263,6 +263,8 @@ window.Wized.push((Wized) => {
     // Store the current scroll position and the last item's position
     const lastItem = document.querySelector(".properties_list .properties_item:last-child");
     const lastItemPosition = lastItem ? lastItem.getBoundingClientRect().top + window.scrollY : 0;
+    const currentScrollPosition = window.scrollY;
+    const scrollOffset = currentScrollPosition - lastItemPosition;
 
     try {
       let searchPagination = Wized.data.v.search_pagination;
@@ -285,25 +287,34 @@ window.Wized.push((Wized) => {
       const combinedArray = [...existingPropertyArray, ...filteredNewItems];
       Wized.data.v.property_array = combinedArray;
 
+      // Temporarily disconnect the observer to prevent infinite loop
+      if (observer) {
+        observer.disconnect();
+      }
+
       insertMixItemsIntoDOM();
-      setPropertyLinks(); // Set href attributes with correct IDs and dynamic URL
+      setPropertyLinks();
 
       if (result.data.nextPage === null) {
         isEndReached = true;
-        observer.disconnect();
       }
 
       reinitializeComponents();
 
-      // Restore scroll position
-      if (lastItemPosition) {
+      // Calculate new position based on the scroll offset
+      const newLastItem = document.querySelector(".properties_list .properties_item:last-child");
+      if (newLastItem) {
+        const newLastItemPosition = newLastItem.getBoundingClientRect().top + window.scrollY;
+        const newScrollPosition = newLastItemPosition + scrollOffset;
+
         window.scrollTo({
-          top: lastItemPosition,
-          behavior: "instant", // Use 'instant' to prevent smooth scrolling
+          top: newScrollPosition,
+          behavior: "instant",
         });
       }
 
-      if (scrollLoadCount !== 3) {
+      // Reconnect the observer if we haven't reached the end
+      if (!isEndReached && scrollLoadCount !== 3) {
         observeLastElement();
       }
     } catch (error) {
