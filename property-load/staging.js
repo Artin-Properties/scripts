@@ -232,7 +232,7 @@ window.Wized.push((Wized) => {
           }
         });
       },
-      { root: null, rootMargin: "0px", threshold: 0.9 }
+      { root: null, rootMargin: "0px", threshold: 0.5 } // Lower threshold to trigger earlier
     );
 
     // Select the first `.properties_list`
@@ -240,7 +240,9 @@ window.Wized.push((Wized) => {
     if (firstList) {
       const items = firstList.querySelectorAll(".properties_item"); // Select all items
       if (items.length > 0) {
-        observer.observe(items[items.length - 5]); // Observe the last item
+        // Observe the item that's 8 items from the end (approximately 2 rows)
+        const targetIndex = Math.max(0, items.length - 8);
+        observer.observe(items[targetIndex]);
       }
     }
   }
