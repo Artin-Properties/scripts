@@ -265,6 +265,11 @@ window.Wized.push((Wized) => {
     const currentScrollPosition = window.scrollY;
     const scrollOffset = currentScrollPosition - lastItemPosition;
 
+    // Temporarily disconnect the observer to prevent infinite loop
+    if (observer) {
+      observer.disconnect();
+    }
+
     try {
       let searchPagination = Wized.data.v.search_pagination;
       if (searchPagination === undefined) {
@@ -286,11 +291,10 @@ window.Wized.push((Wized) => {
       const combinedArray = [...existingPropertyArray, ...filteredNewItems];
       Wized.data.v.property_array = combinedArray;
 
-      // Temporarily disconnect the observer to prevent infinite loop
-      if (observer) {
-        observer.disconnect();
-      }
+      // Create a promise that resolves after the next frame
+      const waitForNextFrame = () => new Promise((resolve) => requestAnimationFrame(resolve));
 
+      // First update the DOM
       insertMixItemsIntoDOM();
       setPropertyLinks();
 
@@ -298,14 +302,19 @@ window.Wized.push((Wized) => {
         isEndReached = true;
       }
 
+      // Wait for the next frame to ensure DOM updates are complete
+      await waitForNextFrame();
+
+      // Reinitialize components
       reinitializeComponents();
 
-      // Use requestAnimationFrame to ensure DOM has updated
-      requestAnimationFrame(() => {
-        window.scrollTo({
-          top: lastItemPosition,
-          behavior: "instant",
-        });
+      // Wait for another frame to ensure all reinitializations are complete
+      await waitForNextFrame();
+
+      // Restore scroll position
+      window.scrollTo({
+        top: lastItemPosition,
+        behavior: "instant",
       });
 
       // Reconnect the observer if we haven't reached the end
