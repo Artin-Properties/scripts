@@ -6,6 +6,9 @@ window.Wized.push((Wized) => {
   let isLoading = false;
   let isEndReached = false;
   let lastRequestTime = 0;
+  let scrollLoadCount = 0;
+  let currentScrollPosition = 0;
+  let lastItemHeight = 0;
 
   // Function to get the origin, with fallback
   function getOrigin() {
@@ -33,7 +36,7 @@ window.Wized.push((Wized) => {
         slidesPerView: 1,
         spaceBetween: "0%",
         loop: true,
-        passiveListeners: true, // Enables passive event listeners globally for Swiper
+        passiveListeners: true,
         mousewheel: {
           forceToAxis: true,
           releaseOnEdges: true,
@@ -61,7 +64,6 @@ window.Wized.push((Wized) => {
 
   // Remove all existing cloned mix items
   function clearExistingMixItems() {
-    // Target both original mix items and cloned mix items
     const existingClones = document.querySelectorAll(
       ".properties_list .mix, .properties_list .mix-item"
     );
@@ -72,9 +74,7 @@ window.Wized.push((Wized) => {
 
   // Reset property array and update the DOM upon filter click
   async function resetPropertyArrayOnClick() {
-    if (isLoading) {
-      return;
-    }
+    if (isLoading) return;
 
     isLoading = true;
     clearExistingMixItems();
@@ -82,25 +82,19 @@ window.Wized.push((Wized) => {
     try {
       const result = await Wized.requests.waitFor("Search_Properties");
       const items = result.data.items;
-
-      // Set the property array to the fresh items
       Wized.data.v.property_array = items;
 
       insertMixItemsIntoDOM();
-      setPropertyLinks(); // Set href attributes with correct IDs and dynamic URL
-
+      setPropertyLinks();
       reinitializeComponents();
     } catch (error) {
-      // Optional error handling
+      console.error("Error resetting property array:", error);
     } finally {
       isLoading = false;
     }
   }
 
-  // Expose the reset function globally if needed
-  window.resetPropertyArrayOnClick = resetPropertyArrayOnClick;
-
-  // Insert mix items into the DOM after every 4th property item
+  // Insert mix items into the DOM
   function insertMixItemsIntoDOM() {
     clearExistingMixItems();
 
@@ -108,18 +102,13 @@ window.Wized.push((Wized) => {
       ".properties_list .properties_item:not(#mix-1):not(#mix-2):not(#mix-3):not(.mix-item)"
     );
 
-    // If there are no property items, don't insert any mix items
-    if (Wized.data.v.property_array.length === 0) {
-      return;
-    }
+    if (Wized.data.v.property_array.length === 0) return;
 
     const mixItems = ["mix-1", "mix-2", "mix-3"];
     let currentMixIndex = 0;
     const cloneCounts = { "mix-1": 0, "mix-2": 0, "mix-3": 0 };
 
     items.forEach((item, index) => {
-      // Insert mix item after every 4th property (at position 4, 8, 12, etc.)
-      // This means we check if index is 3, 7, 11, etc. (zero-based indexing)
       if ((index + 1) % 4 === 0) {
         const mixId = mixItems[currentMixIndex];
         const originalMixItem = document.getElementById(mixId);
@@ -128,28 +117,23 @@ window.Wized.push((Wized) => {
           cloneCounts[mixId] += 1;
           const mixItemClone = originalMixItem.cloneNode(true);
           mixItemClone.id = `${mixId}-clone-${cloneCounts[mixId]}`;
-          mixItemClone.classList.add("mix-item"); // Add class to identify mix items
+          mixItemClone.classList.add("mix-item");
           item.after(mixItemClone);
           mixItemClone.style.display = "";
-
-          // Cycle through the mix items in order
           currentMixIndex = (currentMixIndex + 1) % mixItems.length;
         }
       }
     });
   }
 
-  // Function to set the href attributes of property items
+  // Set property links
   function setPropertyLinks() {
     const origin = getOrigin();
-
-    // Select only property items, excluding mix items
     const propertyItems = document.querySelectorAll(
       ".properties_list .properties_item:not(#mix-1):not(#mix-2):not(#mix-3):not(.mix-item)"
     );
 
     propertyItems.forEach((item) => {
-      // Get the property ID from the data attribute
       const propertyId = item.getAttribute("data-property-id");
       if (propertyId) {
         const linkElement = item.querySelector(".properties_card-visual");
@@ -161,7 +145,7 @@ window.Wized.push((Wized) => {
     });
   }
 
-  // Reinitialize Webflow and Swiper components
+  // Reinitialize components
   function reinitializeComponents() {
     window.Webflow.destroy();
     window.Webflow.ready();
@@ -169,7 +153,114 @@ window.Wized.push((Wized) => {
     initSwiper();
   }
 
-  // Attach click event listeners to filter elements
+  // Load more items with scroll position preservation
+  async function loadMoreItems() {
+    if (isLoading) return;
+
+    const now = Date.now();
+    if (now - lastRequestTime < 1000) {
+      isLoading = false;
+      return;
+    }
+
+    isLoading = true;
+    lastRequestTime = now;
+
+    // Store current scroll position and last item height
+    const propertyItems = document.querySelectorAll('[wized="home_PropertyItem"]');
+    const lastItem = propertyItems[propertyItems.length - 1];
+    if (lastItem) {
+      currentScrollPosition = window.scrollY;
+      lastItemHeight = lastItem.getBoundingClientRect().height;
+    }
+
+    // Disconnect observer before updates
+    if (observer) {
+      observer.disconnect();
+    }
+
+    try {
+      let searchPagination = Wized.data.v.search_pagination || 1;
+      searchPagination += 1;
+      Wized.data.v.search_pagination = searchPagination;
+
+      const existingPropertyArray = Wized.data.v.property_array || [];
+      const result = await Wized.requests.execute("Search_Properties");
+      const newItems = result.data.items || [];
+
+      const existingIds = new Set(existingPropertyArray.map((item) => item.id));
+      const filteredNewItems = newItems.filter((item) => !existingIds.has(item.id));
+
+      // Update the array
+      Wized.data.v.property_array = [...existingPropertyArray, ...filteredNewItems];
+
+      // Update DOM
+      insertMixItemsIntoDOM();
+      setPropertyLinks();
+      reinitializeComponents();
+
+      // Restore scroll position
+      if (lastItem) {
+        const newLastItem = document.querySelectorAll('[wized="home_PropertyItem"]')[
+          propertyItems.length - 1
+        ];
+        if (newLastItem) {
+          const newPosition =
+            currentScrollPosition + (newLastItem.getBoundingClientRect().height - lastItemHeight);
+          window.scrollTo(0, newPosition);
+        }
+      }
+
+      if (result.data.nextPage === null) {
+        isEndReached = true;
+      }
+
+      // Reconnect observer if needed
+      if (!isEndReached && scrollLoadCount !== 3) {
+        observeLastElement();
+      }
+    } catch (error) {
+      console.error("Error loading more items:", error);
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  // Observe last element for infinite scroll
+  function observeLastElement() {
+    observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !isLoading && !isEndReached && scrollLoadCount < 3) {
+            loadMoreItems();
+            scrollLoadCount++;
+          }
+
+          if (scrollLoadCount === 3) {
+            setTimeout(() => {
+              const showMoreBtn = document.getElementById("showMore");
+              if (showMoreBtn) {
+                showMoreBtn.style.display = "block";
+              }
+              observer.disconnect();
+            }, 3000);
+          }
+        });
+      },
+      { root: null, rootMargin: "0px", threshold: 0.5 }
+    );
+
+    const firstList = document.querySelector(".properties_list");
+    if (firstList) {
+      const items = firstList.querySelectorAll(".properties_item");
+      if (items.length > 0) {
+        const targetIndex = Math.max(0, items.length - 8);
+        observer.observe(items[targetIndex]);
+      }
+    }
+  }
+
+  // Setup filter click listeners
   function setupFilterClickListeners() {
     const clickableElements = [
       "term_ALL",
@@ -196,7 +287,7 @@ window.Wized.push((Wized) => {
     });
   }
 
-  // Check and initialize data on load
+  // Check initial data
   async function checkInitialData() {
     const propertyArray = Wized.data.v.property_array;
     if (!propertyArray || propertyArray.length === 0) {
@@ -205,166 +296,17 @@ window.Wized.push((Wized) => {
       Wized.data.v.property_array = initialItems;
 
       insertMixItemsIntoDOM();
-      setPropertyLinks(); // Set href attributes with correct IDs and dynamic URL
-    }
-  }
-
-  let scrollLoadCount = 0;
-
-  function observeLastElement() {
-    observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !isLoading && !isEndReached && scrollLoadCount < 3) {
-            loadMoreItems();
-            scrollLoadCount++;
-            console.log(scrollLoadCount);
-          }
-
-          if (scrollLoadCount === 3) {
-            setTimeout(() => {
-              const showMoreBtn = document.getElementById("showMore");
-              if (showMoreBtn) {
-                showMoreBtn.style.display = "block";
-              }
-              observer.disconnect();
-            }, 3000); // 3-second delay
-          }
-        });
-      },
-      { root: null, rootMargin: "0px", threshold: 0.5 } // Lower threshold to trigger earlier
-    );
-
-    // Select the first `.properties_list`
-    const firstList = document.querySelector(".properties_list");
-    if (firstList) {
-      const items = firstList.querySelectorAll(".properties_item"); // Select all items
-      if (items.length > 0) {
-        // Observe the item that's 8 items from the end (approximately 2 rows)
-        const targetIndex = Math.max(0, items.length - 8);
-        observer.observe(items[targetIndex]);
-      }
-    }
-  }
-
-  // Load more property items when the last element is visible
-  async function loadMoreItems() {
-    isLoading = true;
-    const now = Date.now();
-    if (now - lastRequestTime < 1000) {
-      // Throttle requests to 1 second
-      isLoading = false;
-      return;
-    }
-    lastRequestTime = now;
-
-    // Store the current scroll position and the last property item's position
-    const propertyItems = document.querySelectorAll('[wized="home_PropertyItem"]');
-    const lastPropertyItem = propertyItems[propertyItems.length - 1];
-    const lastItemPosition = lastPropertyItem
-      ? lastPropertyItem.getBoundingClientRect().top + window.scrollY
-      : 0;
-    const currentScrollPosition = window.scrollY;
-    const scrollOffset = currentScrollPosition - lastItemPosition;
-
-    // Temporarily disconnect the observer to prevent infinite loop
-    if (observer) {
-      observer.disconnect();
-    }
-
-    try {
-      let searchPagination = Wized.data.v.search_pagination;
-      if (searchPagination === undefined) {
-        searchPagination = 1;
-      } else {
-        searchPagination += 1;
-      }
-      Wized.data.v.search_pagination = searchPagination;
-
-      const existingPropertyArray = Wized.data.v.property_array || [];
-      const result = await Wized.requests.execute("Search_Properties");
-      const newItems = result.data.items || [];
-
-      // Filter out duplicates before merging arrays
-      const existingIds = new Set(existingPropertyArray.map((item) => item.id));
-      const filteredNewItems = newItems.filter((item) => !existingIds.has(item.id));
-
-      // Now combine the arrays without duplicates
-      const combinedArray = [...existingPropertyArray, ...filteredNewItems];
-      Wized.data.v.property_array = combinedArray;
-
-      // Create a promise that resolves after the next frame
-      const waitForNextFrame = () => new Promise((resolve) => requestAnimationFrame(resolve));
-
-      // First update the DOM
-      insertMixItemsIntoDOM();
       setPropertyLinks();
-
-      if (result.data.nextPage === null) {
-        isEndReached = true;
-      }
-
-      // Wait for the next frame to ensure DOM updates are complete
-      await waitForNextFrame();
-
-      // Reinitialize components
-      reinitializeComponents();
-
-      // Wait for another frame to ensure all reinitializations are complete
-      await waitForNextFrame();
-
-      // Restore scroll position
-      window.scrollTo({
-        top: lastItemPosition,
-        behavior: "instant",
-      });
-
-      // Reconnect the observer if we haven't reached the end
-      if (!isEndReached && scrollLoadCount !== 3) {
-        observeLastElement();
-      }
-    } catch (error) {
-      // Optional error handling
-    } finally {
-      isLoading = false;
     }
   }
-  // Observe DOM changes to reinitialize Swiper when necessary
-  function observeDOMChanges() {
-    const targetNode = document.querySelector(".properties_list");
-    if (!targetNode) return;
 
-    const config = { childList: true, subtree: true };
-
-    const mutationObserver = new MutationObserver((mutationsList) => {
-      // Temporarily disconnect to prevent infinite loop
-      mutationObserver.disconnect();
-
-      let significantChange = false;
-      mutationsList.forEach((mutation) => {
-        if (mutation.addedNodes.length > 0 || mutation.removedNodes.length > 0) {
-          significantChange = true;
-        }
-      });
-
-      if (significantChange) {
-        initSwiper();
-      }
-
-      // Reconnect the observer
-      mutationObserver.observe(targetNode, config);
-    });
-
-    mutationObserver.observe(targetNode, config);
-  }
-
-  // Initialize the entire application
+  // Initialize the application
   (async () => {
     await checkInitialData();
     setupFilterClickListeners();
     initSwiper();
     observeLastElement();
-    observeDOMChanges();
+
     const showMoreBtn = document.getElementById("showMore");
     if (showMoreBtn) {
       showMoreBtn.addEventListener("click", async () => {
