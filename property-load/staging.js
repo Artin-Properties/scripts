@@ -266,28 +266,28 @@ window.Wized.push((Wized) => {
 
       const existingPropertyArray = Wized.data.v.property_array || [];
       const result = await Wized.requests.execute("Search_Properties");
-      // const newItems = result.data.items || [];
+      const newItems = result.data.items || [];
 
-      // // Filter out duplicates before merging arrays
-      // const existingIds = new Set(existingPropertyArray.map((item) => item.id));
-      // const filteredNewItems = newItems.filter((item) => !existingIds.has(item.id));
+      // Filter out duplicates before merging arrays
+      const existingIds = new Set(existingPropertyArray.map((item) => item.id));
+      const filteredNewItems = newItems.filter((item) => !existingIds.has(item.id));
 
-      // // Now combine the arrays without duplicates
-      // const combinedArray = [...existingPropertyArray, ...filteredNewItems];
-      // Wized.data.v.property_array = combinedArray;
+      // Now combine the arrays without duplicates
+      const combinedArray = [...existingPropertyArray, ...filteredNewItems];
+      Wized.data.v.property_array = combinedArray;
 
-      // insertMixItemsIntoDOM();
-      // setPropertyLinks(); // Set href attributes with correct IDs and dynamic URL
+      insertMixItemsIntoDOM();
+      setPropertyLinks(); // Set href attributes with correct IDs and dynamic URL
 
-      // if (result.data.nextPage === null) {
-      //   isEndReached = true;
-      //   observer.disconnect();
-      // }
+      if (result.data.nextPage === null) {
+        isEndReached = true;
+        observer.disconnect();
+      }
 
-      // reinitializeComponents();
-      // if (scrollLoadCount !== 3) {
-      //   observeLastElement();
-      // }
+      reinitializeComponents();
+      if (scrollLoadCount !== 3) {
+        observeLastElement();
+      }
     } catch (error) {
       // Optional error handling
     } finally {
