@@ -166,13 +166,13 @@ window.Wized.push((Wized) => {
     isLoading = true;
     lastRequestTime = now;
 
-    // Store current scroll position and last item height
-    const propertyItems = document.querySelectorAll('[wized="home_PropertyItem"]');
-    const lastItem = propertyItems[propertyItems.length - 1];
-    if (lastItem) {
-      currentScrollPosition = window.scrollY;
-      lastItemHeight = lastItem.getBoundingClientRect().height;
-    }
+    // // Store current scroll position and last item height
+    // const propertyItems = document.querySelectorAll('[wized="home_PropertyItem"]');
+    // const lastItem = propertyItems[propertyItems.length - 1];
+    // if (lastItem) {
+    //   currentScrollPosition = window.scrollY;
+    //   lastItemHeight = lastItem.getBoundingClientRect().height;
+    // }
 
     // Disconnect observer before updates
     if (observer) {
@@ -199,17 +199,17 @@ window.Wized.push((Wized) => {
       setPropertyLinks();
       reinitializeComponents();
 
-      // Restore scroll position
-      if (lastItem) {
-        const newLastItem = document.querySelectorAll('[wized="home_PropertyItem"]')[
-          propertyItems.length - 1
-        ];
-        if (newLastItem) {
-          const newPosition =
-            currentScrollPosition + (newLastItem.getBoundingClientRect().height - lastItemHeight);
-          window.scrollTo(0, newPosition);
-        }
-      }
+      // // Restore scroll position
+      // if (lastItem) {
+      //   const newLastItem = document.querySelectorAll('[wized="home_PropertyItem"]')[
+      //     propertyItems.length - 1
+      //   ];
+      //   if (newLastItem) {
+      //     const newPosition =
+      //       currentScrollPosition + (newLastItem.getBoundingClientRect().height - lastItemHeight);
+      //     window.scrollTo(0, newPosition);
+      //   }
+      // }
 
       if (result.data.nextPage === null) {
         isEndReached = true;
@@ -254,7 +254,8 @@ window.Wized.push((Wized) => {
     if (firstList) {
       const items = firstList.querySelectorAll(".properties_item");
       if (items.length > 0) {
-        const targetIndex = Math.max(0, items.length - 8);
+        const targetIndex = Math.max(0, items.length - 10);
+        console.log(items[targetIndex]);
         observer.observe(items[targetIndex]);
       }
     }
