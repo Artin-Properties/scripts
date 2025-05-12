@@ -7,8 +7,6 @@ window.Wized.push((Wized) => {
   let isEndReached = false;
   let lastRequestTime = 0;
   let scrollLoadCount = 0;
-  let currentScrollPosition = 0;
-  let lastItemHeight = 0;
 
   // Function to get the origin, with fallback
   function getOrigin() {
@@ -21,13 +19,11 @@ window.Wized.push((Wized) => {
     );
   }
 
-  // Initialize Swiper components with passive event listeners
+  // Initialize Swiper components
   function initSwiper() {
-    // Destroy existing Swiper instances to prevent duplicates
     swipers.forEach((swiper) => swiper.destroy(true, true));
     swipers = [];
 
-    // Initialize Swiper for each properties_card-visual element
     $(".properties_card-visual").each(function () {
       const swiperInstance = new Swiper($(this).find(".swiper")[0], {
         speed: 300,
@@ -62,44 +58,26 @@ window.Wized.push((Wized) => {
     });
   }
 
-  // Remove all existing cloned mix items
-  function clearExistingMixItems() {
-    const existingClones = document.querySelectorAll(
-      ".properties_list .mix, .properties_list .mix-item"
-    );
-    existingClones.forEach((clone) => {
-      clone.parentNode.removeChild(clone);
+  // Show shimmer loading state
+  function showShimmerLoading() {
+    const shimmerItems = document.querySelectorAll('.properties_item[wized^="loader-item"]');
+    shimmerItems.forEach((item) => {
+      item.style.display = "block";
     });
   }
 
-  // Reset property array and update the DOM upon filter click
-  async function resetPropertyArrayOnClick() {
-    if (isLoading) return;
-
-    isLoading = true;
-    clearExistingMixItems();
-
-    try {
-      const result = await Wized.requests.waitFor("Search_Properties");
-      const items = result.data.items;
-      Wized.data.v.property_array = items;
-
-      insertMixItemsIntoDOM();
-      setPropertyLinks();
-      reinitializeComponents();
-    } catch (error) {
-      console.error("Error resetting property array:", error);
-    } finally {
-      isLoading = false;
-    }
+  // Hide shimmer loading state
+  function hideShimmerLoading() {
+    const shimmerItems = document.querySelectorAll('.properties_item[wized^="loader-item"]');
+    shimmerItems.forEach((item) => {
+      item.style.display = "none";
+    });
   }
 
   // Insert mix items into the DOM
   function insertMixItemsIntoDOM() {
-    clearExistingMixItems();
-
     const items = document.querySelectorAll(
-      ".properties_list .properties_item:not(#mix-1):not(#mix-2):not(#mix-3):not(.mix-item)"
+      ".properties_list .properties_item:not(#mix-1):not(#mix-2):not(#mix-3):not(.mix-item):not([wized^='loader-item'])"
     );
 
     if (Wized.data.v.property_array.length === 0) return;
@@ -130,7 +108,7 @@ window.Wized.push((Wized) => {
   function setPropertyLinks() {
     const origin = getOrigin();
     const propertyItems = document.querySelectorAll(
-      ".properties_list .properties_item:not(#mix-1):not(#mix-2):not(#mix-3):not(.mix-item)"
+      ".properties_list .properties_item:not(#mix-1):not(#mix-2):not(#mix-3):not(.mix-item):not([wized^='loader-item'])"
     );
 
     propertyItems.forEach((item) => {
@@ -153,7 +131,7 @@ window.Wized.push((Wized) => {
     initSwiper();
   }
 
-  // Load more items with scroll position preservation
+  // Load more items
   async function loadMoreItems() {
     if (isLoading) return;
 
@@ -166,18 +144,8 @@ window.Wized.push((Wized) => {
     isLoading = true;
     lastRequestTime = now;
 
-    // // Store current scroll position and last item height
-    // const propertyItems = document.querySelectorAll('[wized="home_PropertyItem"]');
-    // const lastItem = propertyItems[propertyItems.length - 1];
-    // if (lastItem) {
-    //   currentScrollPosition = window.scrollY;
-    //   lastItemHeight = lastItem.getBoundingClientRect().height;
-    // }
-
-    // Disconnect observer before updates
-    if (observer) {
-      observer.disconnect();
-    }
+    // Show shimmer loading state
+    showShimmerLoading();
 
     try {
       let searchPagination = Wized.data.v.search_pagination || 1;
@@ -199,21 +167,12 @@ window.Wized.push((Wized) => {
       setPropertyLinks();
       reinitializeComponents();
 
-      // // Restore scroll position
-      // if (lastItem) {
-      //   const newLastItem = document.querySelectorAll('[wized="home_PropertyItem"]')[
-      //     propertyItems.length - 1
-      //   ];
-      //   if (newLastItem) {
-      //     const newPosition =
-      //       currentScrollPosition + (newLastItem.getBoundingClientRect().height - lastItemHeight);
-      //     window.scrollTo(0, newPosition);
-      //   }
-      // }
-
       if (result.data.nextPage === null) {
         isEndReached = true;
       }
+
+      // Hide shimmer loading state
+      hideShimmerLoading();
 
       // Reconnect observer if needed
       if (!isEndReached && scrollLoadCount !== 3) {
@@ -221,6 +180,7 @@ window.Wized.push((Wized) => {
       }
     } catch (error) {
       console.error("Error loading more items:", error);
+      hideShimmerLoading();
     } finally {
       isLoading = false;
     }
@@ -252,10 +212,9 @@ window.Wized.push((Wized) => {
 
     const firstList = document.querySelector(".properties_list");
     if (firstList) {
-      const items = firstList.querySelectorAll(".properties_item");
+      const items = firstList.querySelectorAll(".properties_item:not([wized^='loader-item'])");
       if (items.length > 0) {
         const targetIndex = Math.max(0, items.length - 10);
-        console.log(items[targetIndex]);
         observer.observe(items[targetIndex]);
       }
     }
@@ -286,6 +245,28 @@ window.Wized.push((Wized) => {
         element.addEventListener("click", resetPropertyArrayOnClick);
       });
     });
+  }
+
+  // Reset property array and update the DOM upon filter click
+  async function resetPropertyArrayOnClick() {
+    if (isLoading) return;
+
+    isLoading = true;
+    hideShimmerLoading();
+
+    try {
+      const result = await Wized.requests.waitFor("Search_Properties");
+      const items = result.data.items;
+      Wized.data.v.property_array = items;
+
+      insertMixItemsIntoDOM();
+      setPropertyLinks();
+      reinitializeComponents();
+    } catch (error) {
+      console.error("Error resetting property array:", error);
+    } finally {
+      isLoading = false;
+    }
   }
 
   // Check initial data
