@@ -218,7 +218,6 @@ window.Wized.push((Wized) => {
           if (entry.isIntersecting && !isLoading && !isEndReached && scrollLoadCount < 3) {
             loadMoreItems();
             scrollLoadCount++;
-            console.log(scrollLoadCount);
           }
 
           if (scrollLoadCount === 3) {
@@ -245,11 +244,6 @@ window.Wized.push((Wized) => {
     }
   }
 
-  let loaderItemsAppended = false;
-  const loaderItemHtml = `
-        <div class="properties_item loader-item"><div class="properties_card"><div class="content-shimmer"><div class="properties_card-visual is-fav"><div class="swiper is-properties-card swiper-backface-hidden swiper-initialized swiper-horizontal swiper-pointer-events"><div class="swiper-wrapper is-properties-card" id="swiper-wrapper-ba218b613edad798" aria-live="polite" style="transition-duration: 0ms; transform: translate3d(-251px, 0px, 0px);"><div class="swiper-slide is-properties-card swiper-slide-duplicate is-active swiper-slide-prev" role="group" aria-label="1 / 1" data-swiper-slide-index="0" style="width: 251px; margin-right: 0px;"><div class="properties_card-img is-dash-fav"><div class="shimmer is-square is-absolute"></div></div></div><div class="swiper-slide is-properties-card is-active swiper-slide-duplicate-next swiper-slide-duplicate-prev" role="group" aria-label="1 / 1" data-swiper-slide-index="0" style="width: 251px; margin-right: 0px;"><div class="properties_card-img is-dash-fav"><div class="shimmer is-square is-absolute"></div></div></div><div class="swiper-slide is-properties-card swiper-slide-duplicate is-active swiper-slide-next" role="group" aria-label="1 / 1" data-swiper-slide-index="0" style="width: 251px; margin-right: 0px;"><div class="properties_card-img is-dash-fav"><div class="shimmer is-square is-absolute"></div></div></div></div><span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span><span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span><span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span><span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span><span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div></div><div class="properties_card-content"><div class="spacer-xsmall"></div><div class="preloader-layout gap-24"><div id="w-node-_5c663453-3525-5ad6-3ff5-f2f21dc0ec46-af544784" class="shimmer is-rectangular height-20"></div></div><div class="preloader-layout gap-24"><div id="w-node-_5c663453-3525-5ad6-3ff5-f2f21dc0ec48-af544784" class="shimmer is-rectangular height-20"></div><div id="w-node-_5c663453-3525-5ad6-3ff5-f2f21dc0ec49-af544784" class="shimmer is-rectangular height-20"></div></div><div class="preloader-layout gap-24"><div id="w-node-_5c663453-3525-5ad6-3ff5-f2f21dc0ec4b-af544784" class="shimmer is-rectangular height-12"></div><div id="w-node-_5c663453-3525-5ad6-3ff5-f2f21dc0ec4c-af544784" class="shimmer is-rectangular height-12"></div></div><div class="preloader-layout gap-4"><div id="w-node-_5c663453-3525-5ad6-3ff5-f2f21dc0ec4e-af544784" class="preloader-row gap-8"><div class="shimmer is-square is-tiny"></div></div><div id="w-node-_5c663453-3525-5ad6-3ff5-f2f21dc0ec50-af544784" class="preloader-row gap-8"><div class="shimmer is-square is-tiny"></div></div><div id="w-node-_5c663453-3525-5ad6-3ff5-f2f21dc0ec52-af544784" class="preloader-row gap-8"><div class="shimmer is-square is-tiny"></div></div><div id="w-node-_5c663453-3525-5ad6-3ff5-f2f21dc0ec54-af544784" class="preloader-row gap-8"><div class="shimmer is-square is-tiny"></div><div class="shimmer is-rectangular is-small"></div></div></div></div></div></div></div>
-         `;
-  // Load more property items when the last element is visible
   // Load more property items when the last element is visible
   async function loadMoreItems() {
     isLoading = true;
@@ -272,28 +266,28 @@ window.Wized.push((Wized) => {
 
       const existingPropertyArray = Wized.data.v.property_array || [];
       const result = await Wized.requests.execute("Search_Properties");
-      const newItems = result.data.items || [];
+      // const newItems = result.data.items || [];
 
-      // Filter out duplicates before merging arrays
-      const existingIds = new Set(existingPropertyArray.map((item) => item.id));
-      const filteredNewItems = newItems.filter((item) => !existingIds.has(item.id));
+      // // Filter out duplicates before merging arrays
+      // const existingIds = new Set(existingPropertyArray.map((item) => item.id));
+      // const filteredNewItems = newItems.filter((item) => !existingIds.has(item.id));
 
-      // Now combine the arrays without duplicates
-      const combinedArray = [...existingPropertyArray, ...filteredNewItems];
-      Wized.data.v.property_array = combinedArray;
+      // // Now combine the arrays without duplicates
+      // const combinedArray = [...existingPropertyArray, ...filteredNewItems];
+      // Wized.data.v.property_array = combinedArray;
 
-      insertMixItemsIntoDOM();
-      setPropertyLinks(); // Set href attributes with correct IDs and dynamic URL
+      // insertMixItemsIntoDOM();
+      // setPropertyLinks(); // Set href attributes with correct IDs and dynamic URL
 
-      if (result.data.nextPage === null) {
-        isEndReached = true;
-        observer.disconnect();
-      }
+      // if (result.data.nextPage === null) {
+      //   isEndReached = true;
+      //   observer.disconnect();
+      // }
 
-      reinitializeComponents();
-      if (scrollLoadCount !== 3) {
-        observeLastElement();
-      }
+      // reinitializeComponents();
+      // if (scrollLoadCount !== 3) {
+      //   observeLastElement();
+      // }
     } catch (error) {
       // Optional error handling
     } finally {
