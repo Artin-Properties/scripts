@@ -222,12 +222,12 @@ window.Wized.push(async (Wized) => {
                 if (Wized.data.r.auth_me.data?.artin_black_active) {
                   parsedMinStay = Number(
                     Wized.data.r.Get_Property_Dates.data.date_object.find(
-                      (entry) => entry.date === v.arrival_date
+                      (entry) => entry.date === date
                     )?.minimumStay
                   );
                   parsedMaxStay = Number(
                     Wized.data.r.Get_Property_Dates.data.date_object.find(
-                      (entry) => entry.date === v.arrival_date
+                      (entry) => entry.date === date
                     )?.maximumStay
                   );
                 }
