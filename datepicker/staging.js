@@ -216,8 +216,21 @@ window.Wized.push(async (Wized) => {
                 const totalNights = Math.round(
                   (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
                 );
-                const parsedMinStay = Wized.data.r.Get_Property.data.minNights;
-                const parsedMaxStay = Wized.data.r.Get_Property.data.maxNights;
+                let parsedMinStay = Wized.data.r.Get_Property.data.minNights;
+                let parsedMaxStay = Wized.data.r.Get_Property.data.maxNights;
+
+                if (Wized.data.r.auth_me.data?.artin_black_active) {
+                  parsedMinStay = Number(
+                    r.Get_Property_Dates.data.date_object.find(
+                      (entry) => entry.date === v.arrival_date
+                    )?.minimumStay
+                  );
+                  parsedMaxStay = Number(
+                    r.Get_Property_Dates.data.date_object.find(
+                      (entry) => entry.date === v.arrival_date
+                    )?.maximumStay
+                  );
+                }
 
                 if (
                   (parsedMinStay && totalNights < parsedMinStay) ||
