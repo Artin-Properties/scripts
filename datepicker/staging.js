@@ -270,12 +270,10 @@ window.Wized.push(async (Wized) => {
               span.className = "day-price";
               let price = prices[formattedDate];
 
-              console.log(window.Wized.data.r.Get_Property.data.currencyCode);
               if (window.Wized.data?.r?.Get_Property?.data?.currencyCode === "USD") {
-                price = prices[formattedDate] * 1.4;
-                console.log("price", price);
+                price = Math.round(prices[formattedDate] * 1.4);
               }
-              console.log(price);
+
               span.innerHTML = `$${price}`;
               target.append(span);
 
