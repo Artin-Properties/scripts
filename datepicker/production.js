@@ -255,7 +255,12 @@ window.Wized.push(async (Wized) => {
             if (view === "CalendarDay" && prices[formattedDate]) {
               const span = target.querySelector(".day-price") || document.createElement("span");
               span.className = "day-price";
-              span.innerHTML = `$${prices[formattedDate]}`;
+
+              if (window.Wized.data?.r?.Get_Property?.data?.currencyCode === "USD") {
+                price = Math.round(prices[formattedDate] * 1.4);
+              }
+
+              span.innerHTML = `$${price}`;
               target.append(span);
 
               if (target.classList.contains("locked")) {
