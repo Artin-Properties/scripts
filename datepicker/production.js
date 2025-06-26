@@ -255,6 +255,7 @@ window.Wized.push(async (Wized) => {
             if (view === "CalendarDay" && prices[formattedDate]) {
               const span = target.querySelector(".day-price") || document.createElement("span");
               span.className = "day-price";
+              let price = prices[formattedDate];
 
               if (window.Wized.data?.r?.Get_Property?.data?.currencyCode === "USD") {
                 price = Math.round(prices[formattedDate] * 1.4);
